@@ -6,6 +6,9 @@ build/
 application-local.yml
 google-credentials.json
 
+# Compiled class file
+*.class
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
