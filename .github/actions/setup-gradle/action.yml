@@ -1,5 +1,5 @@
 name: Setup Gradle
-description: Sets up JDK 21 and makes the Gradle wrapper executable
+description: Sets up JDK 24 and makes the Gradle wrapper executable
 
 runs:
   using: composite

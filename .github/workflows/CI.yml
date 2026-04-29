@@ -47,12 +47,6 @@ jobs:
       - name: Run tests
         run: ./gradlew test
 
-      - name: Publish test results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
-        with:
-          files: build/test-results/**/*.xml
-
   publish-artifact:
     name: Publish Artifact
     runs-on: ubuntu-latest
@@ -81,14 +75,6 @@ jobs:
 
       - name: Run ktlint
         run: ./gradlew ktlintCheck
-
-      - name: Upload lint report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: ktlint-report-${{ github.sha }}
-          path: build/reports/ktlint/**
-          retention-days: 7
 
   release:
     name: Release
