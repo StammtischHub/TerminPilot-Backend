@@ -47,6 +47,12 @@ jobs:
       - name: Run tests
         run: ./gradlew test
 
+      - name: Publish test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: build/test-results/**/*.xml
+
   publish-artifact:
     name: Publish Artifact
     runs-on: ubuntu-latest
@@ -65,7 +71,6 @@ jobs:
   lint:
     name: Kotlin Lint
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: build
 
     steps:
@@ -75,6 +80,16 @@ jobs:
 
       - name: Run ktlint
         run: ./gradlew ktlintCheck
+        with:
+          fail-on-error: false
+
+      - name: Upload lint report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ktlint-report-${{ github.sha }}
+          path: build/reports/ktlint/**
+          retention-days: 7
 
   release:
     name: Release
