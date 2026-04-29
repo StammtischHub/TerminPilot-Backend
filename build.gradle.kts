@@ -7,6 +7,10 @@ plugins {
 	id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
 }
 
+ktlint {
+	version.set("1.7.0")
+}
+
 group = "de.StammtischHub"
 version = "0.0.1-SNAPSHOT"
 
