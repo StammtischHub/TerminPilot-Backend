@@ -80,8 +80,6 @@ jobs:
 
       - name: Run ktlint
         run: ./gradlew ktlintCheck
-        with:
-          fail-on-error: false
 
       - name: Upload lint report
         uses: actions/upload-artifact@v4
