@@ -31,7 +31,7 @@ tasks.bootJar {
     archiveBaseName.set("terminpilot-backend")
 }
 
-group = "de.StammtischHub"
+group = "de.stammtischHub"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -45,14 +45,22 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.lookfirst:sardine:5.13")
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("tools.jackson.module:jackson-module-kotlin")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("tools.jackson.module:jackson-module-kotlin")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	//Provider
+	implementation("com.github.lookfirst:sardine:5.13")
+	implementation("org.mnode.ical4j:ical4j:4.2.4")
+
+	//Datenbank
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	runtimeOnly("com.mysql:mysql-connector-j")
+	implementation("org.jetbrains.kotlin:kotlin-noarg")
 }
 
 kotlin {
