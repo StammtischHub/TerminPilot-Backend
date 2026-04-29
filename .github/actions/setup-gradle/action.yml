@@ -1,0 +1,16 @@
+name: Setup Gradle
+description: Sets up JDK 21 and makes the Gradle wrapper executable
+
+runs:
+  using: composite
+  steps:
+    - name: Set up JDK 24
+      uses: actions/setup-java@v4
+      with:
+        java-version: '24'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for Gradle wrapper
+      shell: bash
+      run: chmod +x gradlew

@@ -1,0 +1,11 @@
+name: Download Build Output
+description: Downloads the shared build output artifact for the current commit
+
+runs:
+  using: composite
+  steps:
+    - name: Download build output
+      uses: actions/download-artifact@v4
+      with:
+        name: build-output-${{ github.sha }}
+        path: build/
