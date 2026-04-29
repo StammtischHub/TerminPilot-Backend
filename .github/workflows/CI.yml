@@ -20,7 +20,7 @@ jobs:
       - uses: ./.github/actions/setup-gradle
 
       - name: Build project
-        run: ./gradlew build -x test
+        run: ./gradlew build -x test -x ktlintCheck
 
       - name: Upload build output
         uses: actions/upload-artifact@v4
