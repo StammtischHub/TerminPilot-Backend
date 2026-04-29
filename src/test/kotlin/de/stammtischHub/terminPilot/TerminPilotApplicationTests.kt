@@ -1,7 +1,7 @@
-package de.StammtischHub.TerminPilot
+package de.stammtischHub.terminPilot
 
-import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.Test
 
 @SpringBootTest
 class TerminPilotApplicationTests {
