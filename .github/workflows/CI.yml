@@ -68,6 +68,10 @@ jobs:
       - name: Run ktlint
         run: ./gradlew ktlintCheck
 
+      - name: Hint on failure
+        if: failure()
+        run: echo "::warning::Lint failed. Run './gradlew ktlintFormat' locally to auto-fix formatting issues."
+
       - name: Publish lint results
         uses: lcollins/checkstyle-github-action@v2.0.0
         if: always()
