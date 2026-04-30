@@ -73,7 +73,7 @@ jobs:
         run: echo "::warning::Lint failed. Run './gradlew ktlintFormat' locally to auto-fix formatting issues."
 
       - name: Publish lint results
-        uses: lcollins/checkstyle-github-action@v2
+        uses: lcollins/checkstyle-github-action@master
         if: always()
         with:
           path: build/reports/ktlint/**/*.xml
