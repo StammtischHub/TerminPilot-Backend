@@ -5,7 +5,7 @@ runs:
   using: composite
   steps:
     - name: Download build output
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: terminpilot-backend-${{ github.sha }}
         path: build/
