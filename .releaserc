@@ -1,22 +1,42 @@
 {
-  "branches": ["main"],
+  "branches": [
+    "main"
+  ],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
-    ["@semantic-release/changelog", {
-      "changelogFile": "CHANGELOG.md"
-    }],
-    ["@semantic-release/github", {
-      "assets": [
-        {
-          "path": "build/libs/*.jar",
-          "label": "Application JAR"
-        }
-      ]
-    }],
-    ["@semantic-release/git", {
-      "assets": ["CHANGELOG.md"],
-      "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-    }]
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "mv build/libs/*.jar build/libs/terminpilot-backend-${nextRelease.version}.jar"
+      }
+    ],
+
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "build/libs/terminpilot-backend-*.jar",
+            "label": "terminpilot-backend-${nextRelease.version}.jar"
+          }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ]
   ]
 }
