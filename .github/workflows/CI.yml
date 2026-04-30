@@ -24,7 +24,7 @@ jobs:
         run: ./gradlew build -x test
 
       - name: Upload build output
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: terminpilot-backend-${{ github.sha }}
           path: |
@@ -73,7 +73,7 @@ jobs:
         run: echo "::warning::Lint failed. Run './gradlew ktlintFormat' locally to auto-fix formatting issues."
 
       - name: Publish lint results
-        uses: lcollins/checkstyle-github-action@v2.0.0
+        uses: lcollins/checkstyle-github-action@v2
         if: always()
         with:
           path: build/reports/ktlint/**/*.xml
@@ -98,7 +98,7 @@ jobs:
       - uses: ./.github/actions/download-build
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
 
