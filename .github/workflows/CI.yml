@@ -55,6 +55,7 @@ jobs:
         if: always()
         with:
           files: build/test-results/**/*.xml
+          job_summary: false
 
   lint:
     name: Lint Kotlin
