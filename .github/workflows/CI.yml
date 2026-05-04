@@ -103,6 +103,11 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Check downloaded files
+        run: |
+          ls -la build/
+          ls -la build/libs/
+
       - name: Install semantic-release
         run: |
           npm install -g \
