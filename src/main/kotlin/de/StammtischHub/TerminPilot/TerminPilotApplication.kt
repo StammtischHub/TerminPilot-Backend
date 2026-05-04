@@ -1,4 +1,4 @@
-package de.StammtischHub.TerminPilot
+package de.stammtischHub.terminPilot
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class TerminPilotApplication
 
 fun main(args: Array<String>) {
-	runApplication<TerminPilotApplication>(*args)
+    runApplication<TerminPilotApplication>(*args)
 }
