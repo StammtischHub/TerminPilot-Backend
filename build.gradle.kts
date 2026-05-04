@@ -23,6 +23,16 @@ tasks.named("check") {
     )
 }
 
+tasks.jar {
+    archiveBaseName.set("terminpilot-backend")
+    archiveVersion.set("")
+}
+
+tasks.bootJar {
+    archiveBaseName.set("terminpilot-backend")
+    archiveVersion.set("")
+}
+
 group = "de.StammtischHub"
 version = "0.0.1-SNAPSHOT"
 
