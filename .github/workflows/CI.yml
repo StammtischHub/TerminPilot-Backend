@@ -124,5 +124,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
         run: |
-          GITHUB_REPOSITORY_OWNER=$(echo "GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')
+          GITHUB_REPOSITORY_OWNER=$(echo "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')
           npx semantic-release
