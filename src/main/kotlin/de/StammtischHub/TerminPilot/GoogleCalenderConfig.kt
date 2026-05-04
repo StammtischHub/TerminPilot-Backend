@@ -14,7 +14,7 @@ import org.springframework.core.io.Resource
 @Configuration
 class GoogleCalendarConfig {
 
-    @Value("\${google.calendar.credentials-path}")
+    @Value($$"${google.calendar.credentials-path}")
     private lateinit var credentialsResource: Resource
 
     @Bean
