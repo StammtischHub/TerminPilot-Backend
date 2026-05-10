@@ -44,8 +44,8 @@ jobs:
       - name: Run tests
         run: ./gradlew test
 
-  release:
-    name: Release
+  version_release:
+    name: Version release
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
     needs:
@@ -55,17 +55,18 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-      packages: write
     concurrency:
       group: release
       cancel-in-progress: false
+    outputs:
+      new_version: ${{ steps.release.outputs.new_version }}
 
     steps:
       - name: Generate App Token
         uses: actions/create-github-app-token@v3
         id: app-token
         with:
-          app-id: ${{ vars.APP_ID }}
+          client-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@v6
@@ -89,17 +90,40 @@ jobs:
             @semantic-release/github \
             @semantic-release/exec
 
+      - name: Run semantic-release
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: npx semantic-release
+
+  docker_release:
+    name: Docker release
+    runs-on: ubuntu-latest
+    needs: version_release
+    permissions:
+      contents: read
+      packages: write
+    concurrency:
+      group: release
+      cancel-in-progress: false
+    if: needs.version_release.outputs.new_version != ''
+
+    steps:
+      - uses: actions/checkout@v6
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v4
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ steps.app-token.outputs.token }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run semantic-release
+      - name: Build and push Docker image
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          NEW_VERSION: ${{ needs.version_release.outputs.new_version }}
+          OWNER: ${{ github.repository_owner }}
         run: |
-          GITHUB_REPOSITORY_OWNER=$(echo "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')
-          npx semantic-release
+          OWNER=$(echo "OWNER" | tr '[:upper:]' '[:lower:]')
+          docker build -t ghcr.io/${process.env.OWNER}/terminpilot-backend:${NEW_VERSION} -t ghcr.io/${process.env.OWNER}/terminpilot-backend:latest . 
+          docker push ghcr.io/${process.env.OWNER}/terminpilot-backend:${NEW_VERSION} 
+          docker push ghcr.io/${process.env.OWNER}/terminpilot-backend:latest
