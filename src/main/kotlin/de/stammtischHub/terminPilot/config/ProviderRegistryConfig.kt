@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class ProviderRegistryConfig {
-
     @Bean
     fun providerRegistry(providers: List<CalendarProvider>): Map<String, CalendarProvider> =
         providers.associateBy { it.javaClass.simpleName }

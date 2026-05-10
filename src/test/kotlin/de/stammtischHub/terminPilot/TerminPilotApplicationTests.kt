@@ -7,8 +7,7 @@ import kotlin.test.Test
 @SpringBootTest
 @Disabled
 class TerminPilotApplicationTests {
-
-	@Test
-	fun contextLoads() {
-	}
+    @Test
+    fun contextLoads() {
+    }
 }

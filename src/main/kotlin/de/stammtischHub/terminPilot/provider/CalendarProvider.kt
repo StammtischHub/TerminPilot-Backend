@@ -1,4 +1,3 @@
 package de.stammtischHub.terminPilot.provider
 
-interface CalendarProvider {
-}
+interface CalendarProvider

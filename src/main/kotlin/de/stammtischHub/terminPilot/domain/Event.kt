@@ -2,6 +2,6 @@ package de.stammtischHub.terminPilot.domain
 
 import java.util.Date
 
-data class Event (
+data class Event(
     val date: Date,
 )
