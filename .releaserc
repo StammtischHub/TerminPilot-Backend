@@ -14,7 +14,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "echo \"new_version=${nextRelease.version}\" >> $GITHUB_OUTPUT && mv build/libs/terminpilot-backend.jar build/libs/terminpilot-backend-${nextRelease.version}.jar"
+        "prepareCmd": "sed -i 's/^version = .*/version = \"${nextRelease.version}\"/' build.gradle.kts && echo \"new_version=${nextRelease.version}\" >> $GITHUB_OUTPUT && mv build/libs/terminpilot-backend.jar build/libs/terminpilot-backend-${nextRelease.version}.jar"
       }
     ],
 
@@ -32,7 +32,7 @@
     [
       "@semantic-release/git",
       {
-        "assets": ["CHANGELOG.md"],
+        "assets": ["CHANGELOG.md", "build.gradle.kts"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ]

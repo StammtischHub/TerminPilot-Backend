@@ -4,6 +4,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 application-local.yml
+google-credentials.json
 
 ### IntelliJ IDEA ###
 .idea
