@@ -133,6 +133,7 @@ jobs:
           GIT_AUTHOR_EMAIL: "3667706+stammtischhub-releaser[bot]@users.noreply.github.com"
           GIT_COMMITTER_NAME: "StammtischHub Release Bot"
           GIT_COMMITTER_EMAIL: "3667706+stammtischhub-releaser[bot]@users.noreply.github.com"
+
         run: npx semantic-release
 
   docker_release:
