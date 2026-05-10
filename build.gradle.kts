@@ -24,13 +24,11 @@ tasks.named("check") {
 }
 
 tasks.jar {
-    archiveBaseName.set("terminpilot-backend")
-    archiveVersion.set("")
+    enabled = false
 }
 
 tasks.bootJar {
     archiveBaseName.set("terminpilot-backend")
-    archiveVersion.set("")
 }
 
 group = "de.StammtischHub"
