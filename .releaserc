@@ -32,9 +32,9 @@
     [
       "@semantic-release/git",
       {
-        "assets": [
-          "CHANGELOG.md"
-        ],
+        "gitAuthorName": "StammtischHub Release Bot",
+        "gitAuthorEmail": "3667706+stammtischhub-releaser[bot]@users.noreply.github.com",
+        "assets": ["CHANGELOG.md"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ]

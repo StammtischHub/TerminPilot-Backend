@@ -123,7 +123,7 @@ jobs:
           NEW_VERSION: ${{ needs.version_release.outputs.new_version }}
           OWNER: ${{ github.repository_owner }}
         run: |
-          OWNER=$(echo "OWNER" | tr '[:upper:]' '[:lower:]')
-          docker build -t ghcr.io/${process.env.OWNER}/terminpilot-backend:${NEW_VERSION} -t ghcr.io/${process.env.OWNER}/terminpilot-backend:latest . 
-          docker push ghcr.io/${process.env.OWNER}/terminpilot-backend:${NEW_VERSION} 
-          docker push ghcr.io/${process.env.OWNER}/terminpilot-backend:latest
+          OWNER=$(echo "$OWNER" | tr '[:upper:]' '[:lower:]')
+          docker build -t ghcr.io/${OWNER}/terminpilot-backend:${NEW_VERSION} -t ghcr.io/${OWNER}/terminpilot-backend:latest . 
+          docker push ghcr.io/${OWNER}/terminpilot-backend:${NEW_VERSION} 
+          docker push ghcr.io/${OWNER}/terminpilot-backend:latest
