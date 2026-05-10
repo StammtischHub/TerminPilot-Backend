@@ -1,0 +1,27 @@
+name: Init Package
+
+on:
+  workflow_dispatch:
+
+permissions:
+  packages: write
+  contents: read
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push init image
+        run: |
+          docker pull hello-world
+          docker tag hello-world ghcr.io/${{ github.repository_owner }}/terminpilot-backend:init
+          docker push ghcr.io/${{ github.repository_owner }}/terminpilot-backend:init
