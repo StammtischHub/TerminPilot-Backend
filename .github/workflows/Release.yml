@@ -31,7 +31,7 @@ jobs:
             
             if (!allowedRoles.includes(perm.permission)) {
               core.setFailed(
-                `❌ ${context.actor} hat Rolle "${perm.permission}" – benötigt: ${allowedRoles.join(' oder ')`
+                `❌ ${context.actor} hat Rolle "${perm.permission}" – benötigt: ${allowedRoles.join(' oder ')}`
               );
             }
             console.log(`✅ ${context.actor} ist berechtigt (${perm.permission})`);
