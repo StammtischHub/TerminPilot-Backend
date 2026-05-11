@@ -5,19 +5,21 @@
   ],
   "timezone": "Europe/Berlin",
   "schedule": ["every 6 hours"],
+
   "dependencyDashboardApproval": false,
   "labels": ["renovate"],
-  "prConcurrentLimit": 5,
-  "prHourlyLimit": 2,
   "rebaseWhen": "auto",
+  "commitBody": "",
+
+  "automerge": true,
+  "platformAutomerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
 
   "packageRules": [
     {
       "description": "Patch & Minor Updates: automatisch mergen nach erfolgreicher CI",
-      "matchUpdateTypes": ["patch", "minor"],
-      "automerge": true,
-      "automergeType": "pr",
-      "automergeStrategy": "squash"
+      "matchUpdateTypes": ["patch", "minor"]
     },
     {
       "description": "Major Updates: PR erstellen, aber KEIN Auto-Merge",
