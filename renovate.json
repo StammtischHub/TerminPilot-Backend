@@ -1,35 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
-  ],
-  "timezone": "Europe/Berlin",
-  "schedule": ["every 6 hours"],
-  "prConcurrentLimit": 0,
-  "prHourlyLimit": 0,
-
-  "dependencyDashboardApproval": false,
-  "labels": ["renovate"],
-  "rebaseWhen": "auto",
-  "commitBody": "",
-
-  "packageRules": [
-    {
-      "description": "Patch & Minor Updates: automatisch mergen nach erfolgreicher CI",
-      "matchUpdateTypes": ["patch", "minor"],
-      "automerge": true,
-      "automergeType": "pr",
-      "automergeStrategy": "squash"
-    },
-    {
-      "description": "Major Updates: PR erstellen, aber KEIN Auto-Merge",
-      "matchUpdateTypes": ["major"],
-      "automerge": false,
-      "labels": ["renovate", "major update"]
-    }
-  ],
-
-  "gradle": {
-    "enabled": true
-  }
+    "config:recommended"
+  ]
 }
