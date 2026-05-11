@@ -1,10 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:base"
   ],
   "timezone": "Europe/Berlin",
   "schedule": ["before 6am"],
+  "dependencyDashboardApproval": false,
+  "labels": ["renovate"],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
 
   "packageRules": [
     {
@@ -24,9 +28,5 @@
 
   "gradle": {
     "enabled": true
-  },
-
-  "labels": ["renovate"],
-  "prConcurrentLimit": 5,
-  "prHourlyLimit": 2
+  }
 }
