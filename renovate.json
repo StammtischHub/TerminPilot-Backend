@@ -18,9 +18,7 @@
       "description": "Patch & Minor Updates: automatisch mergen nach erfolgreicher CI",
       "matchUpdateTypes": ["patch", "minor"],
       "automerge": true,
-      "platformAutomerge": true,
-      "automergeType": "pr",
-      "automergeStrategy": "squash"
+      "platformAutomerge": true
     },
     {
       "description": "Major Updates: PR erstellen, aber KEIN Auto-Merge",
