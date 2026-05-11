@@ -4,6 +4,7 @@ on:
 
 jobs:
   check-permissions:
+    name: Check Permissions
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -11,12 +12,12 @@ jobs:
       - name: Check branch
         run: |
           if [ "${{ github.ref_name }}" != "main" ]; then
-            echo "❌ Workflow läuft auf Branch '${{ github.ref_name }}' – nur main erlaubt"
+            echo "❌ Workflow runs on branch '${{ github.ref_name }}' – only main allowed"
             exit 1
           fi
-          echo "✅ Branch ist main"
+          echo "✅ Branch is main"
 
-      - name: Check repo role
+      - name: Check repository role
         uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -31,10 +32,10 @@ jobs:
             
             if (!allowedRoles.includes(perm.permission)) {
               core.setFailed(
-                `❌ ${context.actor} hat Rolle "${perm.permission}" – benötigt: ${allowedRoles.join(' oder ')}`
+                `❌ ${context.actor} has role "${perm.permission}" – needs: ${allowedRoles.join(' or ')}`
               );
             }
-            console.log(`✅ ${context.actor} ist berechtigt (${perm.permission})`);
+            console.log(`✅ ${context.actor} is eligible (${perm.permission})`);
 
   build:
     name: Build
