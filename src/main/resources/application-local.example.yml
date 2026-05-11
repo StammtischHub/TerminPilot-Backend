@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/{DB_NAME}
-    username: {DB_USERNAME}
-    password: {DB_USERNAME_PASSWORD}
+    url: jdbc:mysql://localhost:3306/TerminPilot
+    username: TerminPilotUser
+    password: {DATABASE_USERNAME_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 google:
