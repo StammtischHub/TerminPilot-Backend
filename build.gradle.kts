@@ -33,7 +33,7 @@ tasks.bootJar {
 }
 
 group = "de.stammtischHub"
-version = "0.0.0"
+version = "0.0.0-SNAPSHOT"
 
 java {
     toolchain {
