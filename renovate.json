@@ -10,7 +10,7 @@
 
   "dependencyDashboardApproval": false,
   "labels": ["renovate"],
-  "rebaseWhen": "auto",
+  "rebaseWhen": "behind-base-branch",
   "commitBody": "",
   "automerge": true,
   "platformAutomerge": true,
