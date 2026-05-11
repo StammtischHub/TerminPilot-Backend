@@ -85,7 +85,7 @@ dependencies {
   implementation("jakarta.validation:jakarta.validation-api")
   apiSpec("de.stammtischhub:terminpilot-api-spec:0.0.0@yaml")
 
-  // Provider
+  // Apple-Provider
   implementation("com.github.lookfirst:sardine:5.13")
   implementation("org.mnode.ical4j:ical4j:4.3.0")
 
@@ -97,6 +97,11 @@ dependencies {
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+  // Google-Provider
+  implementation("com.google.apis:google-api-services-calendar:v3-rev20260225-2.0.0")
+  implementation("com.google.auth:google-auth-library-oauth2-http:1.46.0")
+  implementation("com.google.http-client:google-http-client-jackson2:2.1.0")
 }
 
 sourceSets {
