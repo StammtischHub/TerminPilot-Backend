@@ -1,0 +1,30 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "timezone": "Europe/Berlin",
+  "schedule": ["* 0-6 * * *"],
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
+
+  "dependencyDashboardApproval": false,
+  "labels": ["renovate"],
+  "rebaseWhen": "behind-base-branch",
+  "commitBody": "",
+  "automerge": true,
+  "platformAutomerge": true,
+
+  "packageRules": [
+    {
+      "description": "Major Updates: PR erstellen, aber KEIN Auto-Merge",
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "labels": ["renovate", "major update"]
+    }
+  ],
+
+  "gradle": {
+    "enabled": true
+  }
+}
