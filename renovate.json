@@ -4,11 +4,12 @@
     "config:base"
   ],
   "timezone": "Europe/Berlin",
-  "schedule": ["before 6am"],
+  "schedule": ["every 6 hours"],
   "dependencyDashboardApproval": false,
   "labels": ["renovate"],
   "prConcurrentLimit": 5,
   "prHourlyLimit": 2,
+  "rebaseWhen": "auto",
 
   "packageRules": [
     {
