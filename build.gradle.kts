@@ -46,22 +46,27 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-webmvc")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("tools.jackson.module:jackson-module-kotlin")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    dependencies {
+        implementation("org.springframework.boot:spring-boot-starter-webmvc")
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("tools.jackson.module:jackson-module-kotlin")
+        developmentOnly("org.springframework.boot:spring-boot-devtools")
+        implementation("org.jetbrains.kotlin:kotlin-noarg")
+        testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+        testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+        runtimeOnly("com.mysql:mysql-connector-j")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    // Provider
-    implementation("com.github.lookfirst:sardine:5.13")
-    implementation("org.mnode.ical4j:ical4j:4.2.5")
+        // Apple-Provider
+        implementation("com.github.lookfirst:sardine:5.13")
+        implementation("org.mnode.ical4j:ical4j:4.2.5")
 
-    // Datenbank
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    runtimeOnly("com.mysql:mysql-connector-j")
-    implementation("org.jetbrains.kotlin:kotlin-noarg")
+        // Google-Provider
+        implementation("com.google.apis:google-api-services-calendar:v3-rev20260225-2.0.0")
+        implementation("com.google.auth:google-auth-library-oauth2-http:1.46.0")
+        implementation("com.google.http-client:google-http-client-jackson2:2.1.0")
+    }
 }
 
 kotlin {
