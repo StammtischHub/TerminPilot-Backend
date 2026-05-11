@@ -55,8 +55,8 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // Provider
-    implementation("com.github.lookfirst:sardine:5.13")
-    implementation("org.mnode.ical4j:ical4j:4.2.4")
+    implementation("com.github.lookfirst:sardine")
+    implementation("org.mnode.ical4j:ical4j:4.2.5")
 
     // Datenbank
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
