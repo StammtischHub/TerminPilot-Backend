@@ -12,14 +12,10 @@
   "labels": ["renovate"],
   "rebaseWhen": "auto",
   "commitBody": "",
+  "automerge": true,
+  "platformAutomerge": true,
 
   "packageRules": [
-    {
-      "description": "Patch & Minor Updates: automatisch mergen nach erfolgreicher CI",
-      "matchUpdateTypes": ["patch", "minor"],
-      "automerge": true,
-      "platformAutomerge": true
-    },
     {
       "description": "Major Updates: PR erstellen, aber KEIN Auto-Merge",
       "matchUpdateTypes": ["major"],
