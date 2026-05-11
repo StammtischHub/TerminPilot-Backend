@@ -56,7 +56,7 @@ dependencies {
 
     // Provider
     implementation("com.github.lookfirst:sardine:5.13")
-    implementation("org.mnode.ical4j:ical4j:4.2.4")
+    implementation("org.mnode.ical4j:ical4j:4.2.5")
 
     // Datenbank
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
