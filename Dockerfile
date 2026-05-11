@@ -1,4 +1,4 @@
-FROM eclipse-temurin:24-jre-alpine
+FROM eclipse-temurin:25.0.3_9-jre-alpine
 
 WORKDIR /terminpilot
 
