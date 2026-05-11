@@ -8,7 +8,7 @@ After cloning the repository, follow the instructions below to get started with 
 
 ### Requirements
 
-The following requirements must be met to be able to setup and run the backend:
+The following requirements must be met to be able to set up and run the backend:
 
 1. Java 24+
 2. MySQL 9.0+
