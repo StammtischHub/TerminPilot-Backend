@@ -3,9 +3,35 @@ on:
   workflow_dispatch:
 
 jobs:
+  check-permission:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check repo role
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: perm } = await github.rest.repos.getCollaboratorPermissionLevel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              username: context.actor,
+            });
+            
+            const allowedRoles = ['admin', 'maintain'];
+            
+            if (!allowedRoles.includes(perm.permission)) {
+              core.setFailed(
+                `❌ ${context.actor} hat Rolle "${perm.permission}" – benötigt: ${allowedRoles.join(' oder ')`
+              );
+            }
+            console.log(`✅ ${context.actor} ist berechtigt (${perm.permission})`);
+
   build:
     name: Build
     runs-on: ubuntu-latest
+    needs: check-permission
     permissions:
       contents: read
 
