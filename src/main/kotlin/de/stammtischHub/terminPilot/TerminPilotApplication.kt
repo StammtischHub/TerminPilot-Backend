@@ -1,4 +1,4 @@
-package de.StammtischHub.TerminPilot
+package de.stammtischHub.terminPilot
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

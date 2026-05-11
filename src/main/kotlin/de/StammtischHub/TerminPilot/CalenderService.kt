@@ -1,9 +1,8 @@
-package de.StammtischHub.TerminPilot
+package de.stammtischHub.terminPilot
 
 import com.google.api.client.util.DateTime
 import com.google.api.services.calendar.Calendar
 import com.google.api.services.calendar.model.Event
-import com.google.api.services.calendar.model.EventDateTime
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 

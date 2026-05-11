@@ -1,4 +1,4 @@
-package de.StammtischHub.TerminPilot
+package de.stammtischHub.terminPilot
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
