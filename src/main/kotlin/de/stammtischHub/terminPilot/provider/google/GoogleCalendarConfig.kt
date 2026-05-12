@@ -1,4 +1,4 @@
-package de.stammtischHub.terminPilot
+package de.stammtischHub.terminPilot.provider.google
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
@@ -21,14 +21,14 @@ class GoogleCalendarConfig {
     fun googleCalendarClient(): Calendar {
         val credentials = GoogleCredentials
             .fromStream(credentialsResource.inputStream)
-            .createScoped(listOf(CalendarScopes.CALENDAR_READONLY))
+            .createScoped(listOf(CalendarScopes.CALENDAR))
 
         return Calendar.Builder(
             GoogleNetHttpTransport.newTrustedTransport(),
             GsonFactory.getDefaultInstance(),
             HttpCredentialsAdapter(credentials)
         )
-            .setApplicationName("My Calendar App")
+            .setApplicationName("TerminPilot")
             .build()
     }
 }
