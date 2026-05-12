@@ -7,7 +7,7 @@ interface CalendarProvider {
     /**
      * Gets the calendar-entries from a user for the given timespan.
      */
-    fun getCalenderForTimespan(start: LocalDateTime, end: LocalDateTime): List<Appointment>
+    fun getCalendarForTimespan(start: LocalDateTime, end: LocalDateTime): List<Appointment>
 
     /**
      * Writes the given appointment to the users calendar.
