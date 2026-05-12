@@ -22,7 +22,7 @@ if (envFile.exists()) {
 }
 
 group = "de.stammtischHub"
-version = "0.0.0-SNAPSHOT"
+version = "0.0.0"
 
 java {
   toolchain {
@@ -89,6 +89,11 @@ dependencies {
   implementation("com.github.lookfirst:sardine:5.13")
   implementation("org.mnode.ical4j:ical4j:4.3.0")
 
+  // Google-Provider
+  implementation("com.google.api-client:google-api-client:2.7.0")
+  implementation("com.google.oauth-client:google-oauth-client-jetty:1.36.0")
+  implementation("com.google.apis:google-api-services-calendar:v3-rev20220715-2.0.0")
+
   // Datenbank
   runtimeOnly("com.mysql:mysql-connector-j")
 
@@ -98,10 +103,6 @@ dependencies {
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-  // Google-Provider
-  implementation("com.google.apis:google-api-services-calendar:v3-rev20260225-2.0.0")
-  implementation("com.google.auth:google-auth-library-oauth2-http:1.46.0")
-  implementation("com.google.http-client:google-http-client-jackson2:2.1.0")
 }
 
 sourceSets {
