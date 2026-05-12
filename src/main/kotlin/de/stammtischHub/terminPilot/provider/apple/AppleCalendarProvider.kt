@@ -5,7 +5,7 @@ import de.stammtischHub.terminPilot.provider.CalendarProvider
 import java.time.LocalDateTime
 
 class AppleCalendarProvider : CalendarProvider {
-    override fun getCalenderForTimespan(start: LocalDateTime, end: LocalDateTime): List<Appointment> {
+    override fun getCalendarForTimespan(start: LocalDateTime, end: LocalDateTime): List<Appointment> {
         TODO("Not yet implemented")
     }
 
