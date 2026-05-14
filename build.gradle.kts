@@ -7,6 +7,7 @@ plugins {
     id("org.springframework.boot") version "4.0.6"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
+    id("org.owasp.dependencycheck") version "9.2.0"
 }
 
 ktlint {
@@ -21,6 +22,15 @@ tasks.named("check") {
             dep is TaskProvider<*> && dep.name.startsWith("ktlint")
         },
     )
+}
+
+dependencyCheck {
+    failBuildOnCVSS = 4.0f
+    formats = listOf("HTML", "SARIF")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 tasks.jar {
@@ -74,8 +84,4 @@ allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
