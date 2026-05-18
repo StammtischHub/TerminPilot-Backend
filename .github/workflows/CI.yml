@@ -63,6 +63,7 @@ jobs:
           min-coverage-overall: 80
           min-coverage-changed-files: 80
           title: Code Coverage
+          update-comment: true
 
   lint:
     name: Ktlint & Code Analysis
