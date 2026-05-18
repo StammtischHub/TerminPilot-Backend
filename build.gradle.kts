@@ -8,31 +8,29 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
     id("dev.detekt") version "2.0.0-alpha.3"
-    id("org.owasp.dependencycheck") version "12.2.2"
+    jacoco
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required = true
+        html.required = false
+    }
 }
 
 ktlint {
     reporters {
         reporter(ReporterType.CHECKSTYLE)
     }
-}
-
-tasks.named("check") {
-    setDependsOn(
-        dependsOn.filterNot { dep ->
-            dep is TaskProvider<*> && dep.name.startsWith("ktlint")
-        },
-    )
-}
-
-dependencyCheck {
-    failBuildOnCVSS = 4.0f
-    formats = listOf("HTML", "SARIF")
-    nvd.apiKey = System.getenv("NVD_API_KEY") ?: ""
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
 
 tasks.jar {

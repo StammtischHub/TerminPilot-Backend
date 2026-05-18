@@ -9,5 +9,6 @@ import kotlin.test.Test
 class TerminPilotApplicationTests {
     @Test
     fun contextLoads() {
+        print("Context loads")
     }
 }

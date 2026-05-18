@@ -20,7 +20,7 @@ jobs:
       - uses: ./.github/actions/setup-gradle
 
       - name: Build project
-        run: ./gradlew build -x test
+        run: ./gradlew assemble
 
       - name: Upload build output
         uses: actions/upload-artifact@v7
@@ -54,8 +54,18 @@ jobs:
           files: build/test-results/**/*.xml
           job_summary: false
 
+      - name: Publish code coverage
+        uses: madrapps/jacoco-report@v1.7.2
+        if: always()
+        with:
+          paths: build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 80
+          title: Code Coverage
+
   lint:
-    name: Ktlint & Static Analysis
+    name: Ktlint & Code Analysis
     runs-on: ubuntu-latest
 
     steps:
@@ -68,8 +78,7 @@ jobs:
 
       - name: Run detekt
         if: always()
-        run: |
-          ./gradlew detekt 
+        run: ./gradlew detekt || (echo "::warning::Code Analysis failed. Check Checkstyle-report for more information." && exit 1)
 
       - name: Publish reports
         uses: lcollins/checkstyle-github-action@v3.2.0
@@ -84,17 +93,11 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: ./.github/actions/setup-gradle
-
-      - name: Run OWASP Dependency Check
-        run: ./gradlew dependencyCheckAnalyze
-        env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-
-      - name: Upload Dependency Check report
-        uses: actions/upload-artifact@v7
-        if: always()
+      - name: Run Trivy Vulnerability Scan
+        uses: aquasecurity/trivy-action@master
         with:
-          name: dependency-check-report-${{ github.sha }}
-          path: build/reports/dependency-check-report.html
-          retention-days: 1
+          scan-type: fs
+          scan-ref: .
+          format: table
+          severity: MEDIUM,HIGH,CRITICAL
+          exit-code: 1
