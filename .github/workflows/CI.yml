@@ -100,7 +100,9 @@ jobs:
       - uses: ./.github/actions/setup-gradle
 
       - name: Export dependencies
-        run: ./gradlew dependencies --configuration runtimeClasspath > build/dependencies.txt
+        run: |
+          mkdir -p build
+          ./gradlew dependencies --configuration runtimeClasspath > build/dependencies.txt
 
       - name: Run Trivy Vulnerability Scan
         uses: aquasecurity/trivy-action@master
