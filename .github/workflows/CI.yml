@@ -56,7 +56,10 @@ jobs:
 
       - name: Publish code coverage
         uses: madrapps/jacoco-report@v1.7.2
-        if: always()
+        if: |
+          always() 
+          && github.event_name == 'pull_request'
+          && !startsWith(github.head_ref, 'renovate')
         with:
           paths: build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -83,7 +86,7 @@ jobs:
 
       - name: Publish reports
         uses: lcollins/checkstyle-github-action@v3.2.0
-        if: always()
+        if: failure()
         with:
           path: build/reports/**/*.xml
 
@@ -94,11 +97,16 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - uses: ./.github/actions/setup-gradle
+
+      - name: Export dependencies
+        run: ./gradlew dependencies --configuration runtimeClasspath > build/dependencies.txt
+
       - name: Run Trivy Vulnerability Scan
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: fs
-          scan-ref: .
+          scan-ref: build/libs/*.jar
           format: table
           severity: MEDIUM,HIGH,CRITICAL
           exit-code: 1
