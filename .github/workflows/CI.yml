@@ -108,7 +108,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: fs
-          scan-ref: build/libs/*.jar
+          scan-ref: .
           format: table
           severity: MEDIUM,HIGH,CRITICAL
           exit-code: 1
