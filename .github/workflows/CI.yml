@@ -54,7 +54,7 @@ jobs:
           image-ref: '.'
           format: json
           output: trivy-results.json
-          severity: MEDIUM,HIGH,CRITICAL
+          severity: UNKNOW,LOW,MEDIUM,HIGH,CRITICAL
           exit-code: '1'
 
       - name: Print custom output
@@ -65,12 +65,13 @@ jobs:
             "\(.Severity)|\(.PkgName)|\(.InstalledVersion)|\(.FixedVersion // "no fix")|\(.VulnerabilityID)"
           ' | while IFS="|" read -r severity pkg installed fixed cve; do
             case "$severity" in
-              CRITICAL) color="\e[41m" ;;  # roter Hintergrund
+              CRITICAL) color="\e[91m" ;;  # helles rot
               HIGH)     color="\e[31m" ;;  # rot
               MEDIUM)   color="\e[33m" ;;  # gelb
               LOW)      color="\e[34m" ;;  # blau
             esac
-            echo -e "${color}[${severity}]\e[0m ${pkg} ${installed} -> ${fixed} | ${cve}"
+            link="https://nvd.nist.gov/vuln/detail/${cve}"
+            echo -e "${color}[${severity}]\e[0m ${pkg} ${installed} -> ${fixed}\n\t${cve} (${link})"
           done
 
   build:
