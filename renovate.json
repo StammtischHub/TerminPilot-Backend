@@ -9,6 +9,7 @@
   "prHourlyLimit": 0,
 
   "dependencyDashboardApproval": false,
+  "dependencyDashboard": false,
   "labels": ["renovate"],
   "rebaseWhen": "behind-base-branch",
   "commitBody": "",
