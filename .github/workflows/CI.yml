@@ -103,7 +103,7 @@ jobs:
       - name: Run Trivy Vulnerability Scan
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: fs
+          scan-type: image
           scan-ref: build/libs/terminpilot-backend.jar
           format: table
           severity: MEDIUM,HIGH,CRITICAL
