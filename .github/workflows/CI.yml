@@ -107,7 +107,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: fs
-          image-ref: .
+          image-ref: '.'
           format: table
           severity: MEDIUM,HIGH,CRITICAL
           exit-code: '1'
