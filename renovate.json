@@ -11,6 +11,7 @@
 
   "dependencyDashboard": false,
   "dependencyDashboardApproval": false,
+  "dependencyDashboard": false,
   "labels": ["renovate"],
   "rebaseWhen": "behind-base-branch",
   "automerge": true,
