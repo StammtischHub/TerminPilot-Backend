@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   lockfile-check:
-    name: Check for outdated lockfiles
+    name: Lockfile Check
     runs-on: ubuntu-latest
 
     steps:
@@ -52,7 +52,7 @@ jobs:
         with:
           scan-type: fs
           image-ref: '.'
-          format: table
+          format: json
           severity: MEDIUM,HIGH,CRITICAL
           exit-code: '1'
 
