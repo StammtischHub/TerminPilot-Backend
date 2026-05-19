@@ -98,13 +98,16 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: ./.github/actions/download-build
+      - uses: ./.github/actions/setup-gradle
+
+      - name: Generate dependency report
+        run: ./gradlew dependencies
 
       - name: Run Trivy Vulnerability Scan
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: image
-          image-ref: build/libs/terminpilot-backend.jar
+          scan-type: fs
+          image-ref: .
           format: table
           severity: MEDIUM,HIGH,CRITICAL
-          exit-code: 1
+          exit-code: '1'
