@@ -104,7 +104,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: image
-          scan-ref: build/libs/terminpilot-backend.jar
+          image-ref: build/libs/terminpilot-backend.jar
           format: table
           severity: MEDIUM,HIGH,CRITICAL
           exit-code: 1
