@@ -74,6 +74,11 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-noarg")
 }
 
+dependencyLocking {
+    lockAllConfigurations()
+    lockMode = LockMode.STRICT
+}
+
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
