@@ -72,12 +72,12 @@ jobs:
               LOW)      color="\e[34m" ;;  # blau
             esac
             link="https://nvd.nist.gov/vuln/detail/${cve}"
-            echo -e "${color}[${severity}]\e[0m ${pkg}\n\t${installed} -> ${fixed}\n\t${cve} (${link})"
+            echo -e "${color}[${severity}]\e[0m ${pkg}\n\t${installed} -> ${fixed}\n\t${cve} (${link})\n"
           done
 
           if [ "$count" -gt 0 ]; then
             echo "::warning::Found $count vulnerabilities. See report above."
-            exit 2
+            exit 1
           else
             echo "No vulnerabilities found."
           fi
