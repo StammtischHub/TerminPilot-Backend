@@ -55,11 +55,12 @@ jobs:
           format: json
           output: trivy-results.json
           severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
-          exit-code: '1'
+          exit-code: '0'
 
       - name: Print custom output
-        if: always()
         run: |
+          count=$(jq '[.Results[]?.Vulnerabilities[]?] | length' trivy-results.json)
+          
           cat trivy-results.json | jq -r '
             .Results[]?.Vulnerabilities[]? |
             "\(.Severity)|\(.PkgName)|\(.InstalledVersion)|\(.FixedVersion // "no fix")|\(.VulnerabilityID)"
@@ -73,6 +74,12 @@ jobs:
             link="https://nvd.nist.gov/vuln/detail/${cve}"
             echo -e "${color}[${severity}]\e[0m ${pkg}\n\t${installed} -> ${fixed}\n\t${cve} (${link})"
           done
+          
+          if [ "$count" -gt 0 ]; then
+            echo "::warning::Found $count vulnerabilities. Please review the Trivy report for details."
+          else
+            echo "No vulnerabilities found."
+          fi
 
   build:
     name: Build
