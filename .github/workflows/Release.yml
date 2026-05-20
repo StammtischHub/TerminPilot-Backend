@@ -12,7 +12,7 @@ jobs:
       - name: Check branch
         run: |
           if [ "${{ github.ref_name }}" != "main" ]; then
-            echo "❌ Workflow runs on branch '${{ github.ref_name }}' – only main allowed"
+            echo "::warning::Workflow runs on branch '${{ github.ref_name }}' – only main allowed"
             exit 1
           fi
           echo "✅ Branch is main"
@@ -32,7 +32,7 @@ jobs:
             
             if (!allowedRoles.includes(perm.permission)) {
               core.setFailed(
-                `❌ ${context.actor} has role "${perm.permission}" – needs: ${allowedRoles.join(' or ')}`
+                `::warning::${context.actor} has role "${perm.permission}" – needs: ${allowedRoles.join(' or ')}`
               );
             }
             console.log(`✅ ${context.actor} is eligible (${perm.permission})`);
@@ -47,11 +47,10 @@ jobs:
       - uses: ./.github/actions/setup-gradle
 
       - name: Validate Lockfile is up to date
-        run: ./gradlew dependencies --write-locks && git diff --exit-code gradle.lockfile
-
-      - name: Show diff on failure
-        if: failure()
-        run: git diff gradle.lockfile
+        run: |
+          ./gradlew dependencies --write-locks
+          git diff gradle.lockfile
+          git diff --exit-code gradle.lockfile
 
       - name: Update lockfile for renovate
         if: |
@@ -70,6 +69,7 @@ jobs:
     name: Dependency Check
     runs-on: ubuntu-latest
     needs: lockfile-check
+    continue-on-error: true
 
     steps:
       - uses: actions/checkout@v6
@@ -84,7 +84,7 @@ jobs:
           severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
           exit-code: '0'
 
-      - name: Print custom output
+      - name: Evaluate Vulnerabilities
         run: |
           count=$(jq '[.Results[]?.Vulnerabilities[]?] | length' trivy-results.json)
           
@@ -103,7 +103,8 @@ jobs:
           done
           
           if [ "$count" -gt 0 ]; then
-            echo "::warning::Found $count vulnerabilities. Please review the Trivy report for details."
+            echo "::warning::Found $count vulnerabilities. See report above."
+            exit 1
           else
             echo "No vulnerabilities found."
           fi

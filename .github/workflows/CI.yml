@@ -20,11 +20,10 @@ jobs:
       - uses: ./.github/actions/setup-gradle
 
       - name: Validate Lockfile is up to date
-        run: ./gradlew dependencies --write-locks && git diff --exit-code gradle.lockfile
-
-      - name: Show diff on failure
-        if: failure()
-        run: git diff gradle.lockfile
+        run: |
+          ./gradlew dependencies --write-locks
+          git diff gradle.lockfile
+          git diff --exit-code gradle.lockfile
 
       - name: Update lockfile for renovate
         if: |
