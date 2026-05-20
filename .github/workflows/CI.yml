@@ -77,7 +77,7 @@ jobs:
 
           if [ "$count" -gt 0 ]; then
             echo "::warning::Found $count vulnerabilities. See report above."
-            exit 1
+            exit 2
           else
             echo "No vulnerabilities found."
           fi

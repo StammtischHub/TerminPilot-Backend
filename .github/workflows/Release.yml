@@ -12,7 +12,7 @@ jobs:
       - name: Check branch
         run: |
           if [ "${{ github.ref_name }}" != "main" ]; then
-            echo "::warning::Workflow runs on branch '${{ github.ref_name }}' – only main allowed"
+            echo "::error::Workflow runs on branch '${{ github.ref_name }}' – only main allowed"
             exit 1
           fi
           echo "✅ Branch is main"
@@ -32,7 +32,7 @@ jobs:
             
             if (!allowedRoles.includes(perm.permission)) {
               core.setFailed(
-                `::warning::${context.actor} has role "${perm.permission}" – needs: ${allowedRoles.join(' or ')}`
+                `::error::${context.actor} has role "${perm.permission}" – needs: ${allowedRoles.join(' or ')}`
               );
             }
             console.log(`✅ ${context.actor} is eligible (${perm.permission})`);
