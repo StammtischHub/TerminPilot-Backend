@@ -21,8 +21,10 @@ jobs:
 
       - name: Validate Lockfile is up to date
         run: |
-          ./gradlew dependencies --write-locks
-          git diff gradle.lockfile
+          echo ${{ github.event_name }}
+          echo ${{ github.head_ref }}
+          echo ${{ github.actor }}
+          ./gradlew dependencies --write-locks > /dev/null
           git diff --exit-code gradle.lockfile
 
       - name: Update lockfile for renovate
@@ -142,7 +144,7 @@ jobs:
           update-comment: true
 
   lint:
-    name: Ktlint & Code Analysis
+    name: Ktlint & Detekt Analysis
     runs-on: ubuntu-latest
 
     steps:
