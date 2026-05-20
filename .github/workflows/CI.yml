@@ -21,19 +21,16 @@ jobs:
 
       - name: Validate Lockfile is up to date
         run: |
-          echo ${{ github.event_name }}
+          echo ${{ github.ref_type }}
           echo ${{ github.ref_name }}
-          echo ${{ github.head_ref }}
-          echo ${{ github.base_ref }}
-          echo ${{ github.actor }}
           ./gradlew dependencies --write-locks > /dev/null
           git diff --exit-code gradle.lockfile
 
       - name: Update lockfile for renovate
         if: |
           failure()
-          && github.event_name == 'pull_request'
-          && startsWith(github.head_ref, 'renovate')
+          && github.ref_type == 'pull_request'
+          && startsWith(github.ref_name, 'renovate')
           && github.actor == 'renovate[bot]'
         run: |
           git config user.name "github-actions[bot]"
