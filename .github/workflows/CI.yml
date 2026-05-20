@@ -22,7 +22,9 @@ jobs:
       - name: Validate Lockfile is up to date
         run: |
           echo ${{ github.event_name }}
+          echo ${{ github.ref_name }}
           echo ${{ github.head_ref }}
+          echo ${{ github.base_ref }}
           echo ${{ github.actor }}
           ./gradlew dependencies --write-locks > /dev/null
           git diff --exit-code gradle.lockfile
