@@ -29,7 +29,6 @@ jobs:
   dependency-check:
     name: Dependency Check
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: lockfile-check
 
     steps:
