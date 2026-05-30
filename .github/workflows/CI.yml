@@ -26,18 +26,6 @@ jobs:
           ./gradlew dependencies --write-locks > /dev/null
           git diff --exit-code gradle.lockfile
 
-      - name: Update lockfile for renovate
-        if: |
-          failure()
-          && startsWith(github.ref_name, 'renovate')
-          && github.actor == 'renovate[bot]'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add gradle.lockfile
-          git commit -m "chore: update gradle lockfile"
-          git push origin HEAD:${{ github.ref_name }}
-
   dependency-check:
     name: Dependency Check
     runs-on: ubuntu-latest
