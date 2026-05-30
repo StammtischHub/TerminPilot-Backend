@@ -21,18 +21,14 @@ jobs:
 
       - name: Validate Lockfile is up to date
         run: |
-          echo ${{ github.ref }}
-          echo ${{ github.ref_name }}
-          echo ${{ github.event }}
           ./gradlew dependencies --write-locks > /dev/null
           git diff --exit-code gradle.lockfile
 
       - name: Update lockfile for renovate
         if: |
           failure()
-          && github.ref_type == 'pull_request'
-          && startsWith(github.ref_name, 'renovate')
-          && github.actor == 'renovate[bot]'
+          && startsWith(github.ref_name, 'feat')
+          && github.actor == 'Leon4ever2802'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -43,8 +39,8 @@ jobs:
   dependency-check:
     name: Dependency Check
     runs-on: ubuntu-latest
-    needs: lockfile-check
     continue-on-error: true
+    needs: lockfile-check
 
     steps:
       - uses: actions/checkout@v6
@@ -87,7 +83,6 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: dependency-check
 
     steps:
       - uses: actions/checkout@v6
@@ -153,6 +148,7 @@ jobs:
       - uses: ./.github/actions/setup-gradle
 
       - name: Run ktlint
+        if: always()
         run: ./gradlew ktlintCheck || (echo "::warning::Lint failed. Run './gradlew ktlintFormat' to auto-fix formatting issues." && exit 1)
 
       - name: Run detekt
