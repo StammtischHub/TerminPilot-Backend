@@ -29,8 +29,8 @@ jobs:
       - name: Update lockfile for renovate
         if: |
           failure()
-          && startsWith(github.ref_name, 'feat')
-          && github.actor == 'Leon4ever2802'
+          && startsWith(github.ref_name, 'renovate')
+          && github.actor == 'renovate[bot]'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
