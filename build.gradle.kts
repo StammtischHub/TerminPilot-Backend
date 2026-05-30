@@ -7,20 +7,30 @@ plugins {
     id("org.springframework.boot") version "4.0.6"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
+    id("dev.detekt") version "2.0.0-alpha.3"
+    jacoco
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required = true
+        html.required = false
+    }
 }
 
 ktlint {
     reporters {
         reporter(ReporterType.CHECKSTYLE)
     }
-}
-
-tasks.named("check") {
-    setDependsOn(
-        dependsOn.filterNot { dep ->
-            dep is TaskProvider<*> && dep.name.startsWith("ktlint")
-        },
-    )
 }
 
 tasks.jar {
@@ -64,6 +74,11 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-noarg")
 }
 
+dependencyLocking {
+    lockAllConfigurations()
+    lockMode = LockMode.STRICT
+}
+
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
@@ -74,8 +89,4 @@ allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
