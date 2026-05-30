@@ -20,7 +20,8 @@
 
   "lockFileMaintenance": {
     "enabled": true,
-    "automerge": true
+    "automerge": true,
+    "dependencyDashboardApproval": false
   },
 
   "packageRules": [
@@ -28,6 +29,7 @@
       "description": "Major Updates: PR erstellen, aber kein Auto-Merge",
       "matchUpdateTypes": ["major"],
       "automerge": false,
+      "dependencyDashboardApproval": false,
       "labels": ["renovate", "major update"]
     }
   ]
