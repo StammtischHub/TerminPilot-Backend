@@ -114,7 +114,7 @@ jobs:
           job_summary: false
 
       - name: Publish code coverage
-        uses: madrapps/jacoco-report@v1.7.2
+        uses: madrapps/jacoco-report@v1.8.0
         if: |
           always() 
           && github.event_name == 'pull_request'
