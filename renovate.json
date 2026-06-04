@@ -2,7 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    ":semanticCommits",
     ":disableDependencyDashboard"
   ],
   "timezone": "Europe/Berlin",
@@ -10,18 +9,14 @@
   "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
 
-  "dependencyDashboard": false,
-  "dependencyDashboardApproval": false,
   "labels": ["renovate"],
   "rebaseWhen": "behind-base-branch",
   "automerge": true,
   "platformAutomerge": true,
-  "separateMajorMinor": true,
 
   "lockFileMaintenance": {
     "enabled": true,
-    "automerge": true,
-    "dependencyDashboardApproval": false
+    "automerge": true
   },
 
   "packageRules": [
@@ -29,7 +24,6 @@
       "description": "Major Updates: PR erstellen, aber kein Auto-Merge",
       "matchUpdateTypes": ["major"],
       "automerge": false,
-      "dependencyDashboardApproval": false,
       "labels": ["renovate", "major update"]
     }
   ]
