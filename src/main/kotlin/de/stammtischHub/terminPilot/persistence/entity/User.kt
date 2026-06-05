@@ -7,7 +7,7 @@ import jakarta.persistence.Id
 
 @Entity
 class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  var id: Long? = null
 }
