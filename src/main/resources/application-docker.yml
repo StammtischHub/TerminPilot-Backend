@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3366/TerminPilot
+    username: ${DOCKER_DB_USER:User}
+    password: ${DOCKER_DB_USER_PASSWORD:UserPassword}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
