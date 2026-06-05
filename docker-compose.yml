@@ -4,12 +4,12 @@ services:
     container_name: terminpilot-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${DOCKER_DB_ROOT_PASSWORD:-RootPassword}
-      MYSQL_DATABASE: TerminPilot
-      MYSQL_USER: ${DOCKER_DB_USER:-User}
-      MYSQL_PASSWORD: ${DOCKER_DB_USER_PASSWORD:-UserPassword}
+      MYSQL_ROOT_PASSWORD: ${DOCKER_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DOCKER_DB_NAME}
+      MYSQL_USER: ${DOCKER_DB_USER}
+      MYSQL_PASSWORD: ${DOCKER_DB_USER_PASSWORD}
     ports:
-      - "3366:3306"
+      - "${DOCKER_MYSQL_PORT}:3306"
     volumes:
       - terminpilot-mysql-data:/var/lib/mysql
 
