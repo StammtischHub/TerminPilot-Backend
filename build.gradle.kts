@@ -76,7 +76,6 @@ dependencies {
 
 dependencyLocking {
     lockAllConfigurations()
-    lockMode = LockMode.STRICT
 }
 
 kotlin {
