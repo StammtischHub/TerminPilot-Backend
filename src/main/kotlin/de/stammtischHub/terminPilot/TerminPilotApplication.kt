@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class TerminPilotApplication
 
 fun main(args: Array<String>) {
-    runApplication<TerminPilotApplication>(*args)
+  runApplication<TerminPilotApplication>(*args)
 }
