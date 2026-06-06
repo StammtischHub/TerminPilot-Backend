@@ -14,10 +14,14 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Check branch
+      - name: Check branch and event
         run: |
           if [ "${{ github.ref_name }}" != "main" ]; then
             echo "::error::Workflow runs on branch '${{ github.ref_name }}' – only main allowed"
+            exit 1
+          fi
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "::error::Workflow was not triggered manually but by '${{ github.event_name }}' – only workflow_dispatch allowed"
             exit 1
           fi
           echo "✅ Branch is main"
@@ -32,9 +36,9 @@ jobs:
               repo: context.repo.repo,
               username: context.actor,
             });
-            
+
             const allowedRoles = ['admin', 'maintain'];
-            
+
             if (!allowedRoles.includes(perm.permission)) {
               core.setFailed(
                 `::error::${context.actor} has role "${perm.permission}" – needs: ${allowedRoles.join(' or ')}`
@@ -81,7 +85,7 @@ jobs:
       - name: Evaluate Vulnerabilities
         run: |
           count=$(jq '[.Results[]?.Vulnerabilities[]?] | length' trivy-results.json)
-          
+
           cat trivy-results.json | jq -r '
             .Results[]?.Vulnerabilities[]? |
             "\(.Severity)|\(.PkgName)|\(.InstalledVersion)|\(.FixedVersion // "no fix")|\(.VulnerabilityID)"
@@ -95,7 +99,7 @@ jobs:
             link="https://nvd.nist.gov/vuln/detail/${cve}"
             echo -e "${color}[${severity}]\e[0m ${pkg}\n\t${installed} -> ${fixed}\n\t${cve} (${link})"
           done
-          
+
           if [ "$count" -gt 0 ]; then
             echo "::warning::Found $count vulnerabilities. See report above."
             exit 1
@@ -150,7 +154,6 @@ jobs:
   version_release:
     name: Version Release
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
     needs:
       - build
       - test
@@ -233,6 +236,6 @@ jobs:
           OWNER: ${{ github.repository_owner }}
         run: |
           OWNER=$(echo "$OWNER" | tr '[:upper:]' '[:lower:]')
-          docker build -t ghcr.io/${OWNER}/terminpilot-backend:${NEW_VERSION} -t ghcr.io/${OWNER}/terminpilot-backend:latest . 
-          docker push ghcr.io/${OWNER}/terminpilot-backend:${NEW_VERSION} 
+          docker build -t ghcr.io/${OWNER}/terminpilot-backend:${NEW_VERSION} -t ghcr.io/${OWNER}/terminpilot-backend:latest .
+          docker push ghcr.io/${OWNER}/terminpilot-backend:${NEW_VERSION}
           docker push ghcr.io/${OWNER}/terminpilot-backend:latest
