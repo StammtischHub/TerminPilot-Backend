@@ -104,14 +104,19 @@ jobs:
       - uses: ./.github/actions/download-build
 
       - name: Run tests
-        run: ./gradlew test
+        run: |
+          ${{ github.event_name }}
+          ${{ github.head_ref }}
+          ${{ !startsWith(github.head_ref, 'renovate') }}
+          ./gradlew test
 
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           files: build/test-results/**/*.xml
-          job_summary: false
+          job_summary: true
+          comment_mode: off
 
       - name: Publish code coverage
         uses: madrapps/jacoco-report@v1.8.0
@@ -126,6 +131,7 @@ jobs:
           min-coverage-changed-files: 80
           title: Code Coverage
           update-comment: true
+          skip-if-no-changes: true
 
   lint:
     name: Ktlint
