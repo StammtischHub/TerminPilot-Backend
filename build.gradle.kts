@@ -56,6 +56,7 @@ repositories {
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webmvc")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("tools.jackson.module:jackson-module-kotlin")
   developmentOnly("org.springframework.boot:spring-boot-devtools")

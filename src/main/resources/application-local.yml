@@ -12,6 +12,12 @@ spring:
       hibernate:
         format_sql: true
 
+springdoc:
+  swagger-ui:
+    enabled: true
+  api-docs:
+    enabled: true
+
 google:
   calendar:
     credentials-path: classpath:google-credentials.json
