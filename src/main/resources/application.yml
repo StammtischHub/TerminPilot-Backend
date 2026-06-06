@@ -5,10 +5,6 @@ spring:
     name: TerminPilot
   jpa:
     open-in-view: false
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
 
 logging:
   level:
