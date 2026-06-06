@@ -1,4 +1,4 @@
-name: CI
+name: Gradle Spring Kotlin
 
 on:
   pull_request:
@@ -106,11 +106,7 @@ jobs:
       - uses: ./.github/actions/download-build
 
       - name: Run tests
-        run: |
-          ${{ github.event_name }}
-          ${{ github.head_ref }}
-          ${{ !startsWith(github.ref_name, 'renovate') }}
-          ./gradlew test
+        run: ./gradlew test
 
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v2
