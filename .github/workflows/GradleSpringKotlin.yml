@@ -1,8 +1,10 @@
-name: CI
+name: Gradle Spring Kotlin
 
 on:
+  pull_request:
   push:
-    branches: [ "**" ]
+    branches:
+      - "main"
 
 permissions:
   contents: read
@@ -111,7 +113,8 @@ jobs:
         if: always()
         with:
           files: build/test-results/**/*.xml
-          job_summary: false
+          job_summary: true
+          comment_mode: off
 
       - name: Publish code coverage
         uses: madrapps/jacoco-report@v1.8.0
@@ -126,6 +129,7 @@ jobs:
           min-coverage-changed-files: 80
           title: Code Coverage
           update-comment: true
+          skip-if-no-changes: true
 
   lint:
     name: Ktlint
