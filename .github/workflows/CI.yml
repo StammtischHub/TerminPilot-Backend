@@ -108,7 +108,7 @@ jobs:
       - name: Run tests
         run: |
           ${{ github.event_name }}
-          ${{ github.ref_name }}
+          ${{ github.head_ref }}
           ${{ !startsWith(github.ref_name, 'renovate') }}
           ./gradlew test
 
