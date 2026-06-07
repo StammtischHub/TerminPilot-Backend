@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:9.0
+    container_name: terminpilot-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DOCKER_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DOCKER_DB_NAME}
+      MYSQL_USER: ${DOCKER_DB_USER}
+      MYSQL_PASSWORD: ${DOCKER_DB_USER_PASSWORD}
+    ports:
+      - "${DOCKER_MYSQL_PORT}:3306"
+    volumes:
+      - terminpilot-mysql-data:/var/lib/mysql
+
+volumes:
+  terminpilot-mysql-data:
