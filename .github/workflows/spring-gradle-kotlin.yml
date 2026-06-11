@@ -1,4 +1,4 @@
-name: Gradle Spring Kotlin
+name: Spring Gradle Kotlin
 
 on:
   pull_request:
