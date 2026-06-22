@@ -11,15 +11,16 @@ permissions:
   pull-requests: write
   checks: write
 
+env:
+  GITHUB_ACTOR: ${{ github.actor }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   lockfile-check:
     name: Lockfile Check
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      GITHUB_ACTOR: ${{ github.actor }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v7
