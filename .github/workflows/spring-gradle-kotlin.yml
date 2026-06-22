@@ -81,6 +81,9 @@ jobs:
       - uses: ./.github/actions/setup-gradle
 
       - name: Build project
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew assemble
 
       - name: Upload build output
