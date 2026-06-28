@@ -83,7 +83,11 @@ dependencies {
   implementation("io.swagger.core.v3:swagger-annotations:2.2.28")
   implementation("io.swagger.core.v3:swagger-models:2.2.28")
   implementation("jakarta.validation:jakarta.validation-api")
-  apiSpec("de.stammtischhub:terminpilot-api-spec:0.0.0@yaml")
+  apiSpec(libs.terminpilot.api.spec) {
+    artifact {
+      extension = "yaml"
+    }
+  }
 
   // Provider
   implementation("com.github.lookfirst:sardine:5.13")
