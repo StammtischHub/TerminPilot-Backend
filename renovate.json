@@ -19,6 +19,15 @@
     "automerge": true
   },
 
+  "hostRules": [
+    {
+      "matchHost": "maven.pkg.github.com",
+      "hostType": "maven",
+      "username": "x-access-token",
+      "token": "{{ secrets.GITHUB_PACKAGES_TOKEN }}"
+    }
+  ],
+
   "packageRules": [
     {
       "description": "Major Updates: Create PR, but no Auto-Merge",

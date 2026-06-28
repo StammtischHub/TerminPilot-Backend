@@ -1,5 +1,0 @@
-[versions]
-terminpilot-api-spec = "0.0.0"
-
-[libraries]
-terminpilot-api-spec = { group = "de.stammtischhub", name = "terminpilot-api-spec", version.ref = "terminpilot-api-spec" }
