@@ -8,8 +8,6 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write
-  checks: write
 
 env:
   GITHUB_ACTOR: ${{ github.actor }}
@@ -19,8 +17,6 @@ jobs:
   lockfile-check:
     name: Lockfile Check
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - uses: actions/checkout@v7
@@ -78,6 +74,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      packages: read
 
     steps:
       - uses: actions/checkout@v7
@@ -101,6 +99,9 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      checks: write
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v7
@@ -128,7 +129,7 @@ jobs:
           && !startsWith(github.head_ref, 'renovate')
         with:
           paths: build/reports/jacoco/test/jacocoTestReport.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ env.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 80
           title: Code Coverage
@@ -138,6 +139,8 @@ jobs:
   lint:
     name: Ktlint
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
 
     steps:
       - uses: actions/checkout@v7
