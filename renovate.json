@@ -25,12 +25,6 @@
       "matchUpdateTypes": ["major"],
       "automerge": false,
       "labels": ["renovate", "major update"]
-    },
-    {
-      "description": "Ignore PR snapshot versions of internal API spec",
-      "matchDatasources": ["maven"],
-      "matchPackageNames": ["de.stammtischhub:terminpilot-api-spec"],
-      "ignoreUnstable": "true"
     }
   ]
 }
