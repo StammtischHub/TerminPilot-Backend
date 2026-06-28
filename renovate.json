@@ -21,7 +21,7 @@
 
   "packageRules": [
     {
-      "description": "Major Updates: PR erstellen, aber kein Auto-Merge",
+      "description": "Major Updates: Create PR, but no Auto-Merge",
       "matchUpdateTypes": ["major"],
       "automerge": false,
       "labels": ["renovate", "major update"]

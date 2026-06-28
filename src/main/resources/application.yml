@@ -6,6 +6,12 @@ spring:
   jpa:
     open-in-view: false
 
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
+
 logging:
   level:
     root: INFO
