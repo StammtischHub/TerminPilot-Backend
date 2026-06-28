@@ -60,10 +60,10 @@ repositories {
     credentials {
       username = System.getenv("GITHUB_ACTOR")
         ?: System.getProperty("GITHUB_ACTOR")
-        ?: ""
+        ?: error("GITHUB_ACTOR ist nicht gesetzt")
       password = System.getenv("GITHUB_TOKEN")
         ?: System.getProperty("GITHUB_TOKEN")
-        ?: ""
+        ?: error("GITHUB_TOKEN ist nicht gesetzt")
     }
   }
 }
@@ -83,7 +83,11 @@ dependencies {
   implementation("io.swagger.core.v3:swagger-annotations:2.2.28")
   implementation("io.swagger.core.v3:swagger-models:2.2.28")
   implementation("jakarta.validation:jakarta.validation-api")
-  apiSpec("de.stammtischhub:terminpilot-api-spec:0.0.0@yaml")
+  apiSpec(libs.terminpilot.api.spec) {
+    artifact {
+      extension = "yaml"
+    }
+  }
 
   // Provider
   implementation("com.github.lookfirst:sardine:5.13")
