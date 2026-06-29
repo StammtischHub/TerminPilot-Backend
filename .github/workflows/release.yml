@@ -10,10 +10,6 @@ on:
 permissions:
   contents: read
 
-env:
-  GITHUB_ACTOR: ${{ github.actor }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
   check-permissions:
     name: Check Permissions
