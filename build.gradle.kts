@@ -79,7 +79,7 @@ dependencies {
   implementation("tools.jackson.module:jackson-module-kotlin")
 
   // OpenAPI Generator
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.17")
   implementation("io.swagger.core.v3:swagger-annotations:2.2.28")
   implementation("io.swagger.core.v3:swagger-models:2.2.28")
   implementation("jakarta.validation:jakarta.validation-api")
