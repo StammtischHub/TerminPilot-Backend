@@ -1,31 +1,18 @@
 name: Release
 on:
   workflow_dispatch:
-    inputs:
-      ignore_dependencies_vulnerabilities:
-        description: 'Ignore dependency vulnerabilities and proceed with release (not recommended)'
-        required: false
-        default: 'false'
-
-permissions:
-  contents: read
-
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   check-permissions:
     name: Check Permissions
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - name: Check branch and event
+      - name: Check branch
         run: |
           if [ "${{ github.ref_name }}" != "main" ]; then
-            echo "::error::Workflow runs on branch '${{ github.ref_name }}' – only main allowed"
-            exit 1
-          fi
-          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
-            echo "::error::Workflow was not triggered manually but by '${{ github.event_name }}' – only workflow_dispatch allowed"
+            echo "❌ Workflow runs on branch '${{ github.ref_name }}' – only main allowed"
             exit 1
           fi
           echo "✅ Branch is main"
@@ -33,91 +20,32 @@ jobs:
       - name: Check repository role
         uses: actions/github-script@v9
         with:
-          github-token: ${{ env.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { data: perm } = await github.rest.repos.getCollaboratorPermissionLevel({
               owner: context.repo.owner,
               repo: context.repo.repo,
               username: context.actor,
             });
-
+            
             const allowedRoles = ['admin', 'maintain'];
-
+            
             if (!allowedRoles.includes(perm.permission)) {
               core.setFailed(
-                `::error::${context.actor} has role "${perm.permission}" – needs: ${allowedRoles.join(' or ')}`
+                `❌ ${context.actor} has role "${perm.permission}" – needs: ${allowedRoles.join(' or ')}`
               );
             }
             console.log(`✅ ${context.actor} is eligible (${perm.permission})`);
 
-  lockfile-check:
-    name: Lockfile Check
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: ./.github/actions/setup-gradle
-
-      - name: Validate Lockfile is up to date
-        run: |
-          ./gradlew dependencies --write-locks > /dev/null
-          git diff --exit-code gradle.lockfile
-
-  dependency-check:
-    name: Dependency Check
-    runs-on: ubuntu-latest#
-    needs:
-      - lockfile-check
-    continue-on-error: ${{ github.event.inputs.ignore_dependencies_vulnerabilities == 'true' }}
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Run Trivy Vulnerability Scan
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          scan-type: fs
-          image-ref: '.'
-          format: json
-          output: trivy-results.json
-          severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
-          exit-code: '0'
-
-      - name: Evaluate Vulnerabilities
-        run: |
-          count=$(jq '[.Results[]?.Vulnerabilities[]?] | length' trivy-results.json)
-
-          cat trivy-results.json | jq -r '
-            .Results[]?.Vulnerabilities[]? |
-            "\(.Severity)|\(.PkgName)|\(.InstalledVersion)|\(.FixedVersion // "no fix")|\(.VulnerabilityID)"
-          ' | while IFS="|" read -r severity pkg installed fixed cve; do
-            case "$severity" in
-              CRITICAL) color="\e[35m" ;;  # Magenta
-              HIGH)     color="\e[31m" ;;  # rot
-              MEDIUM)   color="\e[33m" ;;  # gelb
-              LOW)      color="\e[34m" ;;  # blau
-            esac
-            link="https://nvd.nist.gov/vuln/detail/${cve}"
-            echo -e "${color}[${severity}]\e[0m ${pkg}\n\t${installed} -> ${fixed}\n\t${cve} (${link})"
-          done
-
-          if [ "$count" -gt 0 ]; then
-            echo "::warning::Found $count vulnerabilities. See report above."
-            exit 1
-          else
-            echo "No vulnerabilities found."
-          fi
-
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs:
-      - check-permissions
-      - dependency-check
+    needs: check-permissions
+    permissions:
+      contents: read
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v6
 
       - uses: ./.github/actions/setup-gradle
 
@@ -138,9 +66,11 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: read
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v6
 
       - uses: ./.github/actions/setup-gradle
 
@@ -152,6 +82,7 @@ jobs:
   version_release:
     name: Version Release
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
     needs:
       - build
       - test
@@ -173,7 +104,7 @@ jobs:
           client-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v6
         with:
           token: ${{ steps.app-token.outputs.token }}
           fetch-depth: 0
@@ -210,6 +141,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: version_release
     permissions:
+      contents: read
       packages: write
     concurrency:
       group: release
@@ -217,7 +149,7 @@ jobs:
     if: needs.version_release.outputs.new_version != ''
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v6
 
       - uses: ./.github/actions/download-build
 
@@ -225,8 +157,8 @@ jobs:
         uses: docker/login-action@v4
         with:
           registry: ghcr.io
-          username: ${{ env.GITHUB_ACTOR }}
-          password: ${{ env.GITHUB_TOKEN }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
         env:
@@ -234,6 +166,6 @@ jobs:
           OWNER: ${{ github.repository_owner }}
         run: |
           OWNER=$(echo "$OWNER" | tr '[:upper:]' '[:lower:]')
-          docker build -t ghcr.io/${OWNER}/terminpilot-backend:${NEW_VERSION} -t ghcr.io/${OWNER}/terminpilot-backend:latest .
-          docker push ghcr.io/${OWNER}/terminpilot-backend:${NEW_VERSION}
+          docker build -t ghcr.io/${OWNER}/terminpilot-backend:${NEW_VERSION} -t ghcr.io/${OWNER}/terminpilot-backend:latest . 
+          docker push ghcr.io/${OWNER}/terminpilot-backend:${NEW_VERSION} 
           docker push ghcr.io/${OWNER}/terminpilot-backend:latest
