@@ -22,7 +22,7 @@ if (envFile.exists()) {
 }
 
 group = "de.stammtischHub"
-version = "0.0.0"
+version = "0.0.0-SNAPSHOT"
 
 java {
   toolchain {
@@ -90,8 +90,10 @@ dependencies {
   implementation("org.mnode.ical4j:ical4j:4.3.0")
 
   // Google-Provider
-    implementation("com.google.api-client:google-api-client:2.7.0")
-    implementation("com.google.apis:google-api-services-calendar:v3-rev20220715-2.0.0")// Datenbank
+  implementation("com.google.api-client:google-api-client:2.7.0")
+  implementation("com.google.apis:google-api-services-calendar:v3-rev20220715-2.0.0")
+
+  // Datenbank
   runtimeOnly("com.mysql:mysql-connector-j")
 
   developmentOnly("org.springframework.boot:spring-boot-devtools")
