@@ -9,20 +9,23 @@ import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/api/calendar")
-class CalendarController(private val googleCalendarService: GoogleCalendarService) {
-
-    @GetMapping("/events")
-    fun getEvents(@RequestParam userId: Long): List<Map<String, String>> {
-        val now = LocalDateTime.now()
-        val end = now.plusMonths(1)
-        return googleCalendarService.getCalendarForTimespan(userId, now, end).map { appointment ->
-            mapOf(
-                "title" to appointment.title,
-                "start" to appointment.start.toString(),
-                "end" to appointment.end.toString(),
-                "location" to appointment.location,
-                "description" to appointment.description,
-            )
-        }
+class CalendarController(
+  private val googleCalendarService: GoogleCalendarService,
+) {
+  @GetMapping("/events")
+  fun getEvents(
+    @RequestParam userId: Long,
+  ): List<Map<String, String>> {
+    val now = LocalDateTime.now()
+    val end = now.plusMonths(1)
+    return googleCalendarService.getCalendarForTimespan(userId, now, end).map { appointment ->
+      mapOf(
+        "title" to appointment.title,
+        "start" to appointment.start.toString(),
+        "end" to appointment.end.toString(),
+        "location" to appointment.location,
+        "description" to appointment.description,
+      )
     }
-}
+  }
+}
