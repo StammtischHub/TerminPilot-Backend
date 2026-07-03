@@ -15,22 +15,21 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 class GoogleCalendarConfig {
-
-    /**
-     * Builds a Google Calendar API client authorized with the given [credential].
-     *
-     * A new client instance is created per request so that each user's API calls
-     * are isolated and use their own token.
-     *
-     * @param credential The OAuth 2.0 credential for the authenticated user.
-     * @return A configured [Calendar] client instance.
-     */
-    fun buildCalendarClient(credential: Credential): Calendar =
-        Calendar.Builder(
-            GoogleNetHttpTransport.newTrustedTransport(),
-            GsonFactory.getDefaultInstance(),
-            credential,
-        )
-            .setApplicationName("TerminPilot")
-            .build()
+  /**
+   * Builds a Google Calendar API client authorized with the given [credential].
+   *
+   * A new client instance is created per request so that each user's API calls
+   * are isolated and use their own token.
+   *
+   * @param credential The OAuth 2.0 credential for the authenticated user.
+   * @return A configured [Calendar] client instance.
+   */
+  fun buildCalendarClient(credential: Credential): Calendar =
+    Calendar
+      .Builder(
+        GoogleNetHttpTransport.newTrustedTransport(),
+        GsonFactory.getDefaultInstance(),
+        credential,
+      ).setApplicationName("TerminPilot")
+      .build()
 }
