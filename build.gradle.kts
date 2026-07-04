@@ -70,6 +70,7 @@ repositories {
 
 val apiSpec: Configuration = configurations.create("apiSpec")
 val apiSpecFile = layout.buildDirectory.file("api-spec/openapi.yaml")
+val generatedApiDir = layout.buildDirectory.dir("generated")
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webmvc")
@@ -113,6 +114,7 @@ dependencyLocking {
 tasks.register("extractApiSpec") {
   description = "Extracts the API spec from the GitHub repository into the build directory for the OpenAPI Generator."
   dependsOn(apiSpec)
+  inputs.files(apiSpec)
   outputs.file(apiSpecFile)
   doLast {
     apiSpecFile
@@ -123,12 +125,16 @@ tasks.register("extractApiSpec") {
   }
 }
 
+tasks.register<Delete>("cleanGeneratedApi") {
+  description = "Removes previously generated OpenAPI sources so stale/renamed files don't linger after a spec change."
+  delete(generatedApiDir)
+}
+
 openApiGenerate {
   generatorName.set("kotlin-spring")
   inputSpec.set(apiSpecFile.get().asFile.absolutePath)
   outputDir.set(
-    layout.buildDirectory
-      .dir("generated")
+    generatedApiDir
       .get()
       .asFile.absolutePath,
   )
@@ -144,8 +150,13 @@ openApiGenerate {
   )
 }
 
-tasks.named("openApiGenerate") {
+tasks.named("cleanGeneratedApi") {
   dependsOn("extractApiSpec")
+}
+
+tasks.named("openApiGenerate") {
+  dependsOn("extractApiSpec", "cleanGeneratedApi")
+  inputs.file(apiSpecFile)
 }
 
 tasks.named("compileKotlin") {
