@@ -18,4 +18,12 @@ class GoogleCalendar(
   var refreshToken: String,
   @Column(nullable = false)
   var tokenExpiry: Long,
-) : Calendar(user)
+) : Calendar(user) {
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    else if (other !is GoogleCalendar) return false
+    return id == other.id
+  }
+
+  override fun hashCode(): Int = javaClass.hashCode()
+}

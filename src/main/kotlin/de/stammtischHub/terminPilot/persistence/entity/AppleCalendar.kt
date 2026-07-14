@@ -14,4 +14,12 @@ class AppleCalendar(
   var icloudMail: String,
   @Column(nullable = false)
   var appSpecificPassword: String,
-) : Calendar(user)
+) : Calendar(user) {
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    else if (other !is AppleCalendar) return false
+    return id == other.id
+  }
+
+  override fun hashCode(): Int = javaClass.hashCode()
+}

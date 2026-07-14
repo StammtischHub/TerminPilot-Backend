@@ -27,4 +27,12 @@ class User(
   @Column(name = "user_id", nullable = false, updatable = false, unique = true)
   @GeneratedValue(strategy = GenerationType.AUTO)
   var id: Long? = null
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    else if (other !is User) return false
+    return id == other.id
+  }
+
+  override fun hashCode(): Int = javaClass.hashCode()
 }
