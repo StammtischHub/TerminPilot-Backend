@@ -42,7 +42,7 @@ ktlint {
   }
   filter {
     exclude { element ->
-      element.file.path.contains("/generated/")
+      element.file.path.contains("generated")
     }
   }
 }
@@ -97,6 +97,7 @@ dependencies {
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+  implementation(kotlin("stdlib"))
 }
 
 sourceSets {
@@ -163,12 +164,14 @@ tasks.named("compileKotlin") {
   dependsOn("openApiGenerate")
 }
 
-tasks.named("runKtlintCheckOverMainSourceSet") {
+tasks.named<org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask>("runKtlintCheckOverMainSourceSet") {
   dependsOn("openApiGenerate")
+  exclude { it.file.path.contains("generated") }
 }
 
-tasks.named("runKtlintFormatOverMainSourceSet") {
+tasks.named<org.jlleitschuh.gradle.ktlint.tasks.KtLintFormatTask>("runKtlintFormatOverMainSourceSet") {
   dependsOn("openApiGenerate")
+  exclude { it.file.path.contains("generated") }
 }
 
 tasks.withType<Test> {
