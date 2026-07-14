@@ -1,9 +1,8 @@
 package de.stammtischHub.terminPilot.persistence.repository
 
 import de.stammtischHub.terminPilot.persistence.entity.AppleCalendar
+import org.springframework.data.repository.CrudRepository
+import org.springframework.stereotype.Repository
 
-interface AppleCalendarRepository {
-  fun save(appleCalendar: AppleCalendar)
-
-  fun findById(id: Long): AppleCalendar?
-}
+@Repository
+interface AppleCalendarRepository : CrudRepository<AppleCalendar, Long>

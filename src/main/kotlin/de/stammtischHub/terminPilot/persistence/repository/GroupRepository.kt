@@ -1,9 +1,8 @@
 package de.stammtischHub.terminPilot.persistence.repository
 
 import de.stammtischHub.terminPilot.persistence.entity.UserGroup
+import org.springframework.data.repository.CrudRepository
+import org.springframework.stereotype.Repository
 
-interface GroupRepository {
-  fun save(userGroup: UserGroup)
-
-  fun findById(id: Long): UserGroup?
-}
+@Repository
+interface GroupRepository : CrudRepository<UserGroup, Long>
