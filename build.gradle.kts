@@ -76,8 +76,19 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webmvc")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
+  developmentOnly("org.springframework.boot:spring-boot-devtools")
+  testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
+  testImplementation("org.springframework.boot:spring-boot-starter-test") {
+    exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+    exclude(group = "org.mockito", module = "mockito-core")
+  }
+
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("tools.jackson.module:jackson-module-kotlin")
+  testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+  testImplementation("com.ninja-squad:springmockk:4.0.2")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+  runtimeOnly("com.h2database:h2")
 
   // OpenAPI Generator
   implementation("io.swagger.core.v3:swagger-annotations:2.2.52")
@@ -91,13 +102,6 @@ dependencies {
 
   // Datenbank
   runtimeOnly("com.mysql:mysql-connector-j")
-
-  developmentOnly("org.springframework.boot:spring-boot-devtools")
-
-  testImplementation("org.springframework.boot:spring-boot-starter-test")
-  testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-  implementation(kotlin("stdlib"))
 }
 
 sourceSets {
