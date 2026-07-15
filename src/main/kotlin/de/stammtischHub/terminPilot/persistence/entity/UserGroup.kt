@@ -40,8 +40,11 @@ class UserGroup(
   }
 
   override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    else if (other !is UserGroup) return false
+    if (this === other) {
+      return true
+    } else if (other !is UserGroup) {
+      return false
+    }
     return id == other.id
   }
 

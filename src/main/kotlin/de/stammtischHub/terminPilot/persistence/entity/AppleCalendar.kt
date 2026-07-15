@@ -16,8 +16,11 @@ class AppleCalendar(
   var appSpecificPassword: String,
 ) : Calendar(user) {
   override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    else if (other !is AppleCalendar) return false
+    if (this === other) {
+      return true
+    } else if (other !is AppleCalendar) {
+      return false
+    }
     return id == other.id
   }
 

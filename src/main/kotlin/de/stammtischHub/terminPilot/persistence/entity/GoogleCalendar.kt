@@ -20,8 +20,11 @@ class GoogleCalendar(
   var tokenExpiry: Long,
 ) : Calendar(user) {
   override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    else if (other !is GoogleCalendar) return false
+    if (this === other) {
+      return true
+    } else if (other !is GoogleCalendar) {
+      return false
+    }
     return id == other.id
   }
 

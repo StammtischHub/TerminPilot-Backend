@@ -29,8 +29,11 @@ class User(
   var id: Long? = null
 
   override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    else if (other !is User) return false
+    if (this === other) {
+      return true
+    } else if (other !is User) {
+      return false
+    }
     return id == other.id
   }
 

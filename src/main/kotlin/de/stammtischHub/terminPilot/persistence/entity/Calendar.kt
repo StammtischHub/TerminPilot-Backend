@@ -26,8 +26,11 @@ abstract class Calendar(
   var id: Long? = null
 
   override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    else if (other !is Calendar) return false
+    if (this === other) {
+      return true
+    } else if (other !is Calendar) {
+      return false
+    }
     return id == other.id
   }
 
