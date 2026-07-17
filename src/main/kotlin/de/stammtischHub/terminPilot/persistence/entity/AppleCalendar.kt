@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull
 
 @Entity(name = "AppleCalendar")
 @Table(name = "appleCalendars")
-@PrimaryKeyJoinColumn(name = "id")
+@PrimaryKeyJoinColumn(name = "apple_calendar_id")
 class AppleCalendar(
   user: User? = null,
 ) : Calendar(user) {

@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull
 
 @Entity(name = "GoogleCalendar")
 @Table(name = "googleCalendars")
-@PrimaryKeyJoinColumn(name = "id")
+@PrimaryKeyJoinColumn(name = "google_calendar_id")
 class GoogleCalendar(
   user: User? = null,
 ) : Calendar(user) {
