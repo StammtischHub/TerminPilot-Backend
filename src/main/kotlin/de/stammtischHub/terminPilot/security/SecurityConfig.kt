@@ -17,17 +17,17 @@ import org.springframework.security.web.context.SecurityContextRepository
 @Configuration
 @EnableWebSecurity
 class SecurityConfig {
-
-  //Todo: We temporarily need to use the Java API for the filter chain. See https://github.com/spring-projects/spring-security/issues/18332
+  // Todo: We temporarily need to use the Java API for the filter chain. See https://github.com/spring-projects/spring-security/issues/18332
   @Bean
   fun filterChain(http: HttpSecurity): SecurityFilterChain {
     http
       .authorizeHttpRequests { auth ->
         auth
-          .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
-          .anyRequest().authenticated()
-      }
-      .csrf { csrf -> csrf.spa() }
+          .requestMatchers("/api/auth/login", "/api/auth/register")
+          .permitAll()
+          .anyRequest()
+          .authenticated()
+      }.csrf { csrf -> csrf.spa() }
       .exceptionHandling { ex ->
         ex.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
       }
