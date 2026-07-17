@@ -1,28 +1,22 @@
 package de.stammtischHub.terminPilot.persistence.entity
 
-import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.PrimaryKeyJoinColumn
 import jakarta.persistence.Table
+import jakarta.validation.constraints.NotBlank
+import org.jetbrains.annotations.NotNull
 
 @Entity(name = "AppleCalendar")
 @Table(name = "appleCalendars")
-@PrimaryKeyJoinColumn(name = "calendar_id")
+@PrimaryKeyJoinColumn(name = "id")
 class AppleCalendar(
-  user: User,
-  @Column(nullable = false)
-  var icloudMail: String,
-  @Column(nullable = false)
-  var appSpecificPassword: String,
+  user: User? = null,
 ) : Calendar(user) {
-  override fun equals(other: Any?): Boolean {
-    if (this === other) {
-      return true
-    } else if (other !is AppleCalendar) {
-      return false
-    }
-    return id == other.id
-  }
+  @NotNull
+  @NotBlank
+  var icloudMail: String? = null
 
-  override fun hashCode(): Int = javaClass.hashCode()
+  @NotNull
+  @NotBlank
+  var appSpecificPassword: String? = null
 }

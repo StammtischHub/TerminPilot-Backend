@@ -1,32 +1,29 @@
 package de.stammtischHub.terminPilot.persistence.entity
 
-import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.PrimaryKeyJoinColumn
 import jakarta.persistence.Table
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 
 @Entity(name = "GoogleCalendar")
 @Table(name = "googleCalendars")
-@PrimaryKeyJoinColumn(name = "calendar_id")
+@PrimaryKeyJoinColumn(name = "id")
 class GoogleCalendar(
-  user: User,
-  @Column(nullable = false)
-  var calendarName: String,
-  @Column(nullable = false)
-  var accessToken: String,
-  @Column(nullable = false)
-  var refreshToken: String,
-  @Column(nullable = false)
-  var tokenExpiry: Long,
+  user: User? = null,
 ) : Calendar(user) {
-  override fun equals(other: Any?): Boolean {
-    if (this === other) {
-      return true
-    } else if (other !is GoogleCalendar) {
-      return false
-    }
-    return id == other.id
-  }
+  @NotNull
+  @NotBlank
+  var calendarName: String? = null
 
-  override fun hashCode(): Int = javaClass.hashCode()
+  @NotNull
+  @NotBlank
+  var accessToken: String? = null
+
+  @NotNull
+  @NotBlank
+  var refreshToken: String? = null
+
+  @NotNull
+  var tokenExpiry: Long? = null
 }
