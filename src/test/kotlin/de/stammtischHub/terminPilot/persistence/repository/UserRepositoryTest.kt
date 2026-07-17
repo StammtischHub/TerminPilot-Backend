@@ -46,7 +46,7 @@ class UserRepositoryTest {
     entityManager.flush()
     entityManager.clear()
 
-    val foundUser = userRepository.findByUsername("username")
+    val foundUser = userRepository.findByUsername("username").get()
     assertEquals(user, foundUser)
   }
 

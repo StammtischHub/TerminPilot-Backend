@@ -51,17 +51,28 @@ class CalendarRepositoryTest {
   fun `should find Calendar by user id`() {
     setupUser()
     val calendar =
-      calendarRepository.save(
-        Calendar().apply {
-          user = this.user
-        },
-      )
+      calendarRepository.save(Calendar(this.user))
     entityManager.flush()
     entityManager.clear()
 
-    val foundCalendar = calendarRepository.findById(this.user.id!!).get()
-    assertEquals(calendar, foundCalendar)
-    assertEquals(this.user, foundCalendar.user)
+    val foundCalendars = calendarRepository.findByUserId(this.user.id!!).get()
+    assertEquals(listOf(calendar), foundCalendars)
+    assert(foundCalendars.all { it.user == this.user })
+  }
+
+  @Test
+  fun `should find multiple Calendar entities by user id`() {
+    setupUser()
+    val calendar1 =
+      calendarRepository.save(Calendar(this.user))
+    val calendar2 =
+      calendarRepository.save(Calendar(this.user))
+    entityManager.flush()
+    entityManager.clear()
+
+    val foundCalendars = calendarRepository.findByUserId(this.user.id!!).get()
+    assertEquals(listOf(calendar1, calendar2).sortedBy { it.id }, foundCalendars.sortedBy { it.id })
+    assert(foundCalendars.all { it.user == this.user })
   }
 
   @Test
