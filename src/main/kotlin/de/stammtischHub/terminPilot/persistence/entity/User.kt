@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotNull
 @Entity(name = "User")
 @Table(name = "users")
 @AttributeOverride(name = "id", column = Column(name = "user_id"))
-class User: BaseLongId() {
+class User : BaseLongId() {
   @Column(unique = true)
   @NotBlank
   @NotNull

@@ -3,7 +3,6 @@ package de.stammtischHub.terminPilot.persistence.entity
 import kotlin.test.Test
 
 class UserGroupTest {
-
   @Test
   fun `should add user to group`() {
     val userGroup = UserGroup()
@@ -30,5 +29,4 @@ class UserGroupTest {
     assert(userGroup.members.isEmpty())
     assert(user.userGroups.isEmpty())
   }
-
 }

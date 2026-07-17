@@ -19,5 +19,5 @@ class Calendar(
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id")
   @NotNull
-  var user: User? = null
+  var user: User? = null,
 ) : BaseLongId()
