@@ -13,6 +13,7 @@
   "rebaseWhen": "behind-base-branch",
   "automerge": true,
   "platformAutomerge": true,
+  "ignoreUnstable": true,
 
   "lockFileMaintenance": {
     "enabled": true,
