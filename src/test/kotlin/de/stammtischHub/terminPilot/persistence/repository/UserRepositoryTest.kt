@@ -2,7 +2,6 @@ package de.stammtischHub.terminPilot.persistence.repository
 
 import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.entity.UserType
-import jakarta.validation.ConstraintViolationException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
@@ -10,6 +9,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotEquals
+import jakarta.validation.ConstraintViolationException as JakartaConstraintViolationException
+import org.hibernate.exception.ConstraintViolationException as HibernateConstraintViolationException
 
 @DataJpaTest
 class UserRepositoryTest {
@@ -19,23 +20,10 @@ class UserRepositoryTest {
   @Autowired
   lateinit var userRepository: UserRepository
 
-  @Test
-  fun `should automatically generate an id when saving an User`() {
-    val userGroup =
-      userRepository.save(
-        User().apply {
-          username = "username"
-          password = "password"
-          userType = UserType.USER
-        },
-      )
+  lateinit var user: User
 
-    assertNotEquals(null, userGroup.id)
-  }
-
-  @Test
-  fun `should find User by username`() {
-    val user =
+  fun setupUser() {
+    this.user =
       userRepository.save(
         User().apply {
           username = "username"
@@ -45,14 +33,42 @@ class UserRepositoryTest {
       )
     entityManager.flush()
     entityManager.clear()
+  }
+
+  @Test
+  fun `should automatically generate an id when saving an User`() {
+    setupUser()
+
+    assertNotEquals(null, this.user.id)
+  }
+
+  @Test
+  fun `should not be able to create two users with the same username`() {
+    setupUser()
+
+    assertFailsWith<HibernateConstraintViolationException> {
+      userRepository.save(
+        User().apply {
+          username = "username"
+          password = "password"
+          userType = UserType.USER
+        },
+      )
+      entityManager.flush()
+    }
+  }
+
+  @Test
+  fun `should find User by username`() {
+    setupUser()
 
     val foundUser = userRepository.findByUsername("username").get()
-    assertEquals(user, foundUser)
+    assertEquals(this.user, foundUser)
   }
 
   @Test
   fun `should throw an exception when creating an User with blank fields`() {
-    assertFailsWith<ConstraintViolationException> {
+    assertFailsWith<JakartaConstraintViolationException> {
       userRepository.save(
         User().apply {
           username = ""
@@ -66,7 +82,7 @@ class UserRepositoryTest {
 
   @Test
   fun `should throw an exception when creating an User with null fields`() {
-    assertFailsWith<ConstraintViolationException> {
+    assertFailsWith<JakartaConstraintViolationException> {
       userRepository.save(User())
       entityManager.flush()
     }
