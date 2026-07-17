@@ -9,6 +9,7 @@ import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNotEquals
 
 @DataJpaTest
 class UserRepositoryTest {
@@ -19,12 +20,29 @@ class UserRepositoryTest {
   lateinit var userRepository: UserRepository
 
   @Test
-  fun `should find user by username`() {
-    val user = userRepository.save(User().apply {
-      username = "username"
-      password = "password"
-      userType = UserType.USER
-    })
+  fun `should automatically generate an id when saving an User`() {
+    val userGroup =
+      userRepository.save(
+        User().apply {
+          username = "username"
+          password = "password"
+          userType = UserType.USER
+        },
+      )
+
+    assertNotEquals(null, userGroup.id)
+  }
+
+  @Test
+  fun `should find User by username`() {
+    val user =
+      userRepository.save(
+        User().apply {
+          username = "username"
+          password = "password"
+          userType = UserType.USER
+        },
+      )
     entityManager.flush()
     entityManager.clear()
 
@@ -33,19 +51,21 @@ class UserRepositoryTest {
   }
 
   @Test
-  fun `should throw exception when creating a user with blank fields`() {
+  fun `should throw an exception when creating an User with blank fields`() {
     assertFailsWith<ConstraintViolationException> {
-      userRepository.save(User().apply {
-        username = ""
-        password = ""
-        userType = UserType.USER
-      })
+      userRepository.save(
+        User().apply {
+          username = ""
+          password = ""
+          userType = UserType.USER
+        },
+      )
       entityManager.flush()
     }
   }
 
   @Test
-  fun `should throw exception when creating a user with null fields`() {
+  fun `should throw an exception when creating an User with null fields`() {
     assertFailsWith<ConstraintViolationException> {
       userRepository.save(User())
       entityManager.flush()

@@ -7,10 +7,10 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNotEquals
 
 @DataJpaTest
 class UserGroupRepositoryTest {
-
   @Autowired
   lateinit var entityManager: TestEntityManager
 
@@ -18,7 +18,19 @@ class UserGroupRepositoryTest {
   lateinit var userGroupRepository: UserGroupRepository
 
   @Test
-  fun `should throw exception when creating a user group with null fields`() {
+  fun `should automatically generate an id when saving an UserGroup`() {
+    val userGroup =
+      userGroupRepository.save(
+        UserGroup().apply {
+          name = "name"
+        },
+      )
+
+    assertNotEquals(null, userGroup.id)
+  }
+
+  @Test
+  fun `should throw an exception when creating an UserGroup with null fields`() {
     assertFailsWith<ConstraintViolationException> {
       userGroupRepository.save(UserGroup())
       entityManager.flush()
@@ -26,11 +38,13 @@ class UserGroupRepositoryTest {
   }
 
   @Test
-  fun `should throw exception when creating a user group with an blank name`() {
+  fun `should throw an exception when creating an UserGroup with an blank name`() {
     assertFailsWith<ConstraintViolationException> {
-      userGroupRepository.save(UserGroup().apply {
-        name = ""
-      })
+      userGroupRepository.save(
+        UserGroup().apply {
+          name = ""
+        },
+      )
       entityManager.flush()
     }
   }
