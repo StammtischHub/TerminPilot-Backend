@@ -26,14 +26,13 @@ class AppleCalendarRepositoryTest {
 
   fun setupUser() {
     this.user =
-      userRepository.save(
+      userRepository.saveAndFlush(
         User().apply {
           username = "username"
           passwordHash = "password"
           userType = UserType.USER
         },
       )
-    entityManager.flush()
     entityManager.clear()
   }
 
@@ -42,7 +41,7 @@ class AppleCalendarRepositoryTest {
     setupUser()
 
     val appleCalendar =
-      appleCalendarRepository.save(
+      appleCalendarRepository.saveAndFlush(
         AppleCalendar().apply {
           owner = user
           icloudMail = "a"
@@ -56,8 +55,7 @@ class AppleCalendarRepositoryTest {
   @Test
   fun `should throw an exception when creating an AppleCalendar with null fields`() {
     assertFailsWith<ConstraintViolationException> {
-      appleCalendarRepository.save(AppleCalendar())
-      entityManager.flush()
+      appleCalendarRepository.saveAndFlush(AppleCalendar())
     }
   }
 
@@ -66,14 +64,13 @@ class AppleCalendarRepositoryTest {
     setupUser()
 
     assertFailsWith<ConstraintViolationException> {
-      appleCalendarRepository.save(
+      appleCalendarRepository.saveAndFlush(
         AppleCalendar().apply {
           owner = user
           icloudMail = ""
           appSpecificPassword = ""
         },
       )
-      entityManager.flush()
     }
   }
 }

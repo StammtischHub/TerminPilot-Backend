@@ -26,14 +26,13 @@ class GoogleCalendarRepositoryTest {
 
   fun setupUser() {
     this.user =
-      userRepository.save(
+      userRepository.saveAndFlush(
         User().apply {
           username = "username"
           passwordHash = "password"
           userType = UserType.USER
         },
       )
-    entityManager.flush()
     entityManager.clear()
   }
 
@@ -42,7 +41,7 @@ class GoogleCalendarRepositoryTest {
     setupUser()
 
     val googleCalendar =
-      googleCalendarRepository.save(
+      googleCalendarRepository.saveAndFlush(
         GoogleCalendar().apply {
           owner = user
           calendarName = "calendarName"
@@ -58,8 +57,7 @@ class GoogleCalendarRepositoryTest {
   @Test
   fun `should throw an exception when creating a GoogleCalendar with null fields`() {
     assertFailsWith<ConstraintViolationException> {
-      googleCalendarRepository.save(GoogleCalendar())
-      entityManager.flush()
+      googleCalendarRepository.saveAndFlush(GoogleCalendar())
     }
   }
 
@@ -68,7 +66,7 @@ class GoogleCalendarRepositoryTest {
     setupUser()
 
     assertFailsWith<ConstraintViolationException> {
-      googleCalendarRepository.save(
+      googleCalendarRepository.saveAndFlush(
         GoogleCalendar().apply {
           owner = user
           calendarName = ""
@@ -77,7 +75,6 @@ class GoogleCalendarRepositoryTest {
           tokenExpiry = 5L
         },
       )
-      entityManager.flush()
     }
   }
 }
