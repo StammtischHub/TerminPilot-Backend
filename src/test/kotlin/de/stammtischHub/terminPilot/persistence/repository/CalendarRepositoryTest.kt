@@ -30,7 +30,7 @@ class CalendarRepositoryTest {
       userRepository.save(
         User().apply {
           username = "username"
-          password = "password"
+          passwordHash = "password"
           userType = UserType.USER
         },
       )
@@ -42,7 +42,9 @@ class CalendarRepositoryTest {
   fun `should automatically generate an id when saving a Calendar`() {
     setupUser()
 
-    val calendar = calendarRepository.save(Calendar(this.user))
+    val calendar = calendarRepository.save(Calendar().apply {
+      owner = user
+    })
 
     assertNotEquals(null, calendar.id)
   }
@@ -51,28 +53,34 @@ class CalendarRepositoryTest {
   fun `should find Calendar by user id`() {
     setupUser()
     val calendar =
-      calendarRepository.save(Calendar(this.user))
+      calendarRepository.save(Calendar().apply {
+        owner = user
+      })
     entityManager.flush()
     entityManager.clear()
 
-    val foundCalendars = calendarRepository.findByUserId(this.user.id!!).get()
+    val foundCalendars = calendarRepository.findByOwnerId(this.user.id!!).get()
     assertEquals(listOf(calendar), foundCalendars)
-    assert(foundCalendars.all { it.user == this.user })
+    assert(foundCalendars.all { it.owner == this.user })
   }
 
   @Test
   fun `should find multiple Calendar entities by user id`() {
     setupUser()
     val calendar1 =
-      calendarRepository.save(Calendar(this.user))
+      calendarRepository.save(Calendar().apply {
+        owner = user
+      })
     val calendar2 =
-      calendarRepository.save(Calendar(this.user))
+      calendarRepository.save(Calendar().apply {
+        owner = user
+      })
     entityManager.flush()
     entityManager.clear()
 
-    val foundCalendars = calendarRepository.findByUserId(this.user.id!!).get()
+    val foundCalendars = calendarRepository.findByOwnerId(this.user.id!!).get()
     assertEquals(listOf(calendar1, calendar2).sortedBy { it.id }, foundCalendars.sortedBy { it.id })
-    assert(foundCalendars.all { it.user == this.user })
+    assert(foundCalendars.all { it.owner == this.user })
   }
 
   @Test

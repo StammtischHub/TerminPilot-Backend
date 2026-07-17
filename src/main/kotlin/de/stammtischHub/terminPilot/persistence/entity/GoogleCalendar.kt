@@ -9,18 +9,13 @@ import jakarta.validation.constraints.NotNull
 @Entity(name = "GoogleCalendar")
 @Table(name = "googleCalendars")
 @PrimaryKeyJoinColumn(name = "google_calendar_id")
-class GoogleCalendar(
-  user: User? = null,
-) : Calendar(user) {
-  @NotNull
+class GoogleCalendar : Calendar() {
   @NotBlank
   var calendarName: String? = null
 
-  @NotNull
   @NotBlank
   var accessToken: String? = null
 
-  @NotNull
   @NotBlank
   var refreshToken: String? = null
 

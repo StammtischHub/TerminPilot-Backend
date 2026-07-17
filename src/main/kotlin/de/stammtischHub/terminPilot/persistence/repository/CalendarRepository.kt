@@ -7,5 +7,5 @@ import java.util.Optional
 
 @Repository
 interface CalendarRepository : CrudRepository<Calendar, Long> {
-  fun findByUserId(userId: Long): Optional<Iterable<Calendar>>
+  fun findByOwnerId(userId: Long): Optional<Iterable<Calendar>>
 }

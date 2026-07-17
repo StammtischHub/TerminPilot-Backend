@@ -29,7 +29,7 @@ class AppleCalendarRepositoryTest {
       userRepository.save(
         User().apply {
           username = "username"
-          password = "password"
+          passwordHash = "password"
           userType = UserType.USER
         },
       )
@@ -43,7 +43,8 @@ class AppleCalendarRepositoryTest {
 
     val appleCalendar =
       appleCalendarRepository.save(
-        AppleCalendar(this.user).apply {
+        AppleCalendar().apply {
+          owner = user
           icloudMail = "a"
           appSpecificPassword = "b"
         },
@@ -66,7 +67,8 @@ class AppleCalendarRepositoryTest {
 
     assertFailsWith<ConstraintViolationException> {
       appleCalendarRepository.save(
-        AppleCalendar(this.user).apply {
+        AppleCalendar().apply {
+          owner = user
           icloudMail = ""
           appSpecificPassword = ""
         },

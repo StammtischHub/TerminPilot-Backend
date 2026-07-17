@@ -29,7 +29,7 @@ class GoogleCalendarRepositoryTest {
       userRepository.save(
         User().apply {
           username = "username"
-          password = "password"
+          passwordHash = "password"
           userType = UserType.USER
         },
       )
@@ -43,7 +43,8 @@ class GoogleCalendarRepositoryTest {
 
     val googleCalendar =
       googleCalendarRepository.save(
-        GoogleCalendar(this.user).apply {
+        GoogleCalendar().apply {
+          owner = user
           calendarName = "calendarName"
           accessToken = "accessToken"
           refreshToken = "refreshToken"
@@ -68,7 +69,8 @@ class GoogleCalendarRepositoryTest {
 
     assertFailsWith<ConstraintViolationException> {
       googleCalendarRepository.save(
-        GoogleCalendar(this.user).apply {
+        GoogleCalendar().apply {
+          owner = user
           calendarName = ""
           accessToken = ""
           refreshToken = ""

@@ -6,7 +6,6 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
@@ -19,20 +18,18 @@ import jakarta.validation.constraints.NotNull
 class User : BaseLongId() {
   @Column(unique = true)
   @NotBlank
-  @NotNull
   var username: String? = null
 
-  @NotNull
   @NotBlank
-  var password: String? = null
+  var passwordHash: String? = null
 
   @Enumerated(EnumType.STRING)
   @NotNull
   var userType: UserType? = null
 
-  @ManyToMany(mappedBy = "members", fetch = FetchType.EAGER)
+  @ManyToMany(mappedBy = "members")
   var userGroups: MutableSet<UserGroup> = mutableSetOf()
 
-  @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
+  @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], orphanRemoval = true)
   var calendars: MutableSet<Calendar> = mutableSetOf()
 }

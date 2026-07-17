@@ -9,13 +9,11 @@ import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.NotNull
 
 @Entity(name = "UserGroup")
 @Table(name = "userGroups")
 @AttributeOverride(name = "id", column = Column(name = "user_group_id"))
 class UserGroup : BaseLongId() {
-  @NotNull
   @NotBlank
   var name: String? = null
 

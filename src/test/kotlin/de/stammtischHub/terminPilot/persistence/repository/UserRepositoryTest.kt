@@ -27,7 +27,7 @@ class UserRepositoryTest {
       userRepository.save(
         User().apply {
           username = "username"
-          password = "password"
+          passwordHash = "password"
           userType = UserType.USER
         },
       )
@@ -50,7 +50,7 @@ class UserRepositoryTest {
       userRepository.save(
         User().apply {
           username = "username"
-          password = "password"
+          passwordHash = "password"
           userType = UserType.USER
         },
       )
@@ -72,7 +72,7 @@ class UserRepositoryTest {
       userRepository.save(
         User().apply {
           username = ""
-          password = ""
+          passwordHash = ""
           userType = UserType.USER
         },
       )
