@@ -31,6 +31,11 @@
 
   "packageRules": [
     {
+      "description": "Should only update stable openapi spec",
+      "matchPackageNames": ["de.stammtischhub:terminpilot-api-spec"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+    },
+    {
       "description": "Major Updates: Create PR, but no Auto-Merge",
       "matchUpdateTypes": ["major"],
       "automerge": false,
