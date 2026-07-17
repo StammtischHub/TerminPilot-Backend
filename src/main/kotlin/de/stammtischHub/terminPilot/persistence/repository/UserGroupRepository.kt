@@ -1,8 +1,8 @@
 package de.stammtischHub.terminPilot.persistence.repository
 
-import de.stammtischHub.terminPilot.persistence.entity.AppleCalendar
+import de.stammtischHub.terminPilot.persistence.entity.UserGroup
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AppleCalendarRepository : CrudRepository<AppleCalendar, Long>
+interface UserGroupRepository : CrudRepository<UserGroup, Long>
