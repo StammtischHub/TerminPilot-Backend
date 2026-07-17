@@ -51,7 +51,7 @@ jobs:
             console.log(`✅ ${context.actor} is eligible (${perm.permission})`);
 
   lockfile-check:
-    name: Lockfile Check
+    name: Check lockfile
     runs-on: ubuntu-latest
 
     steps:
@@ -65,7 +65,7 @@ jobs:
           git diff --exit-code gradle.lockfile
 
   dependency-check:
-    name: Dependency Check
+    name: Trivy scan
     runs-on: ubuntu-latest
     needs:
       - lockfile-check

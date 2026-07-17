@@ -1,9 +1,8 @@
 package de.stammtischHub.terminPilot.persistence.repository
 
 import de.stammtischHub.terminPilot.persistence.entity.GoogleCalendar
+import org.springframework.data.repository.CrudRepository
+import org.springframework.stereotype.Repository
 
-interface GoogleCalendarRepository {
-  fun save(googleCalendar: GoogleCalendar)
-
-  fun findById(id: Long): GoogleCalendar?
-}
+@Repository
+interface GoogleCalendarRepository : CrudRepository<GoogleCalendar, Long>

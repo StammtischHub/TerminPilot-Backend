@@ -1,9 +1,9 @@
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 plugins {
-  kotlin("jvm") version "2.4.0"
-  kotlin("plugin.spring") version "2.4.0"
-  kotlin("plugin.jpa") version "2.4.0"
+  kotlin("jvm") version "2.4.10"
+  kotlin("plugin.spring") version "2.4.10"
+  kotlin("plugin.jpa") version "2.4.10"
   id("org.springframework.boot") version "4.1.0"
   id("io.spring.dependency-management") version "1.1.7"
   id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
@@ -76,8 +76,19 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webmvc")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
+  developmentOnly("org.springframework.boot:spring-boot-devtools")
+  testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
+  testImplementation("org.springframework.boot:spring-boot-starter-test") {
+    exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+    exclude(group = "org.mockito", module = "mockito-core")
+  }
+
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("tools.jackson.module:jackson-module-kotlin")
+  testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+  testImplementation("com.ninja-squad:springmockk:5.0.1")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+  runtimeOnly("com.h2database:h2")
 
   // OpenAPI Generator
   implementation("io.swagger.core.v3:swagger-annotations:2.2.52")
@@ -96,12 +107,6 @@ dependencies {
 
   // Datenbank
   runtimeOnly("com.mysql:mysql-connector-j")
-
-  developmentOnly("org.springframework.boot:spring-boot-devtools")
-
-  testImplementation("org.springframework.boot:spring-boot-starter-test")
-  testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 sourceSets {
