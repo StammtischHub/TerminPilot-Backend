@@ -20,7 +20,7 @@ class UserGroupRepositoryTest {
   @Test
   fun `should automatically generate an id when saving an UserGroup`() {
     val userGroup =
-      userGroupRepository.save(
+      userGroupRepository.saveAndFlush(
         UserGroup().apply {
           name = "name"
         },
@@ -32,20 +32,18 @@ class UserGroupRepositoryTest {
   @Test
   fun `should throw an exception when creating an UserGroup with null fields`() {
     assertFailsWith<ConstraintViolationException> {
-      userGroupRepository.save(UserGroup())
-      entityManager.flush()
+      userGroupRepository.saveAndFlush(UserGroup())
     }
   }
 
   @Test
   fun `should throw an exception when creating an UserGroup with an blank name`() {
     assertFailsWith<ConstraintViolationException> {
-      userGroupRepository.save(
+      userGroupRepository.saveAndFlush(
         UserGroup().apply {
           name = ""
         },
       )
-      entityManager.flush()
     }
   }
 }

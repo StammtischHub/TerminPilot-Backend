@@ -3,7 +3,6 @@ package de.stammtischHub.terminPilot.persistence.entity
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
 import jakarta.persistence.Inheritance
 import jakarta.persistence.InheritanceType
 import jakarta.persistence.JoinColumn
@@ -15,9 +14,9 @@ import jakarta.validation.constraints.NotNull
 @Table(name = "calendars")
 @Inheritance(strategy = InheritanceType.JOINED)
 @AttributeOverride(name = "id", column = Column(name = "calendar_id"))
-class Calendar(
-  @ManyToOne(fetch = FetchType.EAGER)
+class Calendar : BaseLongId() {
+  @ManyToOne
   @JoinColumn(name = "user_id")
   @NotNull
-  var user: User? = null,
-) : BaseLongId()
+  var owner: User? = null
+}

@@ -6,33 +6,32 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Size
 
 @Entity(name = "User")
 @Table(name = "users")
 @AttributeOverride(name = "id", column = Column(name = "user_id"))
 class User : BaseLongId() {
   @Column(unique = true)
+  @Size(min = 3, max = 30)
   @NotBlank
-  @NotNull
-  var username: String? = null
+  var username: String = ""
 
-  @NotNull
   @NotBlank
-  var password: String? = null
+  var passwordHash: String = ""
 
   @Enumerated(EnumType.STRING)
   @NotNull
-  var userType: UserType? = null
+  var userType: UserType = UserType.USER
 
-  @ManyToMany(mappedBy = "members", fetch = FetchType.EAGER)
+  @ManyToMany(mappedBy = "members")
   var userGroups: MutableSet<UserGroup> = mutableSetOf()
 
-  @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
+  @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], orphanRemoval = true)
   var calendars: MutableSet<Calendar> = mutableSetOf()
 }
