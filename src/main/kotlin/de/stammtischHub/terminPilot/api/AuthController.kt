@@ -81,8 +81,8 @@ class AuthController(
 
   private fun User.toUserResponse() =
     UserResponse(
-      username = requireNotNull(username),
-      roles = listOfNotNull(userType?.toUserRole()),
+      username = username,
+      roles = listOfNotNull(userType.toUserRole()),
     )
 
   private fun UserType.toUserRole(): UserRole? =
