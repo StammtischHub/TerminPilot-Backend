@@ -23,7 +23,7 @@ class UserService(
     val user = userRepository.findByUsername(username).getOrElse { throw UsernameNotFoundException("User not found") }
 
     return SecurityUser
-      .withUsername(user.username!!)
+      .withUsername(user.username)
       .password(user.passwordHash)
       .roles(user.userType.toString())
       .build()
@@ -43,7 +43,7 @@ class UserService(
     val user =
       User().apply {
         this.username = normalized
-        passwordHash = passwordEncoder.encode(rawPassword)
+        passwordHash = passwordEncoder.encode(rawPassword).toString()
         userType = UserType.USER
       }
 
