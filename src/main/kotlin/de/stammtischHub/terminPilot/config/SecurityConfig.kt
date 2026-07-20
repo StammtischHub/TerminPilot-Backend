@@ -1,4 +1,4 @@
-package de.stammtischHub.terminPilot.security
+package de.stammtischHub.terminPilot.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

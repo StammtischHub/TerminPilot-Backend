@@ -1,6 +1,5 @@
-package de.stammtischHub.terminPilot.api
+package de.stammtischHub.terminPilot.exception
 
-import de.stammtischHub.terminPilot.exception.UsernameTakenException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
