@@ -10,8 +10,8 @@ import jakarta.validation.constraints.NotBlank
 @PrimaryKeyJoinColumn(name = "apple_calendar_id")
 class AppleCalendar : Calendar() {
   @NotBlank
-  var icloudMail: String? = null
+  var icloudMail: String = ""
 
   @NotBlank
-  var appSpecificPassword: String? = null
+  var appSpecificPassword: String = ""
 }

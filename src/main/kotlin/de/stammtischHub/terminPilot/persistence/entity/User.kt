@@ -20,14 +20,14 @@ class User : BaseLongId() {
   @Column(unique = true)
   @Size(min = 3, max = 30)
   @NotBlank
-  var username: String? = null
+  var username: String = ""
 
   @NotBlank
-  var passwordHash: String? = null
+  var passwordHash: String = ""
 
   @Enumerated(EnumType.STRING)
   @NotNull
-  var userType: UserType? = null
+  var userType: UserType = UserType.USER
 
   @ManyToMany(mappedBy = "members")
   var userGroups: MutableSet<UserGroup> = mutableSetOf()

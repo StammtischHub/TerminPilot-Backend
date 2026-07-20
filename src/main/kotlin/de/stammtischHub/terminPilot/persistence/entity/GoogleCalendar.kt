@@ -11,13 +11,13 @@ import jakarta.validation.constraints.NotNull
 @PrimaryKeyJoinColumn(name = "google_calendar_id")
 class GoogleCalendar : Calendar() {
   @NotBlank
-  var calendarName: String? = null
+  var calendarName: String = ""
 
   @NotBlank
-  var accessToken: String? = null
+  var accessToken: String = ""
 
   @NotBlank
-  var refreshToken: String? = null
+  var refreshToken: String = ""
 
   @NotNull
   var tokenExpiry: Long? = null

@@ -15,7 +15,7 @@ import jakarta.validation.constraints.NotBlank
 @AttributeOverride(name = "id", column = Column(name = "user_group_id"))
 class UserGroup : BaseLongId() {
   @NotBlank
-  var name: String? = null
+  var name: String = ""
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
