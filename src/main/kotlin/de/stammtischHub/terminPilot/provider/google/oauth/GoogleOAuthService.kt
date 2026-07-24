@@ -7,6 +7,7 @@ import de.stammtischHub.terminPilot.persistence.entity.GoogleCalendar
 import de.stammtischHub.terminPilot.persistence.repository.GoogleCalendarRepository
 import de.stammtischHub.terminPilot.persistence.repository.UserRepository
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 /**
@@ -25,7 +26,6 @@ class GoogleOAuthService(
   private val googleCalendarRepository: GoogleCalendarRepository,
   @Value("\${google.oauth.redirect-uri}") private val redirectUri: String,
 ) {
-
   fun buildAuthorizationUrl(userId: Long): String =
     flow
       .newAuthorizationUrl()
@@ -43,13 +43,14 @@ class GoogleOAuthService(
         .setRedirectUri(redirectUri)
         .execute()
 
-    val user = userRepository.findById(userId)
-      ?: throw IllegalArgumentException("User with ID $userId not found.")
+    val user =
+      userRepository.findByIdOrNull(userId)
+        ?: throw IllegalArgumentException("User with ID $userId not found.")
 
-    // Prüfen, ob bereits ein GoogleCalendar existiert
-    val existingCalendar = user.calendars
-      .filterIsInstance<GoogleCalendar>()
-      .firstOrNull()
+    val existingCalendar =
+      user.calendars
+        .filterIsInstance<GoogleCalendar>()
+        .firstOrNull()
 
     if (existingCalendar != null) {
       existingCalendar.accessToken = tokenResponse.accessToken
@@ -65,13 +66,14 @@ class GoogleOAuthService(
       val newCalendar =
         GoogleCalendar(
           user = user,
-          calendarName = "primary",
-          accessToken = tokenResponse.accessToken,
-          refreshToken = tokenResponse.refreshToken ?: "",
+        ).apply {
+          calendarName = "primary"
+          accessToken = tokenResponse.accessToken
+          refreshToken = tokenResponse.refreshToken ?: ""
           tokenExpiry =
             System.currentTimeMillis() +
-              (tokenResponse.expiresInSeconds ?: 3600) * 1000L,
-        )
+            (tokenResponse.expiresInSeconds ?: 3600) * 1000L
+        }
 
       googleCalendarRepository.save(newCalendar)
       user.calendars.add(newCalendar)
@@ -80,10 +82,12 @@ class GoogleOAuthService(
   }
 
   fun getCredentialForCalendar(calendarId: Long): Credential {
-    val calendar = googleCalendarRepository.findById(calendarId) ?: throw IllegalArgumentException("Calendar with ID $calendarId not found.")
+    val calendar =
+      googleCalendarRepository.findByIdOrNull(calendarId)
+        ?: throw IllegalArgumentException("Calendar with ID $calendarId not found.")
 
     val expiresInSeconds =
-      (calendar.tokenExpiry - System.currentTimeMillis()) / 1000L
+      ((calendar.tokenExpiry ?: 0L) - System.currentTimeMillis()) / 1000L
 
     val tokenResponse =
       TokenResponse()
@@ -99,7 +103,7 @@ class GoogleOAuthService(
       val refreshed = credential.refreshToken()
       if (refreshed) {
         calendar.accessToken = credential.accessToken
-        calendar.tokenExpiry = credential.expirationTimeMilliseconds!!
+        calendar.tokenExpiry = credential.expirationTimeMilliseconds
         googleCalendarRepository.save(calendar)
       }
     }
@@ -108,9 +112,34 @@ class GoogleOAuthService(
   }
 
   fun getCalendarName(calendarId: Long): String {
-    val calendar = googleCalendarRepository.findById(calendarId) ?: throw IllegalArgumentException("Calendar with ID $calendarId not found.")
+    val calendar =
+      googleCalendarRepository.findByIdOrNull(calendarId)
+        ?: throw IllegalArgumentException("Calendar with ID $calendarId not found.")
 
-    return calendar.calendarName
+    return calendar.calendarName ?: "primary"
+  }
+
+  fun getCredentialForUser(userId: Long): Credential {
+    val user =
+      userRepository.findByIdOrNull(userId)
+        ?: throw IllegalArgumentException("User with ID $userId not found.")
+    val calendar =
+      user.calendars
+        .filterIsInstance<GoogleCalendar>()
+        .firstOrNull()
+        ?: throw IllegalStateException("User $userId has not authorized Google Calendar access.")
+    return getCredentialForCalendar(calendar.id!!)
+  }
+
+  fun getCalendarIdForUser(userId: Long): String {
+    val user =
+      userRepository.findByIdOrNull(userId)
+        ?: throw IllegalArgumentException("User with ID $userId not found.")
+    val calendar =
+      user.calendars
+        .filterIsInstance<GoogleCalendar>()
+        .firstOrNull()
+        ?: throw IllegalStateException("User $userId has not authorized Google Calendar access.")
+    return calendar.calendarName ?: "primary"
   }
 }
-
