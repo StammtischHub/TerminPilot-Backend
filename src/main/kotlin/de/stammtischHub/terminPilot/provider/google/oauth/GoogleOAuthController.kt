@@ -21,47 +21,47 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/google/oauth")
 class GoogleOAuthController(
-    private val googleOAuthService: GoogleOAuthService,
+  private val googleOAuthService: GoogleOAuthService,
 ) {
-    /**
-     * Initiates the Google OAuth 2.0 authorization flow for a user.
-     *
-     * Redirects the user's browser to the Google OAuth consent screen.
-     * After granting access, Google redirects back to `/api/google/oauth/callback`.
-     *
-     * @param userId The ID of the user who wishes to connect their Google Calendar.
-     * @param response The HTTP response used to issue the browser redirect.
-     */
-    @GetMapping("/authorize")
-    fun authorize(
-        @RequestParam userId: Long,
-        response: HttpServletResponse,
-    ) {
-        val authorizationUrl = googleOAuthService.buildAuthorizationUrl(userId)
-        response.sendRedirect(authorizationUrl)
-    }
+  /**
+   * Initiates the Google OAuth 2.0 authorization flow for a user.
+   *
+   * Redirects the user's browser to the Google OAuth consent screen.
+   * After granting access, Google redirects back to `/api/google/oauth/callback`.
+   *
+   * @param userId The ID of the user who wishes to connect their Google Calendar.
+   * @param response The HTTP response used to issue the browser redirect.
+   */
+  @GetMapping("/authorize")
+  fun authorize(
+    @RequestParam userId: Long,
+    response: HttpServletResponse,
+  ) {
+    val authorizationUrl = googleOAuthService.buildAuthorizationUrl(userId)
+    response.sendRedirect(authorizationUrl)
+  }
 
-    /**
-     * Handles the OAuth 2.0 redirect callback from Google after the user grants access.
-     *
-     * Google appends the one-time authorization [code] and the original [state] (which encodes
-     * the [userId]) to this endpoint's URL. The code is exchanged for access and refresh tokens,
-     * which are then persisted to the database.
-     *
-     * @param code The authorization code issued by Google.
-     * @param state The OAuth state parameter containing the user ID set during `/authorize`.
-     * @return A confirmation payload with a success message and the connected user ID.
-     */
-    @GetMapping("/callback")
-    fun callback(
-        @RequestParam code: String,
-        @RequestParam state: String,
-    ): Map<String, String> {
-        val userId = state.toLong()
-        googleOAuthService.handleCallback(code, userId)
-        return mapOf(
-            "message" to "Google Calendar successfully connected for user $userId.",
-            "userId" to userId.toString(),
-        )
-    }
+  /**
+   * Handles the OAuth 2.0 redirect callback from Google after the user grants access.
+   *
+   * Google appends the one-time authorization [code] and the original [state] (which encodes
+   * the [userId]) to this endpoint's URL. The code is exchanged for access and refresh tokens,
+   * which are then persisted to the database.
+   *
+   * @param code The authorization code issued by Google.
+   * @param state The OAuth state parameter containing the user ID set during `/authorize`.
+   * @return A confirmation payload with a success message and the connected user ID.
+   */
+  @GetMapping("/callback")
+  fun callback(
+    @RequestParam code: String,
+    @RequestParam state: String,
+  ): Map<String, String> {
+    val userId = state.toLong()
+    googleOAuthService.handleCallback(code, userId)
+    return mapOf(
+      "message" to "Google Calendar successfully connected for user $userId.",
+      "userId" to userId.toString(),
+    )
+  }
 }

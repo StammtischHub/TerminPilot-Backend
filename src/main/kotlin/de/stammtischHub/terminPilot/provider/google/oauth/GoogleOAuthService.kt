@@ -33,7 +33,10 @@ class GoogleOAuthService(
       .setState(userId.toString())
       .build()
 
-  fun handleCallback(code: String, userId: Long) {
+  fun handleCallback(
+    code: String,
+    userId: Long,
+  ) {
     val tokenResponse =
       flow
         .newTokenRequest(code)
@@ -59,14 +62,16 @@ class GoogleOAuthService(
 
       googleCalendarRepository.save(existingCalendar)
     } else {
-      val newCalendar = GoogleCalendar(
-        user = user,
-        calendarName = "primary",
-        accessToken = tokenResponse.accessToken,
-        refreshToken = tokenResponse.refreshToken ?: "",
-        tokenExpiry = System.currentTimeMillis() +
-          (tokenResponse.expiresInSeconds ?: 3600) * 1000L
-      )
+      val newCalendar =
+        GoogleCalendar(
+          user = user,
+          calendarName = "primary",
+          accessToken = tokenResponse.accessToken,
+          refreshToken = tokenResponse.refreshToken ?: "",
+          tokenExpiry =
+            System.currentTimeMillis() +
+              (tokenResponse.expiresInSeconds ?: 3600) * 1000L,
+        )
 
       googleCalendarRepository.save(newCalendar)
       user.calendars.add(newCalendar)

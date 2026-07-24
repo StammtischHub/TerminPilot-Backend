@@ -1,30 +1,38 @@
 package de.stammtischHub.terminPilot.persistence.entity
 
+import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 
 @Entity(name = "User")
 @Table(name = "users")
-class User(
-  @Column(nullable = false, unique = true)
-  var username: String,
-  @Column(nullable = false)
-  var password: String,
+@AttributeOverride(name = "id", column = Column(name = "user_id"))
+class User : BaseLongId() {
+  @Column(unique = true)
+  @NotBlank
+  @NotNull
+  var username: String? = null
+
+  @NotNull
+  @NotBlank
+  var password: String? = null
+
+  @Enumerated(EnumType.STRING)
+  @NotNull
+  var userType: UserType? = null
+
   @ManyToMany(mappedBy = "members", fetch = FetchType.EAGER)
-  var userGroups: MutableSet<UserGroup> = mutableSetOf(),
+  var userGroups: MutableSet<UserGroup> = mutableSetOf()
+
   @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
-  var calendars: MutableSet<Calendar> = mutableSetOf(),
-) {
-  @Id
-  @Column(name = "user_id", nullable = false, updatable = false, unique = true)
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  var id: Long? = null
+  var calendars: MutableSet<Calendar> = mutableSetOf()
 }

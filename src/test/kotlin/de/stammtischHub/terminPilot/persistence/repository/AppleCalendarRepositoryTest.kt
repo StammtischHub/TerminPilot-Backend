@@ -1,0 +1,77 @@
+package de.stammtischHub.terminPilot.persistence.repository
+
+import de.stammtischHub.terminPilot.persistence.entity.AppleCalendar
+import de.stammtischHub.terminPilot.persistence.entity.User
+import de.stammtischHub.terminPilot.persistence.entity.UserType
+import jakarta.validation.ConstraintViolationException
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
+import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
+import kotlin.test.Test
+import kotlin.test.assertFailsWith
+import kotlin.test.assertNotEquals
+
+@DataJpaTest
+class AppleCalendarRepositoryTest {
+  @Autowired
+  lateinit var entityManager: TestEntityManager
+
+  @Autowired
+  lateinit var appleCalendarRepository: AppleCalendarRepository
+
+  @Autowired
+  lateinit var userRepository: UserRepository
+
+  lateinit var user: User
+
+  fun setupUser() {
+    this.user =
+      userRepository.save(
+        User().apply {
+          username = "username"
+          password = "password"
+          userType = UserType.USER
+        },
+      )
+    entityManager.flush()
+    entityManager.clear()
+  }
+
+  @Test
+  fun `should automatically generate an id when saving an AppleCalendar`() {
+    setupUser()
+
+    val appleCalendar =
+      appleCalendarRepository.save(
+        AppleCalendar(this.user).apply {
+          icloudMail = "a"
+          appSpecificPassword = "b"
+        },
+      )
+
+    assertNotEquals(null, appleCalendar.id)
+  }
+
+  @Test
+  fun `should throw an exception when creating an AppleCalendar with null fields`() {
+    assertFailsWith<ConstraintViolationException> {
+      appleCalendarRepository.save(AppleCalendar())
+      entityManager.flush()
+    }
+  }
+
+  @Test
+  fun `should throw an exception when creating an AppleCalendar with blank fields`() {
+    setupUser()
+
+    assertFailsWith<ConstraintViolationException> {
+      appleCalendarRepository.save(
+        AppleCalendar(this.user).apply {
+          icloudMail = ""
+          appSpecificPassword = ""
+        },
+      )
+      entityManager.flush()
+    }
+  }
+}
