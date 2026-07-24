@@ -7,7 +7,7 @@ plugins {
   id("org.springframework.boot") version "4.1.0"
   id("io.spring.dependency-management") version "1.1.7"
   id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
-  id("org.openapi.generator") version "7.23.0"
+  id("org.openapi.generator") version "7.24.0"
   jacoco
 }
 
@@ -74,6 +74,8 @@ val generatedApiDir = layout.buildDirectory.dir("generated")
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webmvc")
+  implementation("org.springframework.boot:spring-boot-starter-security")
+  implementation("org.springframework.boot:spring-boot-starter-validation")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
   developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -94,7 +96,7 @@ dependencies {
   implementation("io.swagger.core.v3:swagger-annotations:2.2.52")
   implementation("io.swagger.core.v3:swagger-models:2.2.52")
   implementation("jakarta.validation:jakarta.validation-api")
-  apiSpec("de.stammtischhub:terminpilot-api-spec:0.0.0-pr.23.d6b7b64@yaml")
+  apiSpec("de.stammtischhub:terminpilot-api-spec:0.1.0-pr.23.d6b7b64@yaml")
 
   // Apple-Provider
   implementation("com.github.lookfirst:sardine:5.13")

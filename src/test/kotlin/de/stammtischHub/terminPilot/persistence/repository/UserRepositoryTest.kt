@@ -2,15 +2,15 @@ package de.stammtischHub.terminPilot.persistence.repository
 
 import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.entity.UserType
+import jakarta.validation.ConstraintViolationException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
+import org.springframework.dao.DataIntegrityViolationException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotEquals
-import jakarta.validation.ConstraintViolationException as JakartaConstraintViolationException
-import org.hibernate.exception.ConstraintViolationException as HibernateConstraintViolationException
 
 @DataJpaTest
 class UserRepositoryTest {
@@ -24,14 +24,13 @@ class UserRepositoryTest {
 
   fun setupUser() {
     this.user =
-      userRepository.save(
+      userRepository.saveAndFlush(
         User().apply {
           username = "username"
-          password = "password"
+          passwordHash = "password"
           userType = UserType.USER
         },
       )
-    entityManager.flush()
     entityManager.clear()
   }
 
@@ -46,15 +45,14 @@ class UserRepositoryTest {
   fun `should not be able to create two users with the same username`() {
     setupUser()
 
-    assertFailsWith<HibernateConstraintViolationException> {
-      userRepository.save(
+    assertFailsWith<DataIntegrityViolationException> {
+      userRepository.saveAndFlush(
         User().apply {
           username = "username"
-          password = "password"
+          passwordHash = "password"
           userType = UserType.USER
         },
       )
-      entityManager.flush()
     }
   }
 
@@ -68,23 +66,21 @@ class UserRepositoryTest {
 
   @Test
   fun `should throw an exception when creating an User with blank fields`() {
-    assertFailsWith<JakartaConstraintViolationException> {
-      userRepository.save(
+    assertFailsWith<ConstraintViolationException> {
+      userRepository.saveAndFlush(
         User().apply {
           username = ""
-          password = ""
+          passwordHash = ""
           userType = UserType.USER
         },
       )
-      entityManager.flush()
     }
   }
 
   @Test
   fun `should throw an exception when creating an User with null fields`() {
-    assertFailsWith<JakartaConstraintViolationException> {
-      userRepository.save(User())
-      entityManager.flush()
+    assertFailsWith<ConstraintViolationException> {
+      userRepository.saveAndFlush(User())
     }
   }
 }
