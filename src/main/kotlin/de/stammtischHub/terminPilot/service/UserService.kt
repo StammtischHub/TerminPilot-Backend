@@ -4,6 +4,7 @@ import de.stammtischHub.terminPilot.exception.UsernameTakenException
 import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.entity.UserType
 import de.stammtischHub.terminPilot.persistence.repository.UserRepository
+import de.stammtischHub.terminPilot.security.UserPrincipal
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -12,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrElse
-import org.springframework.security.core.userdetails.User as SecurityUser
 
 @Service
 class UserService(
@@ -21,12 +21,7 @@ class UserService(
 ) : UserDetailsService {
   override fun loadUserByUsername(username: String): UserDetails {
     val user = userRepository.findByUsername(username).getOrElse { throw UsernameNotFoundException("User not found") }
-
-    return SecurityUser
-      .withUsername(user.username)
-      .password(user.passwordHash)
-      .roles(user.userType.toString())
-      .build()
+    return UserPrincipal(user)
   }
 
   @Transactional

@@ -7,6 +7,7 @@ import de.stammtischHub.terminPilot.model.generated.UserResponse
 import de.stammtischHub.terminPilot.model.generated.UserRole
 import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.entity.UserType
+import de.stammtischHub.terminPilot.security.UserPrincipal
 import de.stammtischHub.terminPilot.service.UserService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -81,6 +82,7 @@ class AuthController(
 
   private fun User.toUserResponse() =
     UserResponse(
+      id = id!!,
       username = username,
       roles = listOfNotNull(userType.toUserRole()),
     )
@@ -91,16 +93,22 @@ class AuthController(
       UserType.USER -> UserRole.user
     }
 
-  private fun Authentication.toUserResponse() =
-    UserResponse(
-      username = name,
+  private fun Authentication.toUserResponse(): UserResponse {
+    val principal =
+      principal as? UserPrincipal
+        ?: error("Unerwarteter Principal-Typ: ${principal!!::class}")
+
+    return UserResponse(
+      id = principal.id,
+      username = principal.username,
       roles = authorities.mapNotNull { it.authority?.toUserRole() },
     )
+  }
 
   private fun String.toUserRole(): UserRole? =
     when (this) {
-      "ROLE_ADMIN" -> UserRole.admin
-      "ROLE_USER" -> UserRole.user
+      "ADMIN" -> UserRole.admin
+      "USER" -> UserRole.user
       else -> null
     }
 }
