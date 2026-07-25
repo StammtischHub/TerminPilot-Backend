@@ -1,7 +1,9 @@
 package de.stammtischHub.terminPilot.service
 
+import de.stammtischHub.terminPilot.exception.UserNotFoundException
 import de.stammtischHub.terminPilot.exception.UsernameTakenException
 import de.stammtischHub.terminPilot.persistence.entity.User
+import de.stammtischHub.terminPilot.persistence.entity.UserGroup
 import de.stammtischHub.terminPilot.persistence.entity.UserType
 import de.stammtischHub.terminPilot.persistence.repository.UserRepository
 import de.stammtischHub.terminPilot.security.UserPrincipal
@@ -48,4 +50,11 @@ class UserService(
       throw UsernameTakenException()
     }
   }
+
+  fun getAllUserGroupsByUserId(userId: Long): List<UserGroup> {
+    val user = userRepository.findById(userId).orElseThrow { UserNotFoundException() }
+    return user.userGroups.toList()
+  }
+
+  fun getAllUsers(): List<User> = userRepository.findAll().toList()
 }
