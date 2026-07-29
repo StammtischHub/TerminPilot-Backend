@@ -17,3 +17,18 @@ springdoc:
     enabled: true
   api-docs:
     enabled: true
+
+google:
+  calendar:
+    credentials-path: classpath:google-credentials.json
+    id: ${GOOGLE_CALENDAR_ID:}
+
+terminpilot:
+  encryption:
+    key: ${TERMINPILOT_ENCRYPTION_KEY}
+  apple-caldav:
+    base-url: https://caldav.icloud.com
+    connect-timeout: PT10S
+    read-timeout: PT30S
+  calendar-sync:
+    lookahead-days: 180

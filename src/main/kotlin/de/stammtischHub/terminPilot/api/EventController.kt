@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter
 class EventController(
   private val eventService: EventService,
 ) : EventApi {
-  override fun getSuggestions(suggestionsRequest: SuggestionsRequest): ResponseEntity<SuggestionsResponse> {
+  override fun suggestions(suggestionsRequest: SuggestionsRequest): ResponseEntity<SuggestionsResponse> {
     if (!areConstraintsValid(suggestionsRequest)) {
       throw UnsatisfiableConstraintsException("Constraints are not logically satisfiable")
     }
