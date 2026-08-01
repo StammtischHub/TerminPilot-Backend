@@ -15,9 +15,11 @@ class GoogleCalendar : Calendar() {
   var calendarName: String = ""
 
   @Column(columnDefinition = "TEXT")
+  @NotBlank
   var accessToken: String = ""
 
   @Column(columnDefinition = "TEXT")
+  @NotBlank
   var refreshToken: String = ""
 
   @NotNull
