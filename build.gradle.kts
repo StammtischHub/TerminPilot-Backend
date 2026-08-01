@@ -96,7 +96,7 @@ dependencies {
   implementation("io.swagger.core.v3:swagger-annotations:2.2.52")
   implementation("io.swagger.core.v3:swagger-models:2.2.52")
   implementation("jakarta.validation:jakarta.validation-api")
-  apiSpec("de.stammtischhub:terminpilot-api-spec:0.1.0-pr.23.8912674@yaml")
+  apiSpec("de.stammtischhub:terminpilot-api-spec:1.0.1@yaml")
 
   // Apple-Provider
   implementation("com.github.lookfirst:sardine:5.13")
