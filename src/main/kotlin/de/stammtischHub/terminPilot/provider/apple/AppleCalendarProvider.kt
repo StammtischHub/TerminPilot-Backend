@@ -6,13 +6,17 @@ import java.time.LocalDateTime
 
 class AppleCalendarProvider : CalendarProvider {
   override fun getCalendarForTimespan(
+    userId: Long,
     start: LocalDateTime,
     end: LocalDateTime,
   ): List<Appointment> {
     TODO("Not yet implemented")
   }
 
-  override fun writeToCalendar(appointment: Appointment) {
+  override fun writeToCalendar(
+    userId: Long,
+    appointment: Appointment,
+  ) {
     TODO("Not yet implemented")
   }
 }
