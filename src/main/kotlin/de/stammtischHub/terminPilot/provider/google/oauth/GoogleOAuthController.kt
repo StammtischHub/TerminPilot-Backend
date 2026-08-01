@@ -34,10 +34,10 @@ class GoogleOAuthController(
    */
   @GetMapping("/authorize")
   fun authorize(
-    @RequestParam userId: Long,
+    @org.springframework.security.core.annotation.AuthenticationPrincipal userPrincipal: de.stammtischHub.terminPilot.security.UserPrincipal,
     response: HttpServletResponse,
   ) {
-    val authorizationUrl = googleOAuthService.buildAuthorizationUrl(userId)
+    val authorizationUrl = googleOAuthService.buildAuthorizationUrl(userPrincipal.id)
     response.sendRedirect(authorizationUrl)
   }
 

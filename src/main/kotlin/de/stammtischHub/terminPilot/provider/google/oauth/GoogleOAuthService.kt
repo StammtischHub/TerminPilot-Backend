@@ -64,9 +64,8 @@ class GoogleOAuthService(
       googleCalendarRepository.save(existingCalendar)
     } else {
       val newCalendar =
-        GoogleCalendar(
-          user = user,
-        ).apply {
+        GoogleCalendar().apply {
+          owner = user
           calendarName = "primary"
           accessToken = tokenResponse.accessToken
           refreshToken = tokenResponse.refreshToken ?: ""
