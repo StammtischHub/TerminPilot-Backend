@@ -24,15 +24,16 @@ class SecurityConfig {
       .authorizeHttpRequests { auth ->
         auth
           .requestMatchers(
-            "/api/auth/login", 
-            "/api/auth/register", 
-            "/api/google/oauth/callback"
-          )
-          .permitAll()
+            "/api/auth/login",
+            "/api/auth/register",
+            "/api/google/oauth/callback",
+          ).permitAll()
           .anyRequest()
           .authenticated()
-      }.csrf { csrf -> csrf.spa() }
-      .exceptionHandling { ex ->
+      }.csrf { csrf ->
+        csrf.spa()
+        csrf.ignoringRequestMatchers("/api/auth/**", "/api/google/oauth/callback")
+      }.exceptionHandling { ex ->
         ex.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
       }
     return http.build()

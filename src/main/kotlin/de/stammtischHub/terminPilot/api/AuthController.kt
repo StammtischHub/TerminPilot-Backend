@@ -82,7 +82,6 @@ class AuthController(
 
   private fun User.toUserResponse() =
     UserResponse(
-      id = id!!,
       username = username,
       roles = listOfNotNull(userType.toUserRole()),
     )
@@ -99,7 +98,6 @@ class AuthController(
         ?: error("Unerwarteter Principal-Typ: ${principal!!::class}")
 
     return UserResponse(
-      id = principal.id,
       username = principal.username,
       roles = authorities.mapNotNull { it.authority?.toUserRole() },
     )

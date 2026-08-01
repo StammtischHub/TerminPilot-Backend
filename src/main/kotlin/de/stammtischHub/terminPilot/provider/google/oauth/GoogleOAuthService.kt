@@ -9,6 +9,7 @@ import de.stammtischHub.terminPilot.persistence.repository.UserRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 /**
  * Service responsible for managing the Google OAuth 2.0 Authorization Code Flow
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service
  * - Loading and refreshing per-user [Credential] objects for downstream API calls
  */
 @Service
+@Transactional
 class GoogleOAuthService(
   private val flow: GoogleAuthorizationCodeFlow,
   private val userRepository: UserRepository,
@@ -31,6 +33,7 @@ class GoogleOAuthService(
       .newAuthorizationUrl()
       .setRedirectUri(redirectUri)
       .setState(userId.toString())
+      .set("prompt", "consent")
       .build()
 
   fun handleCallback(

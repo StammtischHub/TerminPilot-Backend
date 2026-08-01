@@ -1,6 +1,8 @@
 package de.stammtischHub.terminPilot.provider.google.oauth
 
+import de.stammtischHub.terminPilot.security.UserPrincipal
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -34,7 +36,7 @@ class GoogleOAuthController(
    */
   @GetMapping("/authorize")
   fun authorize(
-    @org.springframework.security.core.annotation.AuthenticationPrincipal userPrincipal: de.stammtischHub.terminPilot.security.UserPrincipal,
+    @AuthenticationPrincipal userPrincipal: UserPrincipal,
     response: HttpServletResponse,
   ) {
     val authorizationUrl = googleOAuthService.buildAuthorizationUrl(userPrincipal.id)
