@@ -14,7 +14,7 @@ class GoogleController(
   private val googleOAuthService: GoogleOAuthService,
 ) : GoogleApi {
 
-  override fun authorize(): ResponseEntity<String> {
+  override fun authorize(): ResponseEntity<Unit> {
     val authentication = SecurityContextHolder.getContext().authentication
     val principal = authentication!!.principal as? UserPrincipal
     val authorizationUrl = googleOAuthService.buildAuthorizationUrl(principal!!.id)
@@ -25,7 +25,7 @@ class GoogleController(
       .body(null)
   }
 
-  override fun callback(code: String, state: String): ResponseEntity<String> {
+  override fun callback(code: String, state: String): ResponseEntity<Unit> {
     val userId = state.toLong()
     googleOAuthService.handleCallback(code, userId)
 
