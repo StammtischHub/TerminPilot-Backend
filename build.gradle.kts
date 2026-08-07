@@ -77,7 +77,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-security")
   implementation("org.springframework.boot:spring-boot-starter-validation")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0")
   developmentOnly("org.springframework.boot:spring-boot-devtools")
   testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -93,8 +93,8 @@ dependencies {
   runtimeOnly("com.h2database:h2")
 
   // OpenAPI Generator
-  implementation("io.swagger.core.v3:swagger-annotations:2.2.52")
-  implementation("io.swagger.core.v3:swagger-models:2.2.52")
+  implementation("io.swagger.core.v3:swagger-annotations:2.2.53")
+  implementation("io.swagger.core.v3:swagger-models:2.2.53")
   implementation("jakarta.validation:jakarta.validation-api")
   apiSpec("de.stammtischhub:terminpilot-api-spec:1.1.0-pr.48.bae75b9@yaml")
 
