@@ -13,7 +13,6 @@ import java.net.URI
 class GoogleController(
   private val googleOAuthService: GoogleOAuthService,
 ) : GoogleApi {
-
   override fun authorize(): ResponseEntity<Unit> {
     val authentication = SecurityContextHolder.getContext().authentication
     val principal = authentication!!.principal as? UserPrincipal
@@ -25,7 +24,10 @@ class GoogleController(
       .body(null)
   }
 
-  override fun callback(code: String, state: String): ResponseEntity<Unit> {
+  override fun callback(
+    code: String,
+    state: String,
+  ): ResponseEntity<Unit> {
     val userId = state.toLong()
     googleOAuthService.handleCallback(code, userId)
 
