@@ -4,6 +4,10 @@
     "config:recommended",
     ":disableDependencyDashboard"
   ],
+  "env": {
+    "GRADLE_OPTS": "-DGITHUB_TOKEN={{ secrets.GITHUB_TOKEN }}"
+  },
+
   "timezone": "Europe/Berlin",
   "schedule": ["* 0-6 * * *"],
   "prConcurrentLimit": 0,
