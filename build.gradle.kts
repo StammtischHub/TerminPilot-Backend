@@ -33,6 +33,7 @@ java {
 kotlin {
   compilerOptions {
     freeCompilerArgs.addAll("-Xjsr305=strict")
+    javaParameters = true
   }
 }
 

@@ -24,14 +24,4 @@ class UserGroup : BaseLongId() {
     inverseJoinColumns = [JoinColumn(name = "user_id")],
   )
   var members: MutableSet<User> = mutableSetOf()
-
-  fun addMember(user: User) {
-    members.add(user)
-    user.userGroups.add(this)
-  }
-
-  fun removeMember(user: User) {
-    members.remove(user)
-    user.userGroups.remove(this)
-  }
 }

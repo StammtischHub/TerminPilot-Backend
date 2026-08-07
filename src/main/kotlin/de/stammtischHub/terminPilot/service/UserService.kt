@@ -31,15 +31,15 @@ class UserService(
     username: String,
     rawPassword: String,
   ): User {
-    val normalized = username.trim()
+    val normalizedUsername = username.trim()
 
-    if (userRepository.findByUsername(normalized).isPresent) {
+    if (userRepository.findByUsername(normalizedUsername).isPresent) {
       throw UsernameTakenException()
     }
 
     val user =
       User().apply {
-        this.username = normalized
+        this.username = normalizedUsername
         passwordHash = passwordEncoder.encode(rawPassword).toString()
         userType = UserType.USER
       }
@@ -51,10 +51,13 @@ class UserService(
     }
   }
 
+  @Transactional(readOnly = true)
   fun getAllUserGroupsByUserId(userId: Long): List<UserGroup> {
     val user = userRepository.findById(userId).orElseThrow { UserNotFoundException() }
     return user.userGroups.toList()
   }
+
+  fun getUserByUserId(userId: Long): User = userRepository.findById(userId).orElseThrow { UserNotFoundException() }
 
   fun getAllUsers(): List<User> = userRepository.findAll().toList()
 }
