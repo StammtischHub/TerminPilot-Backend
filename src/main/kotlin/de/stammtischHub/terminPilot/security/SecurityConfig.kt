@@ -23,8 +23,13 @@ class SecurityConfig {
     http
       .authorizeHttpRequests { auth ->
         auth
-          .requestMatchers("/api/auth/login", "/api/auth/register")
-          .permitAll()
+          .requestMatchers(
+            "/api/auth/login",
+            "/api/auth/register",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-ui.html",
+          ).permitAll()
           .anyRequest()
           .authenticated()
       }.csrf { csrf -> csrf.spa() }

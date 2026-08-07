@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotEquals
 
@@ -27,6 +28,19 @@ class UserGroupRepositoryTest {
       )
 
     assertNotEquals(null, userGroup.id)
+  }
+
+  @Test
+  fun `should fin UserGroup by name`() {
+    val userGroup =
+      userGroupRepository.saveAndFlush(
+        UserGroup().apply {
+          name = "name"
+        },
+      )
+
+    val foundUserGroup = userGroupRepository.findByName("name").get()
+    assertEquals(userGroup, foundUserGroup)
   }
 
   @Test
