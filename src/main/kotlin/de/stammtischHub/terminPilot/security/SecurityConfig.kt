@@ -26,13 +26,12 @@ class SecurityConfig {
           .requestMatchers(
             "/api/auth/login",
             "/api/auth/register",
-            "/api/google/oauth/callback", // TODO: remove
           ).permitAll()
           .anyRequest()
           .authenticated()
       }.csrf { csrf ->
         csrf.spa()
-        csrf.ignoringRequestMatchers("/api/auth/**", "/api/google/oauth/callback") // TODO: remove
+        csrf.ignoringRequestMatchers("/api/auth/**")
       }.exceptionHandling { ex ->
         ex.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
       }
