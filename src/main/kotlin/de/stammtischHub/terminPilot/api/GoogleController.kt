@@ -21,7 +21,7 @@ class GoogleController(
     return ResponseEntity
       .status(HttpStatus.FOUND)
       .location(URI.create(authorizationUrl))
-      .body(null)
+      .build()
   }
 
   override fun callback(
@@ -31,6 +31,6 @@ class GoogleController(
     val userId = state.toLong()
     googleOAuthService.handleCallback(code, userId)
 
-    return ResponseEntity.ok(null)
+    return ResponseEntity.ok().build()
   }
 }
