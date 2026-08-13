@@ -1,15 +1,11 @@
 package de.stammtischHub.terminPilot.api
 
 import de.stammtischHub.terminPilot.api.generated.EventApi
-import de.stammtischHub.terminPilot.exception.CalendarAccessFailedException
-import de.stammtischHub.terminPilot.exception.CalendarAccessTimeoutException
 import de.stammtischHub.terminPilot.exception.UnsatisfiableConstraintsException
-import de.stammtischHub.terminPilot.model.generated.CalendarAccessFailure
 import de.stammtischHub.terminPilot.model.generated.SuggestionsRequest
 import de.stammtischHub.terminPilot.model.generated.SuggestionsResponse
 import de.stammtischHub.terminPilot.service.EventService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestController
 import java.time.Duration
 import java.time.LocalTime
@@ -41,20 +37,4 @@ class EventController(
     val minutesAvailable = Duration.between(start, end).toMinutes()
     return constraints.durationMinutes <= minutesAvailable
   }
-
-  @ExceptionHandler(UnsatisfiableConstraintsException::class)
-  fun handleUnsatisfiableConstraints(ex: UnsatisfiableConstraintsException): ResponseEntity<String> =
-    ResponseEntity.status(422).body(ex.message)
-
-  @ExceptionHandler(CalendarAccessFailedException::class)
-  fun handleCalendarAccessFailed(ex: CalendarAccessFailedException): ResponseEntity<CalendarAccessFailure> =
-    ResponseEntity.status(502).body(
-      CalendarAccessFailure(participantId = ex.participantId, reason = ex.reason),
-    )
-
-  @ExceptionHandler(CalendarAccessTimeoutException::class)
-  fun handleCalendarAccessTimeout(ex: CalendarAccessTimeoutException): ResponseEntity<CalendarAccessFailure> =
-    ResponseEntity.status(504).body(
-      CalendarAccessFailure(participantId = ex.participantId, reason = ex.reason),
-    )
 }
