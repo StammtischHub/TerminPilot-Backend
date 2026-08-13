@@ -98,9 +98,14 @@ dependencies {
   implementation("jakarta.validation:jakarta.validation-api")
   apiSpec("de.stammtischhub:terminpilot-api-spec:1.3.0@yaml")
 
-  // Provider
+  // Apple-Provider
   implementation("com.github.lookfirst:sardine:5.13")
   implementation("org.mnode.ical4j:ical4j:4.3.0")
+
+  // Google-Provider
+  implementation("com.google.api-client:google-api-client:2.7.0")
+  implementation("com.google.oauth-client:google-oauth-client-jetty:1.36.0")
+  implementation("com.google.apis:google-api-services-calendar:v3-rev20260225-2.0.0")
 
   // Datenbank
   runtimeOnly("com.mysql:mysql-connector-j")
@@ -170,14 +175,12 @@ tasks.named("compileKotlin") {
   dependsOn("openApiGenerate")
 }
 
-tasks.named<org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask>("runKtlintCheckOverMainSourceSet") {
+tasks.named("runKtlintCheckOverMainSourceSet") {
   dependsOn("openApiGenerate")
-  exclude { it.file.path.contains("generated") }
 }
 
-tasks.named<org.jlleitschuh.gradle.ktlint.tasks.KtLintFormatTask>("runKtlintFormatOverMainSourceSet") {
+tasks.named("runKtlintFormatOverMainSourceSet") {
   dependsOn("openApiGenerate")
-  exclude { it.file.path.contains("generated") }
 }
 
 tasks.withType<Test> {

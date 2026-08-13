@@ -23,12 +23,16 @@ class SecurityConfig {
     http
       .authorizeHttpRequests { auth ->
         auth
-          .requestMatchers("/api/auth/login", "/api/auth/register")
-          .permitAll()
+          .requestMatchers(
+            "/api/auth/login",
+            "/api/auth/register",
+          ).permitAll()
           .anyRequest()
           .authenticated()
-      }.csrf { csrf -> csrf.spa() }
-      .exceptionHandling { ex ->
+      }.csrf { csrf ->
+        csrf.spa()
+        csrf.ignoringRequestMatchers("/api/auth/**")
+      }.exceptionHandling { ex ->
         ex.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
       }
     return http.build()
