@@ -41,6 +41,10 @@ class GlobalExceptionHandler {
     return ResponseEntity.status(404).body(ex.message)
   }
 
+  @ExceptionHandler(UserNotFoundException::class)
+  fun handleUserNotFound(ex: UserNotFoundException): ResponseEntity<String> =
+    ResponseEntity.status(404).body(ex.message)
+
   @ExceptionHandler(AuthenticationException::class)
   fun onAuthenticationFailure(): ProblemDetail {
     logger.info("Authentication failure")
