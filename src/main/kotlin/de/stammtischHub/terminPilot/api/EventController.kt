@@ -10,13 +10,12 @@ import de.stammtischHub.terminPilot.model.generated.SuggestionsResponse
 import de.stammtischHub.terminPilot.service.EventService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.time.Duration
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @RestController
-@RequestMapping("/event")
 class EventController(
   private val eventService: EventService,
 ) : EventApi {
@@ -36,8 +35,9 @@ class EventController(
     if (constraints.durationMinutes < 1) return false
     if (suggestionsRequest.participants.isEmpty()) return false
 
-    val start = LocalTime.parse(constraints.timeRange.start)
-    val end = LocalTime.parse(constraints.timeRange.end)
+    val formatter = DateTimeFormatter.ofPattern("HH:mm")
+    val start = LocalTime.parse(constraints.timeRange.start, formatter)
+    val end = LocalTime.parse(constraints.timeRange.end, formatter)
     val minutesAvailable = Duration.between(start, end).toMinutes()
     return constraints.durationMinutes <= minutesAvailable
   }
