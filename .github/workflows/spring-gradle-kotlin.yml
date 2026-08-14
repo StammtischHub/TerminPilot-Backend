@@ -151,7 +151,7 @@ jobs:
         run: ./gradlew ktlintCheck || (echo "::warning::Lint failed. Run './gradlew ktlintFormat' to auto-fix formatting issues." && exit 1)
 
       - name: Publish reports
-        uses: lcollins/checkstyle-github-action@v3.2.0
+        uses: lcollins/checkstyle-github-action@v4.0.0
         if: failure()
         with:
           path: build/reports/**/*.xml
