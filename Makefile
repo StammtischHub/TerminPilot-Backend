@@ -3,7 +3,7 @@ export
 
 # Makefile – Shortcuts für häufige Docker-Operationen
 
-.PHONY: up down down-volume restart logs shell-user shell-root backup restore status run-local run-docker
+.PHONY: up down down-volume restart logs shell-user shell-root backup restore status run-local run-docker build
 
 ## MySQL starten (Volume bleibt erhalten)
 up:
@@ -55,3 +55,8 @@ run-local:
 run-docker:
 	docker compose up -d
 	./gradlew bootRun --args='--spring.profiles.active=docker'
+
+## Schreibt die Abhängigkeiten in die Lock-Dateien und baut das Projekt
+build:
+	./gradlew dependencies --write-locks
+	./gradlew build

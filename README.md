@@ -132,6 +132,7 @@ make run-docker
 | `make status` | Show the status of all running containers |
 | `make run-local` | Run the backend with the `local` profile (manual MySQL) |
 | `make run-docker` | Start the Docker DB and run the backend with the `docker` profile |
+| `make build` | Write dependencies to lock files and build the project |
 
 ### Spring Profiles
 
