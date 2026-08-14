@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController
 class UsersController(
   private val userService: UserService,
 ) : UsersApi {
-  override fun getUserGroupsByUserId(userId: Long): ResponseEntity<List<UserGroupResponse>> {
-    val userGroups = userService.getAllUserGroupsByUserId(userId)
+  override fun getUserGroupsByUserId(
+    userId: Long,
+    userGroupId: Long?,
+  ): ResponseEntity<List<UserGroupResponse>> {
+    val userGroups = userService.getUserGroupsByUserId(userId, userGroupId)
     return ResponseEntity.ok(userGroups.map { it.toUserGroupResponse() })
   }
 

@@ -52,12 +52,18 @@ class UserService(
   }
 
   @Transactional(readOnly = true)
-  fun getAllUserGroupsByUserId(userId: Long): List<UserGroup> {
-    val user = userRepository.findById(userId).orElseThrow { UserNotFoundException() }
-    return user.userGroups.toList()
+  fun getUserGroupsByUserId(
+    userId: Long,
+    userGroupId: Long?,
+  ): List<UserGroup> {
+    val user = userRepository.findById(userId).orElseThrow { UserNotFoundException(userId) }
+    return userGroupId?.let { userGroupId ->
+      user.userGroups.filter { it.id == userGroupId }
+    } ?: user.userGroups.toList()
   }
 
-  fun getUserByUserId(userId: Long): User = userRepository.findById(userId).orElseThrow { UserNotFoundException() }
+  fun getUserByUserId(userId: Long): User =
+    userRepository.findById(userId).orElseThrow { UserNotFoundException(userId) }
 
   fun getAllUsers(): List<User> = userRepository.findAll().toList()
 }
