@@ -2,6 +2,8 @@ package de.stammtischHub.terminPilot.api
 
 import de.stammtischHub.terminPilot.api.generated.EventApi
 import de.stammtischHub.terminPilot.exception.UnsatisfiableConstraintsException
+import de.stammtischHub.terminPilot.model.generated.CreateEventRequest
+import de.stammtischHub.terminPilot.model.generated.CreateEventResponse
 import de.stammtischHub.terminPilot.model.generated.SuggestionsRequest
 import de.stammtischHub.terminPilot.model.generated.SuggestionsResponse
 import de.stammtischHub.terminPilot.service.EventService
@@ -15,6 +17,16 @@ import java.time.format.DateTimeFormatter
 class EventController(
   private val eventService: EventService,
 ) : EventApi {
+  override fun createEvent(createEventRequest: CreateEventRequest): ResponseEntity<CreateEventResponse> {
+    if (!areConstraintsValid(createEventRequest)) {
+      throw UnsatisfiableConstraintsException("Constraints are not logically satisfiable")
+    }
+    val event = eventService.createEvent(createEventRequest)
+
+    val eventResponse = CreateEventResponse(event.title, event.start, event.end, event.participants, event.location, event.description)
+    return ResponseEntity.status(201).body(eventResponse)
+  }
+
   override fun getSuggestions(suggestionsRequest: SuggestionsRequest): ResponseEntity<SuggestionsResponse> {
     if (!areConstraintsValid(suggestionsRequest)) {
       throw UnsatisfiableConstraintsException("Constraints are not logically satisfiable")

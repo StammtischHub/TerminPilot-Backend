@@ -1,7 +1,7 @@
 package de.stammtischHub.terminPilot.provider.google
 
 import com.google.api.services.calendar.Calendar
-import de.stammtischHub.terminPilot.domain.Appointment
+import de.stammtischHub.terminPilot.domain.Event
 import de.stammtischHub.terminPilot.provider.CalendarProvider
 import de.stammtischHub.terminPilot.provider.google.oauth.GoogleCalendarAccountService
 import de.stammtischHub.terminPilot.provider.google.oauth.GoogleCredentialProvider
@@ -32,13 +32,13 @@ class GoogleCalendarService(
    * @param userId The ID of the user whose calendar is queried.
    * @param start The start of the time range.
    * @param end The end of the time range.
-   * @return A list of [Appointment]s found within the range.
+   * @return A list of [Event]s found within the range.
    */
   override fun getCalendarForTimespan(
     userId: Long,
     start: LocalDateTime,
     end: LocalDateTime,
-  ): List<Appointment> {
+  ): List<Event> {
     val client = buildClientForUser(userId)
     val calendarId = calendarAccountService.getCalendarIdForUser(userId)
 
@@ -53,23 +53,23 @@ class GoogleCalendarService(
         .execute()
         .items ?: emptyList()
 
-    return events.map(eventMapper::toAppointment)
+    return events.map(eventMapper::toDomainEvent)
   }
 
   /**
    * Inserts a new appointment into the Google Calendar of the given user.
    *
    * @param userId The ID of the user whose calendar is written to.
-   * @param appointment The appointment to be written to the calendar.
+   * @param event The appointment to be written to the calendar.
    */
   override fun writeToCalendar(
     userId: Long,
-    appointment: Appointment,
+    event: Event,
   ) {
     val client = buildClientForUser(userId)
     val calendarId = calendarAccountService.getCalendarIdForUser(userId)
 
-    client.events().insert(calendarId, eventMapper.toEvent(appointment)).execute()
+    client.events().insert(calendarId, eventMapper.toEvent(event)).execute()
   }
 
   private fun buildClientForUser(userId: Long): Calendar {
