@@ -1,7 +1,7 @@
 package de.stammtischHub.terminPilot.api
 
 import de.stammtischHub.terminPilot.api.generated.AuthApi
-import de.stammtischHub.terminPilot.api.response.toUserResponse
+import de.stammtischHub.terminPilot.api.mapping.toUserResponse
 import de.stammtischHub.terminPilot.model.generated.LoginRequest
 import de.stammtischHub.terminPilot.model.generated.RegisterRequest
 import de.stammtischHub.terminPilot.model.generated.UserResponse

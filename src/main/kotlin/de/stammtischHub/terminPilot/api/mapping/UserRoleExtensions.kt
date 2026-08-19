@@ -1,4 +1,4 @@
-package de.stammtischHub.terminPilot.api.response
+package de.stammtischHub.terminPilot.api.mapping
 
 import de.stammtischHub.terminPilot.model.generated.UserRole
 import de.stammtischHub.terminPilot.persistence.entity.UserType
