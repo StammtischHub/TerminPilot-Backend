@@ -8,6 +8,6 @@ data class Event(
   val start: LocalDateTime,
   val end: LocalDateTime,
   val participants: List<User>,
-  val location: String,
-  val description: String,
+  val location: String?,
+  val description: String?,
 )

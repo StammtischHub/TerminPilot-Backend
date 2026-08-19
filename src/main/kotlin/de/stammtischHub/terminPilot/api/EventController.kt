@@ -28,7 +28,7 @@ class EventController(
           end = createEventRequest.end.toLocalDateTime(),
           participantIds = createEventRequest.participants,
           location = createEventRequest.location,
-          notes = createEventRequest.notes,
+          description = createEventRequest.notes,
         )
       } catch (e: IllegalArgumentException) {
         throw UnsatisfiableConstraintsException("Constraints are not logically satisfiable", e)

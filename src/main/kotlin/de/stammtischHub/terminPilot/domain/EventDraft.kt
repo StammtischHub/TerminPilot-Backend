@@ -8,5 +8,5 @@ data class EventDraft(
   val end: LocalDateTime,
   val participantIds: List<Long>,
   val location: String?,
-  val notes: String?,
+  val description: String?,
 )
