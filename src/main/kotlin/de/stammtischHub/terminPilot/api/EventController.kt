@@ -1,6 +1,8 @@
 package de.stammtischHub.terminPilot.api
 
 import de.stammtischHub.terminPilot.api.generated.EventApi
+import de.stammtischHub.terminPilot.domain.EventConstraints
+import de.stammtischHub.terminPilot.domain.EventDraft
 import de.stammtischHub.terminPilot.exception.UnsatisfiableConstraintsException
 import de.stammtischHub.terminPilot.model.generated.CreateEventRequest
 import de.stammtischHub.terminPilot.model.generated.CreateEventResponse
@@ -9,8 +11,8 @@ import de.stammtischHub.terminPilot.model.generated.SuggestionsResponse
 import de.stammtischHub.terminPilot.service.EventService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
-import java.time.Duration
 import java.time.LocalTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 @RestController
@@ -18,35 +20,56 @@ class EventController(
   private val eventService: EventService,
 ) : EventApi {
   override fun createEvent(createEventRequest: CreateEventRequest): ResponseEntity<CreateEventResponse> {
-    if (!areConstraintsValid(createEventRequest)) {
-      throw UnsatisfiableConstraintsException("Constraints are not logically satisfiable")
-    }
-    val event = eventService.createEvent(createEventRequest)
+    val draft =
+      try {
+        EventDraft(
+          title = createEventRequest.title,
+          start = createEventRequest.start.toLocalDateTime(), // TODO: Timezones!
+          end = createEventRequest.end.toLocalDateTime(),
+          participantIds = createEventRequest.participants,
+          location = createEventRequest.location,
+          notes = createEventRequest.notes,
+        )
+      } catch (e: IllegalArgumentException) {
+        throw UnsatisfiableConstraintsException("Constraints are not logically satisfiable", e)
+      }
 
-    val eventResponse = CreateEventResponse(event.title, event.start, event.end, event.participants, event.location, event.description)
+    val event = eventService.createEvent(draft)
+    val eventResponse =
+      CreateEventResponse(
+        event.title,
+        event.start.atOffset(ZoneOffset.UTC),
+        event.end.atOffset(ZoneOffset.UTC),
+        event.participants.toDtoList(),
+        event.location,
+        event.description,
+      )
     return ResponseEntity.status(201).body(eventResponse)
   }
 
   override fun getSuggestions(suggestionsRequest: SuggestionsRequest): ResponseEntity<SuggestionsResponse> {
-    if (!areConstraintsValid(suggestionsRequest)) {
-      throw UnsatisfiableConstraintsException("Constraints are not logically satisfiable")
-    }
-    val suggestions = eventService.suggestEvents(suggestionsRequest)
-    return ResponseEntity.ok(SuggestionsResponse(suggestions = suggestions))
-  }
-
-  private fun areConstraintsValid(suggestionsRequest: SuggestionsRequest): Boolean {
-    val constraints = suggestionsRequest.constraints
-    if (constraints.weekdays.isEmpty()) return false
-    if (constraints.dateRange.end.isBefore(constraints.dateRange.start)) return false
-    if (constraints.timeRange.start >= constraints.timeRange.end) return false
-    if (constraints.durationMinutes < 1) return false
-    if (suggestionsRequest.participants.isEmpty()) return false
-
     val formatter = DateTimeFormatter.ofPattern("HH:mm")
-    val start = LocalTime.parse(constraints.timeRange.start, formatter)
-    val end = LocalTime.parse(constraints.timeRange.end, formatter)
-    val minutesAvailable = Duration.between(start, end).toMinutes()
-    return constraints.durationMinutes <= minutesAvailable
+    val constraints =
+      try {
+        EventConstraints(
+          weekdays =
+            suggestionsRequest.constraints.weekdays
+              .toSet()
+              .toDayOfWeekSet(),
+          dateRange = suggestionsRequest.constraints.dateRange.start..suggestionsRequest.constraints.dateRange.end,
+          timeRange =
+            LocalTime.parse(
+              suggestionsRequest.constraints.timeRange.start,
+              formatter,
+            )..LocalTime.parse(suggestionsRequest.constraints.timeRange.end, formatter),
+          duration = suggestionsRequest.constraints.durationMinutes,
+          participantIds = suggestionsRequest.participants,
+        )
+      } catch (e: IllegalArgumentException) {
+        throw UnsatisfiableConstraintsException("Constraints are not logically satisfiable", e)
+      }
+
+    val suggestions = eventService.suggestEvents(constraints)
+    return ResponseEntity.ok(SuggestionsResponse(suggestions = suggestions))
   }
 }
