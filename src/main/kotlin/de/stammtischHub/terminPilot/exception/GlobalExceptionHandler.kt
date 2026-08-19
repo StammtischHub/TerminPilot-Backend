@@ -13,7 +13,7 @@ class GlobalExceptionHandler {
 
   @ExceptionHandler(UnsatisfiableConstraintsException::class)
   fun handleUnsatisfiableConstraints(ex: UnsatisfiableConstraintsException): ProblemDetail {
-    logger.debug("Unsatisfiable constraints exception: ${ex.message}")
+    logger.debug("Unsatisfiable constraints exception: ${ex.message}, ${ex.cause}")
     return ProblemDetail.forStatusAndDetail(
       HttpStatus.UNPROCESSABLE_ENTITY,
       ex.message ?: "Unsatisfiable constraints",
