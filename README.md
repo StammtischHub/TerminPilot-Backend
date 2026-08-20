@@ -36,11 +36,42 @@ The `.env` file is used both by the Makefile (for Docker operations) and by the 
 | `DOCKER_DB_USER_PASSWORD` | Password for the Docker MySQL user |
 | `DOCKER_DB_ROOT_PASSWORD` | Root password for the Docker MySQL container |
 | `GOOGLE_CALENDAR_ID` | Google Calendar ID used for calendar integration |
+| `TERMINPILOT_ENCRYPTION_KEY` | Base64-encoded 32-byte AES-256 key for encrypting stored credentials. Generate with `openssl rand -base64 32`. |
 | `GITHUB_ACTOR` | Your GitHub username — required to download the API spec from GitHub Packages |
 | `GITHUB_TOKEN` | A GitHub Personal Access Token with `read:packages` scope — required to download the API spec |
 
 > [!NOTE]
 > `GITHUB_ACTOR` and `GITHUB_TOKEN` are required at **build time** because the OpenAPI spec is published as a GitHub Package and pulled automatically during the build.
+
+### Apple Calendar Integration
+
+Users connect Apple Calendar with Apple ID e-mail and an [app-specific password](https://support.apple.com/HT204397) from [appleid.apple.com](https://appleid.apple.com). The backend uses CalDAV at `https://caldav.icloud.com`.
+
+Only anonymised busy intervals are stored. Event title, description, location, and participant data are not persisted.
+
+Relevant properties (`application.yml`):
+
+| Property | Default | Description |
+|---|---|---|
+| `terminpilot.apple-caldav.base-url` | `https://caldav.icloud.com` | CalDAV server root |
+| `terminpilot.apple-caldav.connect-timeout` | `PT10S` | TCP connect timeout (ISO-8601) |
+| `terminpilot.apple-caldav.read-timeout` | `PT30S` | Response read timeout (ISO-8601) |
+| `terminpilot.calendar-sync.lookahead-days` | `180` | Future days to synchronise busy intervals for |
+
+### Apple Calendar lokal testen
+
+```powershell
+$env:APPLE_TEST_EMAIL="your.apple.id@icloud.com"
+$env:APPLE_TEST_APP_PASSWORD="your-app-specific-password"
+$env:APPLE_TEST_CALENDAR_NAME="Home"
+$env:APPLE_REAL_INTEGRATION_TEST_ENABLED="true"
+```
+
+```powershell
+./gradlew test --tests "de.stammtischHub.terminPilot.provider.apple.AppleCalDavRealIntegrationTest"
+```
+
+Der Real-Apple-Test legt einen echten Termin an und loescht ihn nicht automatisch.
 
 ### OpenAPI Spec & Code Generation
 

@@ -96,9 +96,8 @@ dependencies {
   implementation("io.swagger.core.v3:swagger-annotations:2.2.54")
   implementation("io.swagger.core.v3:swagger-models:2.2.54")
   implementation("jakarta.validation:jakarta.validation-api")
-  apiSpec("de.stammtischhub:terminpilot-api-spec:1.5.1@yaml")
+  apiSpec("de.stammtischhub:terminpilot-api-spec:1.3.0@yaml")
 
-  // Apple-Provider
   implementation("com.github.lookfirst:sardine:5.13")
   implementation("org.mnode.ical4j:ical4j:4.3.0")
 
@@ -107,8 +106,9 @@ dependencies {
   implementation("com.google.oauth-client:google-oauth-client-jetty:1.39.0")
   implementation("com.google.apis:google-api-services-calendar:v3-rev20260708-2.0.0")
 
-  // Datenbank
   runtimeOnly("com.mysql:mysql-connector-j")
+  testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
+  testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
 }
 
 sourceSets {

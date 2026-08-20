@@ -13,7 +13,7 @@ server:
       cookie:
         http-only: true
         same-site: lax
-        secure: false   # for dev false; on prod true for https
+        secure: false
 
 springdoc:
   swagger-ui:
@@ -25,3 +25,13 @@ logging:
   level:
     root: INFO
     org.springframework.security: DEBUG
+
+terminpilot:
+  encryption:
+    key: ${TERMINPILOT_ENCRYPTION_KEY}
+  apple-caldav:
+    base-url: https://caldav.icloud.com
+    connect-timeout: PT10S
+    read-timeout: PT30S
+  calendar-sync:
+    lookahead-days: 180
