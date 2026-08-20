@@ -35,9 +35,9 @@ The `.env` file is used both by the Makefile (for Docker operations) and by the 
 | `DOCKER_DB_USER`             | MySQL user inside the Docker container                                                        |
 | `DOCKER_DB_USER_PASSWORD`    | Password for the Docker MySQL user                                                            |
 | `DOCKER_DB_ROOT_PASSWORD`    | Root password for the Docker MySQL container                                                  |
-| `google.oauth.client-id`     | Google Cloud Project ID for OAuth Flow                                                        |
-| `google.oauth.client-secret` | Secret to log in the Google Cloud Project for OAuth Flow (Redirecting)                        |
-| `google.oauth.redirect-uri`  | Google OAuth re-entry URI (http://localhost:8080/api/google/callback)                         |
+| `GOOGLE_OAUTH_CLIENT_ID`     | Google Cloud Project ID for OAuth Flow                                                        |
+| `GOOGLE_OAUTH_CLIENT_SECRET` | Secret to log in the Google Cloud Project for OAuth Flow (Redirecting)                        |
+| `GOOGLE_OAUTH_REDIRECT_URI`  | Google OAuth re-entry URI (http://localhost:8080/api/google/callback)                         |
 | `GITHUB_ACTOR`               | Your GitHub username — required to download the API spec from GitHub Packages                 |
 | `GITHUB_TOKEN`               | A GitHub Personal Access Token with `read:packages` scope — required to download the API spec |
 
