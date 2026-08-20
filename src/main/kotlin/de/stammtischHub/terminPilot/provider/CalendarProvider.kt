@@ -19,6 +19,16 @@ interface CalendarProvider {
   ): List<Event>
 
   /**
+   * Verifies that the given user's calendar is reachable and writable,
+   * without creating any event. Used to fail fast before writing to any
+   * participant's calendar.
+   *
+   * @throws [de.stammtischHub.terminPilot.exception.CalendarAccessFailedException] if not connected, auth expired, or provider unavailable.
+   * @throws [de.stammtischHub.terminPilot.exception.CalendarAccessTimeoutException] if the check times out.
+   */
+  fun verifyAccess(userId: Long)
+
+  /**
    * Inserts a new appointment into the Calendar of the given user.
    *
    * @param userId The ID of the user whose calendar is written to.
