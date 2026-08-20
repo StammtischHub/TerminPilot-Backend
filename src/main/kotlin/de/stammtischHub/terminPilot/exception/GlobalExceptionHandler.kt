@@ -23,12 +23,13 @@ class GlobalExceptionHandler {
   @ExceptionHandler(MultipleCalendarAccessFailedException::class)
   fun handleMultipleCalendarAccessFailed(ex: MultipleCalendarAccessFailedException): ProblemDetail {
     logger.debug("Calendar access failed for multiple participants: {}", ex.failures)
-    return ProblemDetail.forStatusAndDetail(
-      HttpStatus.BAD_GATEWAY,
-      "Calendar access failed for one or more participants",
-    ).apply {
-      setProperty("failures", ex.failures)
-    }
+    return ProblemDetail
+      .forStatusAndDetail(
+        HttpStatus.BAD_GATEWAY,
+        "Calendar access failed for one or more participants",
+      ).apply {
+        setProperty("failures", ex.failures)
+      }
   }
 
   @ExceptionHandler(CalendarAccessFailedException::class)

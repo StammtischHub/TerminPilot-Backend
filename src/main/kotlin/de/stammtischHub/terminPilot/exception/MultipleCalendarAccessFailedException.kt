@@ -9,5 +9,5 @@ import de.stammtischHub.terminPilot.model.generated.CalendarAccessFailure
 class MultipleCalendarAccessFailedException(
   val failures: List<CalendarAccessFailure>,
 ) : RuntimeException(
-  "Calendar access failed for participants: ${failures.joinToString { "${it.participantId}(${it.reason})" }}",
-)
+    "Calendar access failed for participants: ${failures.joinToString { "${it.participantId}(${it.reason})" }}",
+  )

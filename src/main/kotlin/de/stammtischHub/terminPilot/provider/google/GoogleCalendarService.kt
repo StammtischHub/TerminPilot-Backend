@@ -66,13 +66,13 @@ class GoogleCalendarService(
     return events.map(eventMapper::toDomainEvent)
   }
 
-  override fun verifyAccess(userId: Long) = withCalendarAccessHandling(userId) {
-    val client = buildClientForUser(userId)
-    val calendarId = calendarAccountService.getCalendarIdForUser(userId)
-    client.calendarList().get(calendarId).execute()
-    Unit
-  }
-
+  override fun verifyAccess(userId: Long) =
+    withCalendarAccessHandling(userId) {
+      val client = buildClientForUser(userId)
+      val calendarId = calendarAccountService.getCalendarIdForUser(userId)
+      client.calendarList().get(calendarId).execute()
+      Unit
+    }
 
   /**
    * Inserts a new appointment into the Google Calendar of the given user.
@@ -80,7 +80,10 @@ class GoogleCalendarService(
    * @param userId The ID of the user whose calendar is written to.
    * @param event The appointment to be written to the calendar.
    */
-  override fun writeToCalendar(userId: Long, event: Event) = withCalendarAccessHandling(userId) {
+  override fun writeToCalendar(
+    userId: Long,
+    event: Event,
+  ) = withCalendarAccessHandling(userId) {
     val client = buildClientForUser(userId)
     val calendarId = calendarAccountService.getCalendarIdForUser(userId)
     client.events().insert(calendarId, eventMapper.toEvent(event)).execute()
@@ -90,7 +93,10 @@ class GoogleCalendarService(
   /**
    * Exception handling and logging for calendar access. Translation to domain exceptions / reasons.
    */
-  private fun <T> withCalendarAccessHandling(userId: Long, action: () -> T): T {
+  private fun <T> withCalendarAccessHandling(
+    userId: Long,
+    action: () -> T,
+  ): T {
     try {
       return action()
     } catch (e: GoogleCalendarNotConnectedException) {
@@ -111,7 +117,6 @@ class GoogleCalendarService(
       throw CalendarAccessFailedException(userId, CalendarAccessFailure.Reason.provider_unavailable)
     }
   }
-
 
   private fun buildClientForUser(userId: Long): Calendar {
     val credential = credentialProvider.getCredentialForUser(userId)

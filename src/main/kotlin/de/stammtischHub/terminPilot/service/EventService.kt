@@ -23,7 +23,8 @@ class EventService(
     val participants: List<User> =
       draft.participantIds.map { participantId ->
         userRepository
-          .findById(participantId).orElseThrow{ UserNotFoundException(participantId) }
+          .findById(participantId)
+          .orElseThrow { UserNotFoundException(participantId) }
       }
 
     // Fail-fast
@@ -39,8 +40,8 @@ class EventService(
         draft.description,
       )
 
-    participants.forEach {
-      participant -> calendarProvider.writeToCalendar(participant.id!!, event)
+    participants.forEach { participant ->
+      calendarProvider.writeToCalendar(participant.id!!, event)
     }
     return event
   }
