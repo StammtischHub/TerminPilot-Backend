@@ -8,4 +8,6 @@ import java.util.Optional
 @Repository
 interface UserGroupRepository : JpaRepository<UserGroup, Long> {
   fun findByName(name: String): Optional<UserGroup>
+
+  fun findByCreatorId(creatorId: Long): Optional<Iterable<UserGroup>>
 }

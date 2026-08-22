@@ -7,8 +7,11 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
 
 @Entity(name = "UserGroup")
 @Table(name = "userGroups")
@@ -17,11 +20,17 @@ class UserGroup : BaseLongId() {
   @NotBlank
   var name: String = ""
 
+  @ManyToOne
+  @JoinColumn(name = "creator_user_id")
+  @NotNull
+  var creator: User? = null
+
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
     name = "userGroupMembers",
     joinColumns = [JoinColumn(name = "user_group_id")],
-    inverseJoinColumns = [JoinColumn(name = "user_id")],
+    inverseJoinColumns = [JoinColumn(name = "member_user_id")],
   )
+  @NotEmpty
   var members: MutableSet<User> = mutableSetOf()
 }
