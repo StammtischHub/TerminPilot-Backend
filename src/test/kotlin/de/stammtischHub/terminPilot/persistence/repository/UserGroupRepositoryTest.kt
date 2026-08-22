@@ -31,7 +31,7 @@ class UserGroupRepositoryTest {
   }
 
   @Test
-  fun `should fin UserGroup by name`() {
+  fun `should find UserGroup by name`() {
     val userGroup =
       userGroupRepository.saveAndFlush(
         UserGroup().apply {
