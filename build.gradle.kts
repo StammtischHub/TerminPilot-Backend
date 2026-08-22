@@ -4,7 +4,7 @@ plugins {
   kotlin("jvm") version "2.4.10"
   kotlin("plugin.spring") version "2.4.10"
   kotlin("plugin.jpa") version "2.4.10"
-  id("org.springframework.boot") version "4.1.0"
+  id("org.springframework.boot") version "4.1.1"
   id("io.spring.dependency-management") version "1.1.7"
   id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
   id("org.openapi.generator") version "7.24.0"
@@ -94,10 +94,10 @@ dependencies {
   runtimeOnly("com.h2database:h2")
 
   // OpenAPI Generator
-  implementation("io.swagger.core.v3:swagger-annotations:2.2.53")
-  implementation("io.swagger.core.v3:swagger-models:2.2.53")
+  implementation("io.swagger.core.v3:swagger-annotations:2.2.54")
+  implementation("io.swagger.core.v3:swagger-models:2.2.54")
   implementation("jakarta.validation:jakarta.validation-api")
-  apiSpec("de.stammtischhub:terminpilot-api-spec:1.4.0-pr.57.8e4a4bb@yaml")
+  apiSpec("de.stammtischhub:terminpilot-api-spec:2.0.0@yaml")
 
   // Apple-Provider
   implementation("com.github.lookfirst:sardine:5.13")

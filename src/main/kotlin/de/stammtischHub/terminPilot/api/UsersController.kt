@@ -1,8 +1,8 @@
 package de.stammtischHub.terminPilot.api
 
 import de.stammtischHub.terminPilot.api.generated.UsersApi
-import de.stammtischHub.terminPilot.api.response.toUserGroupResponse
-import de.stammtischHub.terminPilot.api.response.toUserResponse
+import de.stammtischHub.terminPilot.api.mapping.toUserGroupResponse
+import de.stammtischHub.terminPilot.api.mapping.toUserResponse
 import de.stammtischHub.terminPilot.model.generated.UserGroupResponse
 import de.stammtischHub.terminPilot.model.generated.UserResponse
 import de.stammtischHub.terminPilot.service.UserService
