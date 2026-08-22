@@ -15,6 +15,7 @@ class UserGroupService(
   @Transactional
   fun createUserGroup(
     name: String,
+    creator: User,
     members: MutableSet<User>,
   ): UserGroup {
     val normalizedName = name.trim()
@@ -26,6 +27,7 @@ class UserGroupService(
     val userGroup =
       UserGroup().apply {
         this.name = normalizedName
+        this.creator = creator
         this.members = members
       }
 
@@ -40,11 +42,11 @@ class UserGroupService(
   fun updateUserGroup(
     id: Long,
     name: String?,
-    users: MutableSet<User>?,
+    members: MutableSet<User>?,
   ): UserGroup {
     val userGroup = userGroupRepository.findById(id).get()
     name?.let { userGroup.name = it.trim() }
-    users?.let { userGroup.members = it }
+    members?.let { userGroup.members = it }
     return userGroupRepository.saveAndFlush(userGroup)
   }
 

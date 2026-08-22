@@ -16,12 +16,14 @@ class UserGroupsController(
   private val userService: UserService,
 ) : UserGroupsApi {
   override fun createUserGroup(createUserGroupRequest: CreateUserGroupRequest): ResponseEntity<UserGroupResponse> {
-    val users = createUserGroupRequest.memberIds.map { userService.getUserByUserId(it) }.toMutableSet()
+    val creator = userService.getUserByUserId(createUserGroupRequest.creatorId)
+    val members = createUserGroupRequest.memberIds.map { userService.getUserByUserId(it) }.toMutableSet()
 
     val userGroup =
       userGroupService.createUserGroup(
         createUserGroupRequest.name,
-        users,
+        creator,
+        members,
       )
     return ResponseEntity.ok(userGroup.toUserGroupResponse())
   }

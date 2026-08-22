@@ -7,5 +7,6 @@ fun UserGroup.toUserGroupResponse(): UserGroupResponse =
   UserGroupResponse(
     id = this.id!!,
     name = this.name,
+    creator = this.creator!!.toUserDTO(),
     members = this.members.map { it.toUserDTO() },
   )
