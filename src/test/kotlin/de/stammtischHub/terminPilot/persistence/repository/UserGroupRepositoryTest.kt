@@ -83,22 +83,23 @@ class UserGroupRepositoryTest {
   fun `should find UserGroups by creator`() {
     setupUsers()
 
-    val userGroups = mutableSetOf(
-      userGroupRepository.saveAndFlush(
-      UserGroup().apply {
-          name = "name"
-          creator = creatorUser
-          members = mutableSetOf(memberUser)
-        },
-      ),
-    userGroupRepository.saveAndFlush(
-      UserGroup().apply {
-          name = "name2"
-          creator = creatorUser
-          members = mutableSetOf(memberUser)
-        },
+    val userGroups =
+      mutableSetOf(
+        userGroupRepository.saveAndFlush(
+          UserGroup().apply {
+            name = "name"
+            creator = creatorUser
+            members = mutableSetOf(memberUser)
+          },
+        ),
+        userGroupRepository.saveAndFlush(
+          UserGroup().apply {
+            name = "name2"
+            creator = creatorUser
+            members = mutableSetOf(memberUser)
+          },
+        ),
       )
-    )
 
     entityManager.clear()
 
