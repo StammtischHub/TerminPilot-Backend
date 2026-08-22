@@ -98,7 +98,7 @@ class UserGroupRepositoryTest {
             creator = creatorUser
             members = mutableSetOf(memberUser)
           },
-        )
+        ),
       )
 
     entityManager.clear()
