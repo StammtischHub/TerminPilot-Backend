@@ -31,7 +31,7 @@ class UserGroupRepositoryTest {
       userRepository.saveAndFlush(
         User().apply {
           username = "creator"
-          passwordHash = "password"
+          password = "password"
         },
       )
 
@@ -39,7 +39,7 @@ class UserGroupRepositoryTest {
       userRepository.saveAndFlush(
         User().apply {
           username = "member"
-          passwordHash = "password"
+          password = "password"
         },
       )
 
