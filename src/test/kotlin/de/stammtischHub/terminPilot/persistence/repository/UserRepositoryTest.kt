@@ -27,7 +27,7 @@ class UserRepositoryTest {
       userRepository.saveAndFlush(
         User().apply {
           username = "username"
-          passwordHash = "password"
+          password = "password"
           userType = UserType.USER
         },
       )
@@ -49,7 +49,7 @@ class UserRepositoryTest {
       userRepository.saveAndFlush(
         User().apply {
           username = "username"
-          passwordHash = "password"
+          password = "password"
           userType = UserType.USER
         },
       )
@@ -70,7 +70,7 @@ class UserRepositoryTest {
       userRepository.saveAndFlush(
         User().apply {
           username = ""
-          passwordHash = ""
+          password = ""
           userType = UserType.USER
         },
       )

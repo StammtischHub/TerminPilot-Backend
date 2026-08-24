@@ -29,7 +29,7 @@ class AppleCalendarRepositoryTest {
       userRepository.saveAndFlush(
         User().apply {
           username = "username"
-          passwordHash = "password"
+          password = "password"
           userType = UserType.USER
         },
       )

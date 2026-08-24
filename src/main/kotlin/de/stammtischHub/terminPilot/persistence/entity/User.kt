@@ -23,7 +23,7 @@ class User : BaseLongId() {
   var username: String = ""
 
   @NotBlank
-  var passwordHash: String = ""
+  var password: String = ""
 
   @Enumerated(EnumType.STRING)
   @NotNull
