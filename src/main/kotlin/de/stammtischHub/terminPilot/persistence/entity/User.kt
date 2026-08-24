@@ -28,7 +28,7 @@ class User : BaseLongId() {
   @NotNull
   var userType: UserType = UserType.USER
 
-  @OneToMany(mappedBy = "creator")
+  @OneToMany(mappedBy = "creator", cascade = [CascadeType.ALL], orphanRemoval = true)
   var userGroups: MutableSet<UserGroup> = mutableSetOf()
 
   @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], orphanRemoval = true)

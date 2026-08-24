@@ -5,6 +5,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
+import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
@@ -23,6 +24,7 @@ class UserGroup : BaseLongId() {
   @NotNull
   var creator: User? = null
 
+  @ManyToMany
   @JoinTable(
     name = "userGroupMembers",
     joinColumns = [JoinColumn(name = "user_group_id")],
