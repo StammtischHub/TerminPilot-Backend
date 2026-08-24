@@ -8,16 +8,19 @@ import jakarta.persistence.MappedSuperclass
 
 @MappedSuperclass
 abstract class BaseLongId {
-  @Column(nullable = false, updatable = false, unique = true)
+  @Column(name = "id", nullable = false, updatable = false, unique = true)
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  val id: Long? = null
+  private val _id: Long? = null
+
+  val id: Long
+    get() = _id ?: error("ID is not set yet")
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other == null || other !is BaseLongId) return false
 
-    return id != null && id == other.id
+    return id == other.id
   }
 
   override fun hashCode(): Int = javaClass.hashCode()

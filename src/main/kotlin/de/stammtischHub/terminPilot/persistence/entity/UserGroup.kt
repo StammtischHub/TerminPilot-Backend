@@ -14,10 +14,10 @@ import jakarta.validation.constraints.NotNull
 
 @Entity(name = "UserGroup")
 @Table(name = "userGroups")
-@AttributeOverride(name = "id", column = Column(name = "user_group_id"))
+@AttributeOverride(name = "_id", column = Column(name = "user_group_id"))
 class UserGroup : BaseLongId() {
   @NotBlank
-  var name: String = ""
+  lateinit var name: String
 
   @ManyToOne
   @JoinColumn(name = "creator_user_id")
