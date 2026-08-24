@@ -25,7 +25,6 @@ class UserGroup : BaseLongId() {
   @NotNull
   var creator: User? = null
 
-  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
     name = "userGroupMembers",
     joinColumns = [JoinColumn(name = "user_group_id")],
