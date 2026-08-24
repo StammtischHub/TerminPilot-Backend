@@ -38,7 +38,7 @@ class UserService(
     val user =
       User().apply {
         this.username = normalized
-        passwordHash = passwordEncoder.encode(rawPassword).toString()
+        password = passwordEncoder.encode(rawPassword).toString()
         userType = UserType.USER
       }
 

@@ -15,7 +15,7 @@ class UserPrincipal(
 
   override fun getUsername(): String = user.username
 
-  override fun getPassword(): String = user.passwordHash
+  override fun getPassword(): String = user.password
 
   override fun getAuthorities(): Collection<GrantedAuthority> = listOf(SimpleGrantedAuthority(user.userType.toString()))
 
