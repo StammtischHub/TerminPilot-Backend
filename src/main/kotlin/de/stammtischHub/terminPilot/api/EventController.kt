@@ -40,7 +40,7 @@ class EventController(
         event.title,
         event.start.atOffset(ZoneOffset.UTC),
         event.end.atOffset(ZoneOffset.UTC),
-        event.participants.toDtoList(),
+        event.participants.toUserDtoList(),
         event.location,
         event.description,
       )

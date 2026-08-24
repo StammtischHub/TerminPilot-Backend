@@ -18,10 +18,10 @@ fun Constraints.Weekdays.toDayOfWeek(): DayOfWeek =
 
 fun Set<Constraints.Weekdays>.toDayOfWeekSet(): Set<DayOfWeek> = this.map { it.toDayOfWeek() }.toSet()
 
-fun UserEntity.toDto(): UserDto =
+fun UserEntity.toUserDto(): UserDto =
   UserDto(
     id = this.id!!,
     name = this.username,
   )
 
-fun List<UserEntity>.toDtoList(): List<UserDto> = this.map { it.toDto() }
+fun List<UserEntity>.toUserDtoList(): List<UserDto> = this.map { it.toUserDto() }

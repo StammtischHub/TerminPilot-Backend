@@ -10,11 +10,11 @@ data class EventConstraints(
   val dateRange: ClosedRange<LocalDate>,
   val timeRange: ClosedRange<LocalTime>,
   val duration: Int,
-  val participantIds: List<Long>,
+  val participantIds: Set<Long>,
 ) {
   init {
     require(weekdays.isNotEmpty()) { "weekdays must not be empty" }
-    require(!dateRange.endInclusive.isBefore(dateRange.start)) { "date range invalid" }
+    require(dateRange.endInclusive.isAfter(dateRange.start)) { "date range invalid" }
     require(timeRange.start < timeRange.endInclusive) { "time range invalid" }
     require(duration >= 1) { "duration must be greater than 1 minute" }
     require(participantIds.isNotEmpty()) { "participants must not be empty" }

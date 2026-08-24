@@ -6,7 +6,7 @@ data class EventDraft(
   val title: String,
   val start: LocalDateTime,
   val end: LocalDateTime,
-  val participantIds: List<Long>,
+  val participantIds: Set<Long>,
   val location: String?,
   val description: String?,
 ) {

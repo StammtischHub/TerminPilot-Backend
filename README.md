@@ -43,7 +43,7 @@ The `.env` file is used both by the Makefile (for Docker operations) and by the 
 
 > [!NOTE]
 > `GITHUB_ACTOR` and `GITHUB_TOKEN` are required at **build time** because the OpenAPI spec is published as a GitHub Package and pulled automatically during the build.
-> The `google.oauth`-vars are required aswell, otherwise the project won't build. It is important, that the `redirect-uri` is set correct in the Google-Cloud-Project!
+> The `GOOGLE_OAUTH_`-vars are required aswell, otherwise the project won't build. It is important, that the `redirect-uri` is set correct in the Google-Cloud-Project!
 
 ### OpenAPI Spec & Code Generation
 
