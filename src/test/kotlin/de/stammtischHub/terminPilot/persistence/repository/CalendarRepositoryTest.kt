@@ -54,6 +54,7 @@ class CalendarRepositoryTest {
   @Test
   fun `should find Calendar by user id`() {
     setupUser()
+
     val calendar =
       calendarRepository.saveAndFlush(
         Calendar().apply {
@@ -70,6 +71,7 @@ class CalendarRepositoryTest {
   @Test
   fun `should find multiple Calendar entities by user id`() {
     setupUser()
+
     val calendar1 =
       calendarRepository.saveAndFlush(
         Calendar().apply {

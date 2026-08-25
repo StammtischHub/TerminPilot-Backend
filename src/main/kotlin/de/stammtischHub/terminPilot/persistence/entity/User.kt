@@ -6,7 +6,6 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.ManyToMany
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
@@ -29,7 +28,7 @@ class User : BaseLongId() {
   @NotNull
   var userType: UserType = UserType.USER
 
-  @ManyToMany(mappedBy = "members")
+  @OneToMany(mappedBy = "creator", cascade = [CascadeType.ALL], orphanRemoval = true)
   var userGroups: MutableSet<UserGroup> = mutableSetOf()
 
   @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], orphanRemoval = true)
