@@ -152,6 +152,7 @@ openApiGenerate {
   )
   apiPackage.set("de.stammtischHub.terminPilot.api.generated")
   modelPackage.set("de.stammtischHub.terminPilot.model.generated")
+  cleanupOutput.set(true)
   configOptions.set(
     mapOf(
       "interfaceOnly" to "true",
@@ -162,12 +163,8 @@ openApiGenerate {
   )
 }
 
-tasks.named("cleanGeneratedApi") {
-  dependsOn("extractApiSpec")
-}
-
 tasks.named("openApiGenerate") {
-  dependsOn("extractApiSpec", "cleanGeneratedApi")
+  dependsOn("extractApiSpec")
   inputs.file(apiSpecFile)
 }
 
