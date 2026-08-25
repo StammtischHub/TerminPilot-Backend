@@ -3,6 +3,8 @@ package de.stammtischHub.terminPilot.persistence.repository
 import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.entity.UserGroup
 import jakarta.validation.ConstraintViolationException
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
@@ -10,7 +12,6 @@ import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertNotEquals
 
 @DataJpaTest
 class UserGroupRepositoryTest {
@@ -59,7 +60,8 @@ class UserGroupRepositoryTest {
         },
       )
 
-    assertNotEquals(null, userGroup.id)
+    val id = assertDoesNotThrow { userGroup.id }
+    assertThat(id).isPositive()
   }
 
   @Test
@@ -103,7 +105,7 @@ class UserGroupRepositoryTest {
 
     entityManager.clear()
 
-    val foundUserGroups = userGroupRepository.findByCreatorId(creatorUser.id!!).get()
+    val foundUserGroups = userGroupRepository.findByCreatorId(creatorUser.id).get()
     assertContentEquals(userGroups, foundUserGroups)
   }
 

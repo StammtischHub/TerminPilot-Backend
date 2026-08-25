@@ -4,12 +4,13 @@ import de.stammtischHub.terminPilot.persistence.entity.GoogleCalendar
 import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.entity.UserType
 import jakarta.validation.ConstraintViolationException
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
-import kotlin.test.assertNotEquals
 
 @DataJpaTest
 class GoogleCalendarRepositoryTest {
@@ -51,7 +52,8 @@ class GoogleCalendarRepositoryTest {
         },
       )
 
-    assertNotEquals(null, googleCalendar.id)
+    val id = assertDoesNotThrow { googleCalendar.id }
+    assertThat(id).isPositive()
   }
 
   @Test
