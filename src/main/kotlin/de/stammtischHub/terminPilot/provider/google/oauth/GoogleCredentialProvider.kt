@@ -31,7 +31,7 @@ class GoogleCredentialProvider(
   }
 
   private fun loadCredential(calendar: GoogleCalendar): Credential {
-    val expiresInSeconds = ((calendar.tokenExpiry ?: 0L) - System.currentTimeMillis()) / 1000L
+    val expiresInSeconds = (calendar.tokenExpiry - System.currentTimeMillis()) / 1000L
 
     val tokenResponse =
       TokenResponse()

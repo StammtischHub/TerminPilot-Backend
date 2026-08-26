@@ -82,7 +82,7 @@ class AuthController(
 
   private fun User.toUserResponse() =
     UserResponse(
-      id = id!!,
+      id = id,
       username = username,
       roles = listOfNotNull(userType.toUserRole()),
     )

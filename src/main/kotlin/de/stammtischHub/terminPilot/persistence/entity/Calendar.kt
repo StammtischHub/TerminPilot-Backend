@@ -13,10 +13,10 @@ import jakarta.validation.constraints.NotNull
 @Entity(name = "Calendar")
 @Table(name = "calendars")
 @Inheritance(strategy = InheritanceType.JOINED)
-@AttributeOverride(name = "id", column = Column(name = "calendar_id"))
+@AttributeOverride(name = "_id", column = Column(name = "calendar_id"))
 class Calendar : BaseLongId() {
   @ManyToOne
   @JoinColumn(name = "owner_user_id")
   @NotNull
-  var owner: User? = null
+  lateinit var owner: User
 }

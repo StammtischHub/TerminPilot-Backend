@@ -3,6 +3,8 @@ package de.stammtischHub.terminPilot.persistence.repository
 import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.entity.UserType
 import jakarta.validation.ConstraintViolationException
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
@@ -10,7 +12,6 @@ import org.springframework.dao.DataIntegrityViolationException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertNotEquals
 
 @DataJpaTest
 class UserRepositoryTest {
@@ -38,7 +39,8 @@ class UserRepositoryTest {
   fun `should automatically generate an id when saving an User`() {
     setupUser()
 
-    assertNotEquals(null, this.user.id)
+    val id = assertDoesNotThrow { user.id }
+    assertThat(id).isPositive()
   }
 
   @Test

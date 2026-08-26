@@ -14,15 +14,15 @@ import jakarta.validation.constraints.Size
 
 @Entity(name = "User")
 @Table(name = "users")
-@AttributeOverride(name = "id", column = Column(name = "user_id"))
+@AttributeOverride(name = "_id", column = Column(name = "user_id"))
 class User : BaseLongId() {
   @Column(unique = true)
   @Size(min = 3, max = 30)
   @NotBlank
-  var username: String = ""
+  lateinit var username: String
 
   @NotBlank
-  var password: String = ""
+  lateinit var password: String
 
   @Enumerated(EnumType.STRING)
   @NotNull

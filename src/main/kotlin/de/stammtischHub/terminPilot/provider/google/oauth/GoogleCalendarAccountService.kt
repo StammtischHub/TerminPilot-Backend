@@ -84,7 +84,7 @@ class GoogleCalendarAccountService(
   fun updateAccessToken(
     calendar: GoogleCalendar,
     accessToken: String,
-    tokenExpiry: Long?,
+    tokenExpiry: Long,
   ) {
     calendar.accessToken = accessToken
     calendar.tokenExpiry = tokenExpiry
