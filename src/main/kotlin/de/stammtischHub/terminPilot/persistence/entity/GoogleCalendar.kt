@@ -7,21 +7,28 @@ import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 
-@Entity(name = "GoogleCalendar")
-@Table(name = "googleCalendars")
+@Entity(name = "google_calendar")
+@Table(name = "google_calendars")
 @PrimaryKeyJoinColumn(name = "google_calendar_id")
 class GoogleCalendar : Calendar() {
   @NotBlank
-  var calendarName: String = ""
+  lateinit var calendarName: String
 
   @Column(columnDefinition = "TEXT")
   @NotBlank
-  var accessToken: String = ""
+  lateinit var accessToken: String
 
   @Column(columnDefinition = "TEXT")
   @NotBlank
-  var refreshToken: String = ""
+  lateinit var refreshToken: String
 
+  @Column(name = "token_expiry")
   @NotNull
-  var tokenExpiry: Long? = null
+  private var _tokenExpiry: Long? = null
+
+  var tokenExpiry: Long
+    get() = _tokenExpiry ?: error("tokenExpiry wurde noch nicht initialisiert")
+    set(value) {
+      _tokenExpiry = value
+    }
 }

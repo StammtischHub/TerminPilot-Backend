@@ -5,13 +5,13 @@ import jakarta.persistence.PrimaryKeyJoinColumn
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
 
-@Entity(name = "AppleCalendar")
-@Table(name = "appleCalendars")
+@Entity(name = "apple_calendar")
+@Table(name = "apple_calendars")
 @PrimaryKeyJoinColumn(name = "apple_calendar_id")
 class AppleCalendar : Calendar() {
   @NotBlank
-  var icloudMail: String = ""
+  lateinit var icloudMail: String
 
   @NotBlank
-  var appSpecificPassword: String = ""
+  lateinit var appSpecificPassword: String
 }
