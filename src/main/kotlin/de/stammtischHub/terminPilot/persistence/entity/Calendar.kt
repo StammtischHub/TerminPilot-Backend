@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotNull
 
-@Entity(name = "Calendar")
+@Entity(name = "calendar")
 @Table(name = "calendars")
 @Inheritance(strategy = InheritanceType.JOINED)
 @AttributeOverride(name = "_id", column = Column(name = "calendar_id"))

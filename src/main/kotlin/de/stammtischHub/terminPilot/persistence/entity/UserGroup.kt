@@ -12,8 +12,8 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
 
-@Entity(name = "UserGroup")
-@Table(name = "userGroups")
+@Entity(name = "user_group")
+@Table(name = "user_groups")
 @AttributeOverride(name = "_id", column = Column(name = "user_group_id"))
 class UserGroup : BaseLongId() {
   @NotBlank
