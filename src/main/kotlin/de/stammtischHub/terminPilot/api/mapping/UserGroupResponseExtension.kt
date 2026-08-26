@@ -5,7 +5,7 @@ import de.stammtischHub.terminPilot.persistence.entity.UserGroup
 
 fun UserGroup.toUserGroupResponse(): UserGroupResponse =
   UserGroupResponse(
-    id = this.id!!,
+    id = this.id,
     name = this.name,
     creator = this.creator!!.toUserDTO(),
     members = this.members.map { it.toUserDTO() },

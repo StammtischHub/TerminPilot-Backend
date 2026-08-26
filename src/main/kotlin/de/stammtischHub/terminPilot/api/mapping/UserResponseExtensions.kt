@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication
 
 fun User.toUserResponse(): UserResponse =
   UserResponse(
-    id = id!!,
+    id = id,
     username = username,
     roles = listOfNotNull(userType.toUserRole()),
   )

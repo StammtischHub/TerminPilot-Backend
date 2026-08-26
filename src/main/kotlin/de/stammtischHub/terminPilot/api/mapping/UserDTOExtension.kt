@@ -5,6 +5,6 @@ import de.stammtischHub.terminPilot.persistence.entity.User as UserEntity
 
 fun UserEntity.toUserDTO(): UserDTO =
   UserDTO(
-    id = id!!,
+    id = id,
     name = username,
   )
