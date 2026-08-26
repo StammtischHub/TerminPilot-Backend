@@ -7,8 +7,8 @@ import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 
-@Entity(name = "GoogleCalendar")
-@Table(name = "googleCalendars")
+@Entity(name = "google_calendar")
+@Table(name = "google_calendars")
 @PrimaryKeyJoinColumn(name = "google_calendar_id")
 class GoogleCalendar : Calendar() {
   @NotBlank
