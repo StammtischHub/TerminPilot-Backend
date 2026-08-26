@@ -12,23 +12,23 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 
-@Entity(name = "User")
+@Entity(name = "user")
 @Table(name = "users")
-@AttributeOverride(name = "id", column = Column(name = "user_id"))
+@AttributeOverride(name = "_id", column = Column(name = "user_id"))
 class User : BaseLongId() {
   @Column(unique = true)
   @Size(min = 3, max = 30)
   @NotBlank
-  var username: String = ""
+  lateinit var username: String
 
   @NotBlank
-  var passwordHash: String = ""
+  lateinit var password: String
 
   @Enumerated(EnumType.STRING)
   @NotNull
   var userType: UserType = UserType.USER
 
-  @OneToMany(mappedBy = "creator")
+  @OneToMany(mappedBy = "creator", cascade = [CascadeType.ALL], orphanRemoval = true)
   var userGroups: MutableSet<UserGroup> = mutableSetOf()
 
   @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], orphanRemoval = true)

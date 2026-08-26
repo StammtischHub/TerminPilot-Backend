@@ -4,12 +4,13 @@ import de.stammtischHub.terminPilot.persistence.entity.AppleCalendar
 import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.entity.UserType
 import jakarta.validation.ConstraintViolationException
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
-import kotlin.test.assertNotEquals
 
 @DataJpaTest
 class AppleCalendarRepositoryTest {
@@ -29,7 +30,7 @@ class AppleCalendarRepositoryTest {
       userRepository.saveAndFlush(
         User().apply {
           username = "username"
-          passwordHash = "password"
+          password = "password"
           userType = UserType.USER
         },
       )
@@ -49,7 +50,8 @@ class AppleCalendarRepositoryTest {
         },
       )
 
-    assertNotEquals(null, appleCalendar.id)
+    val id = assertDoesNotThrow { appleCalendar.id }
+    assertThat(id).isPositive()
   }
 
   @Test

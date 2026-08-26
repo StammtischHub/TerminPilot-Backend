@@ -7,7 +7,7 @@ plugins {
   id("org.springframework.boot") version "4.1.1"
   id("io.spring.dependency-management") version "1.1.7"
   id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
-  id("org.openapi.generator") version "7.24.0"
+  id("org.openapi.generator") version "7.25.0"
   jacoco
 }
 
@@ -153,6 +153,7 @@ openApiGenerate {
   )
   apiPackage.set("de.stammtischHub.terminPilot.api.generated")
   modelPackage.set("de.stammtischHub.terminPilot.model.generated")
+  cleanupOutput.set(true)
   configOptions.set(
     mapOf(
       "interfaceOnly" to "true",
@@ -163,12 +164,8 @@ openApiGenerate {
   )
 }
 
-tasks.named("cleanGeneratedApi") {
-  dependsOn("extractApiSpec")
-}
-
 tasks.named("openApiGenerate") {
-  dependsOn("extractApiSpec", "cleanGeneratedApi")
+  dependsOn("extractApiSpec")
   inputs.file(apiSpecFile)
 }
 

@@ -3,7 +3,6 @@ package de.stammtischHub.terminPilot.persistence.entity
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
@@ -13,19 +12,19 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
 
-@Entity(name = "UserGroup")
-@Table(name = "userGroups")
-@AttributeOverride(name = "id", column = Column(name = "user_group_id"))
+@Entity(name = "user_group")
+@Table(name = "user_groups")
+@AttributeOverride(name = "_id", column = Column(name = "user_group_id"))
 class UserGroup : BaseLongId() {
   @NotBlank
-  var name: String = ""
+  lateinit var name: String
 
   @ManyToOne
   @JoinColumn(name = "creator_user_id")
   @NotNull
   var creator: User? = null
 
-  @ManyToMany(fetch = FetchType.EAGER)
+  @ManyToMany
   @JoinTable(
     name = "userGroupMembers",
     joinColumns = [JoinColumn(name = "user_group_id")],
