@@ -11,7 +11,7 @@ class UserPrincipal(
 ) : UserDetails,
   Serializable {
   val id: Long
-    get() = user.id!!
+    get() = user.id
 
   override fun getUsername(): String = user.username
 

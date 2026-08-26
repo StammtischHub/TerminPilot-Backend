@@ -5,12 +5,13 @@ import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.entity.UserType
 import jakarta.persistence.EntityManager
 import jakarta.validation.ConstraintViolationException
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertNotEquals
 
 @DataJpaTest
 class CalendarRepositoryTest {
@@ -48,12 +49,14 @@ class CalendarRepositoryTest {
         },
       )
 
-    assertNotEquals(null, calendar.id)
+    val id = assertDoesNotThrow { calendar.id }
+    assertThat(id).isPositive()
   }
 
   @Test
   fun `should find Calendar by user id`() {
     setupUser()
+
     val calendar =
       calendarRepository.saveAndFlush(
         Calendar().apply {
@@ -62,7 +65,7 @@ class CalendarRepositoryTest {
       )
     entityManager.clear()
 
-    val foundCalendars = calendarRepository.findByOwnerId(this.user.id!!).get()
+    val foundCalendars = calendarRepository.findByOwnerId(this.user.id).get()
     assertEquals(listOf(calendar), foundCalendars)
     assert(foundCalendars.all { it.owner == this.user })
   }
@@ -70,6 +73,7 @@ class CalendarRepositoryTest {
   @Test
   fun `should find multiple Calendar entities by user id`() {
     setupUser()
+
     val calendar1 =
       calendarRepository.saveAndFlush(
         Calendar().apply {
@@ -84,7 +88,7 @@ class CalendarRepositoryTest {
       )
     entityManager.clear()
 
-    val foundCalendars = calendarRepository.findByOwnerId(this.user.id!!).get()
+    val foundCalendars = calendarRepository.findByOwnerId(this.user.id).get()
     assertEquals(listOf(calendar1, calendar2).sortedBy { it.id }, foundCalendars.sortedBy { it.id })
     assert(foundCalendars.all { it.owner == this.user })
   }
