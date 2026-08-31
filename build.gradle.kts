@@ -93,7 +93,7 @@ dependencies {
   runtimeOnly("com.h2database:h2")
 
   // OpenAPI Generator
-  implementation("io.swagger.core.v3:swagger-annotations:2.2.54")
+  implementation("io.swagger.core.v3:swagger-annotations:2.2.55")
   implementation("io.swagger.core.v3:swagger-models:2.2.54")
   implementation("jakarta.validation:jakarta.validation-api")
   apiSpec("de.stammtischhub:terminpilot-api-spec:2.0.0@yaml")
