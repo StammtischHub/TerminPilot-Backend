@@ -1,7 +1,7 @@
 package de.stammtischHub.terminPilot.provider.google.oauth
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.client.util.store.MemoryDataStoreFactory
 import com.google.api.services.calendar.CalendarScopes
@@ -26,7 +26,7 @@ class GoogleOAuthConfig {
   ): GoogleAuthorizationCodeFlow =
     GoogleAuthorizationCodeFlow
       .Builder(
-        GoogleNetHttpTransport.newTrustedTransport(),
+        NetHttpTransport(),
         GsonFactory.getDefaultInstance(),
         clientId,
         clientSecret,
