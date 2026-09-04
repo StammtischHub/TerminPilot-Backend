@@ -1,7 +1,7 @@
 package de.stammtischHub.terminPilot.provider.google
 
 import com.google.api.client.auth.oauth2.Credential
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.calendar.Calendar
 import org.springframework.stereotype.Component
@@ -35,7 +35,7 @@ class GoogleCalendarClientFactory : CalendarClientFactory {
   override fun buildClient(credential: Credential): Calendar =
     Calendar
       .Builder(
-        GoogleNetHttpTransport.newTrustedTransport(),
+        NetHttpTransport(),
         GsonFactory.getDefaultInstance(),
         credential,
       ).setApplicationName(APPLICATION_NAME)
