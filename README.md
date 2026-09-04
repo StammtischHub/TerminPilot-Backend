@@ -25,22 +25,25 @@ cp .env.example .env
 
 The `.env` file is used both by the Makefile (for Docker operations) and by the Gradle build (for downloading the OpenAPI spec from GitHub Packages).
 
-| Variable | Description |
-|---|---|
-| `LOCAL_DB_NAME` | Name of your local MySQL database |
-| `LOCAL_DB_USER` | Username of your local MySQL user |
-| `LOCAL_DB_USER_PASSWORD` | Password of your local MySQL user |
-| `DOCKER_MYSQL_PORT` | Host port for the Docker MySQL container (default: `3366`) |
-| `DOCKER_DB_NAME` | Database name inside the Docker container (default: `TerminPilot`) |
-| `DOCKER_DB_USER` | MySQL user inside the Docker container |
-| `DOCKER_DB_USER_PASSWORD` | Password for the Docker MySQL user |
-| `DOCKER_DB_ROOT_PASSWORD` | Root password for the Docker MySQL container |
-| `GOOGLE_CALENDAR_ID` | Google Calendar ID used for calendar integration |
-| `GITHUB_ACTOR` | Your GitHub username — required to download the API spec from GitHub Packages |
-| `GITHUB_TOKEN` | A GitHub Personal Access Token with `read:packages` scope — required to download the API spec |
+| Variable                     | Description                                                                                   |
+|------------------------------|-----------------------------------------------------------------------------------------------|
+| `LOCAL_DB_NAME`              | Name of your local MySQL database                                                             |
+| `LOCAL_DB_USER`              | Username of your local MySQL user                                                             |
+| `LOCAL_DB_USER_PASSWORD`     | Password of your local MySQL user                                                             |
+| `DOCKER_MYSQL_PORT`          | Host port for the Docker MySQL container (default: `3366`)                                    |
+| `DOCKER_DB_NAME`             | Database name inside the Docker container (default: `TerminPilot`)                            |
+| `DOCKER_DB_USER`             | MySQL user inside the Docker container                                                        |
+| `DOCKER_DB_USER_PASSWORD`    | Password for the Docker MySQL user                                                            |
+| `DOCKER_DB_ROOT_PASSWORD`    | Root password for the Docker MySQL container                                                  |
+| `GOOGLE_OAUTH_CLIENT_ID`     | Google Cloud Project ID for OAuth Flow                                                        |
+| `GOOGLE_OAUTH_CLIENT_SECRET` | Secret to log in the Google Cloud Project for OAuth Flow (Redirecting)                        |
+| `GOOGLE_OAUTH_REDIRECT_URI`  | Google OAuth re-entry URI (http://localhost:8080/api/google/callback)                         |
+| `GITHUB_ACTOR`               | Your GitHub username — required to download the API spec from GitHub Packages                 |
+| `GITHUB_TOKEN`               | A GitHub Personal Access Token with `read:packages` scope — required to download the API spec |
 
 > [!NOTE]
 > `GITHUB_ACTOR` and `GITHUB_TOKEN` are required at **build time** because the OpenAPI spec is published as a GitHub Package and pulled automatically during the build.
+> The `GOOGLE_OAUTH_`-vars are required aswell, otherwise the project won't build. It is important, that the `redirect-uri` is set correct in the Google-Cloud-Project!
 
 ### OpenAPI Spec & Code Generation
 
