@@ -13,6 +13,10 @@ class AppleCalendarProvider : CalendarProvider {
     TODO("Not yet implemented")
   }
 
+  override fun verifyAccess(userId: Long) {
+    TODO("Not yet implemented")
+  }
+
   override fun writeToCalendar(
     userId: Long,
     event: Event,

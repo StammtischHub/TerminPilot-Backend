@@ -26,7 +26,7 @@ class EventController(
           title = createEventRequest.title,
           start = createEventRequest.start.toLocalDateTime(), // TODO: Timezones!
           end = createEventRequest.end.toLocalDateTime(),
-          participantIds = createEventRequest.participants,
+          participantIds = createEventRequest.participants.toSet(),
           location = createEventRequest.location,
           description = createEventRequest.notes,
         )
@@ -54,7 +54,6 @@ class EventController(
         EventConstraints(
           weekdays =
             suggestionsRequest.constraints.weekdays
-              .toSet()
               .toDayOfWeekSet(),
           dateRange = suggestionsRequest.constraints.dateRange.start..suggestionsRequest.constraints.dateRange.end,
           timeRange =
@@ -63,7 +62,7 @@ class EventController(
               formatter,
             )..LocalTime.parse(suggestionsRequest.constraints.timeRange.end, formatter),
           duration = suggestionsRequest.constraints.durationMinutes,
-          participantIds = suggestionsRequest.participants,
+          participantIds = suggestionsRequest.participants.toSet(),
         )
       } catch (e: IllegalArgumentException) {
         throw UnsatisfiableConstraintsException("Constraints are not logically satisfiable", e)
