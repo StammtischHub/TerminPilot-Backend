@@ -1,6 +1,6 @@
 package de.stammtischHub.terminPilot.provider.apple
 
-import de.stammtischHub.terminPilot.domain.Appointment
+import de.stammtischHub.terminPilot.domain.Event
 import de.stammtischHub.terminPilot.provider.CalendarProvider
 import java.time.LocalDateTime
 
@@ -9,13 +9,17 @@ class AppleCalendarProvider : CalendarProvider {
     userId: Long,
     start: LocalDateTime,
     end: LocalDateTime,
-  ): List<Appointment> {
+  ): List<Event> {
+    TODO("Not yet implemented")
+  }
+
+  override fun verifyAccess(userId: Long) {
     TODO("Not yet implemented")
   }
 
   override fun writeToCalendar(
     userId: Long,
-    appointment: Appointment,
+    event: Event,
   ) {
     TODO("Not yet implemented")
   }
