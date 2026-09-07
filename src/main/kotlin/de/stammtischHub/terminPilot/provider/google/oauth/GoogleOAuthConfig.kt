@@ -21,8 +21,8 @@ import org.springframework.context.annotation.Configuration
 class GoogleOAuthConfig {
   @Bean
   fun googleAuthorizationCodeFlow(
-    @Value($$"${google.oauth.client-id}") clientId: String,
-    @Value($$"${google.oauth.client-secret}") clientSecret: String,
+    @Value($$"${GOOGLE_OAUTH_CLIENT_ID}") clientId: String,
+    @Value($$"${GOOGLE_OAUTH_CLIENT_SECRET}") clientSecret: String,
   ): GoogleAuthorizationCodeFlow =
     GoogleAuthorizationCodeFlow
       .Builder(

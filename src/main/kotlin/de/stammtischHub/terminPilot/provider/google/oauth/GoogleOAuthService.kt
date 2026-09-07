@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service
 class GoogleOAuthService(
   private val flow: GoogleAuthorizationCodeFlow,
   private val calendarAccountService: GoogleCalendarAccountService,
-  @Value("\${google.oauth.redirect-uri}") private val redirectUri: String,
+  @Value($$"${GOOGLE_OAUTH_REDIRECT_URI}") private val redirectUri: String,
 ) {
   /**
    * Builds the Google OAuth authorization URL for a specific user.

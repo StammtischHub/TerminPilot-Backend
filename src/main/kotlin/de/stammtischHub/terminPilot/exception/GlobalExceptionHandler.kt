@@ -13,11 +13,23 @@ class GlobalExceptionHandler {
 
   @ExceptionHandler(UnsatisfiableConstraintsException::class)
   fun handleUnsatisfiableConstraints(ex: UnsatisfiableConstraintsException): ProblemDetail {
-    logger.debug("Unsatisfiable constraints exception: ${ex.message}")
+    logger.debug("Unsatisfiable constraints exception: ${ex.message}, ${ex.cause}")
     return ProblemDetail.forStatusAndDetail(
       HttpStatus.UNPROCESSABLE_CONTENT,
       ex.message ?: "Unsatisfiable constraints",
     )
+  }
+
+  @ExceptionHandler(MultipleCalendarAccessFailedException::class)
+  fun handleMultipleCalendarAccessFailed(ex: MultipleCalendarAccessFailedException): ProblemDetail {
+    logger.debug("Calendar access failed for multiple participants: {}", ex.failures)
+    return ProblemDetail
+      .forStatusAndDetail(
+        HttpStatus.BAD_GATEWAY,
+        "Calendar access failed for one or more participants",
+      ).apply {
+        setProperty("failures", ex.failures)
+      }
   }
 
   @ExceptionHandler(CalendarAccessFailedException::class)
