@@ -51,111 +51,19 @@ jobs:
             }
             console.log(`✅ ${context.actor} is eligible (${perm.permission})`);
 
-  lockfile-check:
-    name: Check lockfile
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: ./.github/actions/setup-gradle
-
-      - name: Validate Lockfile is up to date
-        run: |
-          ./gradlew dependencies --write-locks > /dev/null
-          git diff --exit-code gradle.lockfile
-
-  dependency-check:
-    name: Trivy scan
-    runs-on: ubuntu-latest
-    needs:
-      - lockfile-check
-    continue-on-error: ${{ github.event.inputs.ignore_dependencies_vulnerabilities == 'true' }}
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Run Trivy Vulnerability Scan
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          scan-type: fs
-          image-ref: '.'
-          format: json
-          output: trivy-results.json
-          severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
-          exit-code: '0'
-
-      - name: Evaluate Vulnerabilities
-        run: |
-          count=$(jq '[.Results[]?.Vulnerabilities[]?] | length' trivy-results.json)
-
-          cat trivy-results.json | jq -r '
-            .Results[]?.Vulnerabilities[]? |
-            "\(.Severity)|\(.PkgName)|\(.InstalledVersion)|\(.FixedVersion // "no fix")|\(.VulnerabilityID)"
-          ' | while IFS="|" read -r severity pkg installed fixed cve; do
-            case "$severity" in
-              CRITICAL) color="\e[35m" ;;  # Magenta
-              HIGH)     color="\e[31m" ;;  # rot
-              MEDIUM)   color="\e[33m" ;;  # gelb
-              LOW)      color="\e[34m" ;;  # blau
-            esac
-            link="https://nvd.nist.gov/vuln/detail/${cve}"
-            echo -e "${color}[${severity}]\e[0m ${pkg}\n\t${installed} -> ${fixed}\n\t${cve} (${link})"
-          done
-
-          if [ "$count" -gt 0 ]; then
-            echo "::warning::Found $count vulnerabilities. See report above."
-            exit 1
-          else
-            echo "No vulnerabilities found."
-          fi
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
+  spring_gradle_kotlin:
+    name: Spring Gradle Kotlin
     needs:
       - check-permissions
-      - dependency-check
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: ./.github/actions/setup-gradle
-
-      - name: Build project
-        run: ./gradlew build -x test
-
-      - name: Upload build output
-        uses: actions/upload-artifact@v7
-        with:
-          name: terminpilot-backend-${{ github.sha }}
-          path: |
-            build/libs/*.jar
-            build/classes/
-            build/resources/
-          retention-days: 1
-
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: ./.github/actions/setup-gradle
-
-      - uses: ./.github/actions/download-build
-
-      - name: Run tests
-        run: ./gradlew test
+    uses: ./.github/workflows/spring-gradle-kotlin.yml
+    with:
+      ignore_dependencies_vulnerabilities: ${{ github.event.inputs.ignore_dependencies_vulnerabilities }}
 
   version_release:
     name: Version Release
     runs-on: ubuntu-latest
     needs:
-      - build
-      - test
+      - spring_gradle_kotlin
     permissions:
       contents: write
       issues: write
