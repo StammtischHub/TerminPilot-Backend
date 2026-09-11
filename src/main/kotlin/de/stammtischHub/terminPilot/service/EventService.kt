@@ -13,6 +13,9 @@ import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.repository.UserRepository
 import de.stammtischHub.terminPilot.provider.CalendarProvider
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Service
 class EventService(
@@ -41,14 +44,45 @@ class EventService(
       )
 
     participants.forEach { participant ->
-      calendarProvider.writeToCalendar(participant.id!!, event)
+      calendarProvider.writeToCalendar(participant.id, event)
     }
     return event
   }
 
   fun suggestEvents(constraints: EventConstraints): List<Suggestion> {
+    val participants: List<User> =
+      constraints.participantIds.map { participantId ->
+        userRepository
+          .findById(participantId)
+          .orElseThrow { UserNotFoundException(participantId) }
+      }
+
+    val freeSlotsPerParticipant: List<List<LocalDateTime>> =
+      participants.map { participant ->
+        getFreeSlotsForParticipant(participant, constraints.dateRange, constraints.timeRange)
+      }
+
+    val commonFreeSlots = intersectFreeSlots(freeSlotsPerParticipant)
+
+    return commonFreeSlots.map { slot -> Suggestion(slot) }
+  }
+
+  private fun getFreeSlotsForParticipant(
+    user: User,
+    dateRange: ClosedRange<LocalDate>,
+    timeRange: ClosedRange<LocalTime>,
+  ): List<LocalDateTime> {
     // TODO: Implement
     return emptyList()
+  }
+
+  private fun intersectFreeSlots(freeSlotsPerParticipant: List<List<LocalDateTime>>): List<LocalDateTime> {
+    // TODO: Implement
+    return emptyList()
+  }
+
+  private fun scoreFreeSlot() {
+    // TODO: Implement
   }
 
   private fun verifyAllAccess(participants: List<User>) {
@@ -56,11 +90,11 @@ class EventService(
 
     participants.forEach { participant ->
       try {
-        calendarProvider.verifyAccess(participant.id!!)
+        calendarProvider.verifyAccess(participant.id)
       } catch (e: CalendarAccessFailedException) {
-        failures += CalendarAccessFailure(participant.id!!, e.reason)
+        failures += CalendarAccessFailure(participant.id, e.reason)
       } catch (e: CalendarAccessTimeoutException) {
-        failures += CalendarAccessFailure(participant.id!!, e.reason)
+        failures += CalendarAccessFailure(participant.id, e.reason)
       }
     }
 
