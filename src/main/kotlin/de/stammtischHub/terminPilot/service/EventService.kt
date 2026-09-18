@@ -3,6 +3,8 @@ package de.stammtischHub.terminPilot.service
 import de.stammtischHub.terminPilot.domain.Event
 import de.stammtischHub.terminPilot.domain.EventConstraints
 import de.stammtischHub.terminPilot.domain.EventDraft
+import de.stammtischHub.terminPilot.domain.SlotCoverage
+import de.stammtischHub.terminPilot.domain.TimeSlot
 import de.stammtischHub.terminPilot.exception.CalendarAccessFailedException
 import de.stammtischHub.terminPilot.exception.CalendarAccessTimeoutException
 import de.stammtischHub.terminPilot.exception.MultipleCalendarAccessFailedException
@@ -13,9 +15,11 @@ import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.repository.UserRepository
 import de.stammtischHub.terminPilot.provider.CalendarProvider
 import org.springframework.stereotype.Service
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.Duration
 
 @Service
 class EventService(
@@ -57,28 +61,139 @@ class EventService(
           .orElseThrow { UserNotFoundException(participantId) }
       }
 
-    val freeSlotsPerParticipant: List<List<LocalDateTime>> =
-      participants.map { participant ->
-        getFreeSlotsForParticipant(participant, constraints.dateRange, constraints.timeRange)
+    // Fail-fast
+    verifyAllAccess(participants)
+
+    val freeSlotsPerParticipant: Map<Long, List<TimeSlot>> =
+      participants.associate { participant ->
+        participant.id to getFreeSlotsForParticipant(
+          participant,
+          constraints.weekdays,
+          constraints.dateRange,
+          constraints.timeRange,
+        )
       }
 
-    val commonFreeSlots = intersectFreeSlots(freeSlotsPerParticipant)
+    val coverageSegments = intersectFreeSlots(freeSlotsPerParticipant)
+    val filteredSegments = filterByDuration(coverageSegments, constraints.duration)
 
     return commonFreeSlots.map { slot -> Suggestion(slot) }
   }
 
   private fun getFreeSlotsForParticipant(
     user: User,
+    weekdays: Set<DayOfWeek>,
     dateRange: ClosedRange<LocalDate>,
     timeRange: ClosedRange<LocalTime>,
-  ): List<LocalDateTime> {
-    // TODO: Implement
-    return emptyList()
+  ): List<TimeSlot> {
+    val startDateTime = dateRange.start.atTime(timeRange.start)
+    val endDateTime = dateRange.endInclusive.atTime(timeRange.endInclusive)
+
+    val busyEvents = calendarProvider.getCalendarForTimespan(
+      user.id,
+      startDateTime,
+      endDateTime,
+    )
+
+    val mergedBusy = mergeIntervals(
+      busyEvents.map { TimeSlot(it.start, it.end) }
+    )
+
+    return dateRange.toList()
+      .filter { it.dayOfWeek in weekdays }
+      .flatMap { day ->
+        val dayStart = day.atTime(timeRange.start)
+        val dayEnd = day.atTime(timeRange.endInclusive)
+        freeSlotsInWindow(dayStart, dayEnd, mergedBusy)
+      }
   }
 
-  private fun intersectFreeSlots(freeSlotsPerParticipant: List<List<LocalDateTime>>): List<LocalDateTime> {
-    // TODO: Implement
-    return emptyList()
+  private fun mergeIntervals(slots: List<TimeSlot>): List<TimeSlot> {
+    if (slots.isEmpty()) return emptyList()
+
+    val sorted = slots.sortedBy { it.start }
+    val merged = mutableListOf(sorted.first())
+
+    for (current in sorted.drop(1)) {
+      val last = merged.last()
+      if (current.start <= last.end) {
+        if (current.end > last.end) {
+          merged[merged.lastIndex] = last.copy(end = current.end)
+        }
+      } else {
+        merged.add(current)
+      }
+    }
+    return merged
+  }
+
+  private fun freeSlotsInWindow(
+    windowStart: LocalDateTime,
+    windowEnd: LocalDateTime,
+    busy: List<TimeSlot>,
+  ): List<TimeSlot> {
+    val relevant = busy
+      .filter { it.end > windowStart && it.start < windowEnd }
+      .sortedBy { it.start }
+
+    val free = mutableListOf<TimeSlot>()
+    var cursor = windowStart
+
+    for ((start, end) in relevant) {
+      val busyStart = maxOf(start, windowStart)
+      val busyEnd = minOf(end, windowEnd)
+
+      if (busyStart > cursor) {
+        free.add(TimeSlot(cursor, busyStart))
+      }
+      if (busyEnd > cursor) {
+        cursor = busyEnd
+      }
+    }
+
+    if (cursor < windowEnd) {
+      free.add(TimeSlot(cursor, windowEnd))
+    }
+
+    return free
+  }
+
+  private fun intersectFreeSlots(
+    freeSlotsPerParticipant: Map<Long, List<TimeSlot>>,
+  ): List<SlotCoverage> {
+    data class SweepPoint(val time: LocalDateTime, val participantId: Long, val delta: Int)
+
+    val points = freeSlotsPerParticipant.flatMap { (participantId, slots) ->
+      slots.flatMap { slot ->
+        listOf(
+          SweepPoint(slot.start, participantId, +1),
+          SweepPoint(slot.end, participantId, -1),
+        )
+      }
+    }.sortedWith(compareBy({ it.time }, { it.delta }))
+
+    val currentlyFree = mutableSetOf<Long>()
+    val result = mutableListOf<SlotCoverage>()
+    var segmentStart: LocalDateTime? = null
+
+    for ((time, participantId, delta) in points) {
+      if (segmentStart != null && segmentStart != time && currentlyFree.isNotEmpty()) {
+        result.add(SlotCoverage(TimeSlot(segmentStart, time), currentlyFree.toSet()))
+      }
+
+      if (delta > 0) currentlyFree.add(participantId) else currentlyFree.remove(participantId)
+      segmentStart = time
+    }
+
+    return result
+  }
+
+  private fun filterByDuration(
+    segments: List<SlotCoverage>,
+    duration: Int,
+  ): List<SlotCoverage> {
+    val minDuration = Duration.ofMinutes(duration.toLong())
+    return segments.filter { Duration.between(it.slot.start, it.slot.end) >= minDuration }
   }
 
   private fun scoreFreeSlot() {
@@ -101,5 +216,15 @@ class EventService(
     if (failures.isNotEmpty()) {
       throw MultipleCalendarAccessFailedException(failures)
     }
+  }
+
+  private fun ClosedRange<LocalDate>.toList(): List<LocalDate> {
+    val days = mutableListOf<LocalDate>()
+    var d = start
+    while (!d.isAfter(endInclusive)) {
+      days.add(d)
+      d = d.plusDays(1)
+    }
+    return days
   }
 }
