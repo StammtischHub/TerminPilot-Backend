@@ -1,7 +1,9 @@
 package de.stammtischHub.terminPilot.service
 
+import de.stammtischHub.terminPilot.exception.UserNotFoundException
 import de.stammtischHub.terminPilot.exception.UsernameTakenException
 import de.stammtischHub.terminPilot.persistence.entity.User
+import de.stammtischHub.terminPilot.persistence.entity.UserGroup
 import de.stammtischHub.terminPilot.persistence.entity.UserType
 import de.stammtischHub.terminPilot.persistence.repository.UserRepository
 import de.stammtischHub.terminPilot.security.UserPrincipal
@@ -29,15 +31,15 @@ class UserService(
     username: String,
     rawPassword: String,
   ): User {
-    val normalized = username.trim()
+    val normalizedUsername = username.trim()
 
-    if (userRepository.findByUsername(normalized).isPresent) {
+    if (userRepository.findByUsername(normalizedUsername).isPresent) {
       throw UsernameTakenException()
     }
 
     val user =
       User().apply {
-        this.username = normalized
+        this.username = normalizedUsername
         password = passwordEncoder.encode(rawPassword).toString()
         userType = UserType.USER
       }
@@ -48,4 +50,20 @@ class UserService(
       throw UsernameTakenException()
     }
   }
+
+  @Transactional(readOnly = true)
+  fun getUserGroupsByUserId(
+    userId: Long,
+    userGroupId: Long?,
+  ): List<UserGroup> {
+    val user = userRepository.findById(userId).orElseThrow { UserNotFoundException(userId) }
+    return userGroupId?.let { userGroupId ->
+      user.userGroups.filter { it.id == userGroupId }
+    } ?: user.userGroups.toList()
+  }
+
+  fun getUserByUserId(userId: Long): User =
+    userRepository.findById(userId).orElseThrow { UserNotFoundException(userId) }
+
+  fun getAllUsers(): List<User> = userRepository.findAll().toList()
 }
