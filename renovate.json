@@ -44,6 +44,20 @@
       "matchUpdateTypes": ["major"],
       "automerge": false,
       "labels": ["renovate", "major update"]
+    },
+    {
+      "description": "Kotlin-Plugins müssen immer dieselbe Version haben",
+      "groupName": "Kotlin",
+      "matchDepNames": ["org.jetbrains.kotlin.jvm", "org.jetbrains.kotlin.plugin.*"],
+      "automerge": false
+    },
+    {
+      "description": "Swagger-Artefakte werden im Gleichschritt released",
+      "groupName": "swagger-core",
+      "matchPackageNames": [
+        "io.swagger.core.v3:swagger-annotations",
+        "io.swagger.core.v3:swagger-models"
+      ]
     }
   ]
 }
