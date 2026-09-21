@@ -60,10 +60,10 @@ repositories {
     credentials {
       username = System.getenv("GITHUB_ACTOR")
         ?: System.getProperty("GITHUB_ACTOR")
-          ?: "x-access-token"
+        ?: "x-access-token"
       password = System.getenv("GITHUB_TOKEN")
         ?: System.getProperty("GITHUB_TOKEN")
-          ?: error("GITHUB_TOKEN ist nicht gesetzt")
+        ?: error("GITHUB_TOKEN ist nicht gesetzt")
     }
   }
 }
