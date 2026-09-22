@@ -1,19 +1,18 @@
 package de.stammtischHub.terminPilot.persistence.entity
 
+import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.PrimaryKeyJoinColumn
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.PositiveOrZero
 
-@Entity(name = "google_calendar")
-@Table(name = "google_calendars")
-@PrimaryKeyJoinColumn(name = "google_calendar_id")
-class GoogleCalendar : Calendar() {
-  @NotBlank
-  lateinit var calendarName: String
-
+@Entity(name = "google_access")
+@Table(name = "google_accesses")
+@AttributeOverride(name = "_id", column = Column(name = "calendar_access_id"))
+class GoogleAccess : BaseLongId() {
   @Column(columnDefinition = "TEXT")
   @NotBlank
   lateinit var accessToken: String
@@ -23,6 +22,7 @@ class GoogleCalendar : Calendar() {
   lateinit var refreshToken: String
 
   @Column(name = "token_expiry")
+  @PositiveOrZero
   @NotNull
   private var _tokenExpiry: Long? = null
 
