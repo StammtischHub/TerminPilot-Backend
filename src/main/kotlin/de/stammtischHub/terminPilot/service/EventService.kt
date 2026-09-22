@@ -311,7 +311,7 @@ class EventService(
         1.0 - (minutesFromDayStart.toDouble() / daySlack).coerceIn(0.0, 1.0)
       }
 
-    return (centeringScore + earlinessScore) / 2.0 // gleichgewichtet (C)
+    return (centeringScore + earlinessScore) / 2.0 // gleichgewichtet
   }
 
   private fun verifyAllAccess(participants: List<User>) {
