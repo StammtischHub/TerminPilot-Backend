@@ -46,6 +46,7 @@ class CalendarRepositoryTest {
       calendarRepository.saveAndFlush(
         Calendar().apply {
           owner = user
+          externalCalendarName = "Private"
         },
       )
 
@@ -61,11 +62,12 @@ class CalendarRepositoryTest {
       calendarRepository.saveAndFlush(
         Calendar().apply {
           owner = user
+          externalCalendarName = "Private"
         },
       )
     entityManager.clear()
 
-    val foundCalendars = calendarRepository.findByOwnerId(this.user.id).get()
+    val foundCalendars = calendarRepository.findByOwner(this.user.id).get()
     assertEquals(listOf(calendar), foundCalendars)
     assert(foundCalendars.all { it.owner == this.user })
   }
@@ -78,17 +80,19 @@ class CalendarRepositoryTest {
       calendarRepository.saveAndFlush(
         Calendar().apply {
           owner = user
+          externalCalendarName = "Private"
         },
       )
     val calendar2 =
       calendarRepository.saveAndFlush(
         Calendar().apply {
           owner = user
+          externalCalendarName = "Public"
         },
       )
     entityManager.clear()
 
-    val foundCalendars = calendarRepository.findByOwnerId(this.user.id).get()
+    val foundCalendars = calendarRepository.findByOwner(this.user.id).get()
     assertEquals(listOf(calendar1, calendar2).sortedBy { it.id }, foundCalendars.sortedBy { it.id })
     assert(foundCalendars.all { it.owner == this.user })
   }

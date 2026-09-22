@@ -4,9 +4,9 @@ import com.google.api.client.auth.oauth2.TokenResponse
 import de.stammtischHub.terminPilot.exception.GoogleCalendarNotConnectedException
 import de.stammtischHub.terminPilot.exception.GoogleCalendarNotFoundException
 import de.stammtischHub.terminPilot.exception.UserNotFoundException
-import de.stammtischHub.terminPilot.persistence.entity.GoogleCalendar
+import de.stammtischHub.terminPilot.persistence.entity.GoogleAccess
 import de.stammtischHub.terminPilot.persistence.entity.User
-import de.stammtischHub.terminPilot.persistence.repository.GoogleCalendarRepository
+import de.stammtischHub.terminPilot.persistence.repository.GoogleAccessRepository
 import de.stammtischHub.terminPilot.persistence.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -28,7 +28,7 @@ private const val DEFAULT_TOKEN_TTL_MILLIS = 3_600_000L // 1 hour fallback
 @Transactional
 class GoogleCalendarAccountService(
   private val userRepository: UserRepository,
-  private val googleCalendarRepository: GoogleCalendarRepository,
+  private val googleCalendarRepository: GoogleAccessRepository,
 ) {
   /**
    * Finds the connected Google calendar for a given user.
