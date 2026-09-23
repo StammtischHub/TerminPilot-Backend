@@ -78,7 +78,7 @@ class EventServiceTest {
   @Nested
   inner class GetFreeSlotsForParticipant {
     @Test
-    @DisplayName("Keine Busy-Events → das komplette Zeitfenster ist frei")
+    @DisplayName("No Busy-Events → complete Time-Window free")
     fun noBusyEvents() {
       stubBusyEvents(emptyList())
       val monday = LocalDate.of(2026, 9, 21)
@@ -97,7 +97,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Busy-Event vollständig im Fenster teilt es in zwei freie Slots")
+    @DisplayName("Busy-Event fully in Window splitts into two")
     fun busyEventInsideWindow() {
       val monday = LocalDate.of(2026, 9, 21)
       stubBusyEvents(listOf(busyEvent(monday.atTime(12, 0), monday.atTime(13, 0))))
@@ -119,7 +119,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Busy-Event deckt das komplette Fenster ab → keine freien Slots")
+    @DisplayName("Busy-Event covers the complete window → no free Slots")
     fun busyEventCoversWholeWindow() {
       val monday = LocalDate.of(2026, 9, 21)
       stubBusyEvents(listOf(busyEvent(monday.atTime(9, 0), monday.atTime(17, 0))))
@@ -135,7 +135,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Busy-Event ragt über beide Fenstergrenzen hinaus → wird auf das Fenster geclippt")
+    @DisplayName("Busy-Event bigger than both window-borders → window will get clipped")
     fun busyEventOverlapsWindowBoundaries() {
       val monday = LocalDate.of(2026, 9, 21)
       stubBusyEvents(listOf(busyEvent(monday.atTime(7, 0), monday.atTime(19, 0))))
@@ -151,7 +151,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Busy-Event komplett vor dem Fenster wird ignoriert")
+    @DisplayName("Busy-Event before window is ignored")
     fun busyEventBeforeWindow() {
       val monday = LocalDate.of(2026, 9, 21)
       stubBusyEvents(listOf(busyEvent(monday.atTime(6, 0), monday.atTime(8, 0))))
@@ -170,7 +170,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Busy-Event komplett nach dem Fenster wird ignoriert")
+    @DisplayName("Busy-Event after window is ignored")
     fun busyEventAfterWindow() {
       val monday = LocalDate.of(2026, 9, 21)
       stubBusyEvents(listOf(busyEvent(monday.atTime(18, 0), monday.atTime(19, 0))))
@@ -189,7 +189,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Überlappende Busy-Events werden vor der Invertierung gemerged")
+    @DisplayName("Bigger Busy-Events get merged before inversion")
     fun overlappingBusyEventsAreMerged() {
       val monday = LocalDate.of(2026, 9, 21)
       stubBusyEvents(
@@ -216,7 +216,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Direkt angrenzende (berührende) Busy-Events werden zu einem gemerged")
+    @DisplayName("Directly adjacent (touching) Busy-Events get merged")
     fun adjacentBusyEventsAreMerged() {
       val monday = LocalDate.of(2026, 9, 21)
       stubBusyEvents(
@@ -243,7 +243,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Nur die im weekdays-Set enthaltenen Tage liefern freie Slots")
+    @DisplayName("Only the weekdays in the weekdays-Set return free slots")
     fun onlyMatchingWeekdaysAreConsidered() {
       // Mo 2026-09-21 .. So 2026-09-27
       val monday = LocalDate.of(2026, 9, 21)
@@ -268,7 +268,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Ein Busy-Event an einem Tag beeinflusst nicht die freien Slots anderer Tage")
+    @DisplayName("Busy-Event on a different day does not affect other days")
     fun busyEventDoesNotLeakAcrossDays() {
       val monday = LocalDate.of(2026, 9, 21)
       val tuesday = monday.plusDays(1)
@@ -288,7 +288,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Ein Busy-Event über Mitternacht hinweg wird pro Tag separat geclippt")
+    @DisplayName("Ein Busy-Event past midnight get clipped per day")
     fun busyEventSpanningMultipleDaysIsClippedPerDay() {
       val monday = LocalDate.of(2026, 9, 21)
       val tuesday = monday.plusDays(1)
@@ -329,14 +329,14 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Leere Map → keine Segmente")
+    @DisplayName("Empty Map → No segments")
     fun noParticipants() {
       val result = invoke(emptyMap())
       assertEquals(emptyList<SlotCoverage>(), result)
     }
 
     @Test
-    @DisplayName("Ein Teilnehmer, ein Slot → ein Segment mit genau diesem Teilnehmer")
+    @DisplayName("One participant, one Slot → one Segment with exactly this participant")
     fun singleParticipantSingleSlot() {
       val day = LocalDate.of(2026, 9, 21)
       val input = mapOf(1L to listOf(TimeSlot(day.atTime(9, 0), day.atTime(10, 0))))
@@ -350,7 +350,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Zwei Teilnehmer, identische Slots → ein Segment mit beiden Teilnehmern")
+    @DisplayName("Two participants, identical Slots → one Segment with both participants")
     fun twoParticipantsFullyOverlapping() {
       val day = LocalDate.of(2026, 9, 21)
       val input =
@@ -368,7 +368,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Teilweise überlappende Slots ergeben drei Segmente mit unterschiedlicher Coverage")
+    @DisplayName("Partly overlapping Slots result in three Segmente with different Coverage")
     fun partiallyOverlappingSlots() {
       val day = LocalDate.of(2026, 9, 21)
       val input =
@@ -390,7 +390,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Nicht überlappende Slots erzeugen zwei separate Segmente, die Lücke dazwischen fehlt")
+    @DisplayName("None overlapping Slots result in two separate Segmentes (gap is left out)")
     fun nonOverlappingSlotsLeaveGapOut() {
       val day = LocalDate.of(2026, 9, 21)
       val input =
@@ -411,7 +411,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Direkt aneinandergrenzende Slots verschiedener Teilnehmer erzeugen kein leeres Zwischensegment")
+    @DisplayName("Directly adjacent Slots of different participants result in no gap-segment")
     fun adjacentSlotsOfDifferentParticipantsDoNotCreateEmptySegment() {
       val day = LocalDate.of(2026, 9, 21)
       val input =
@@ -432,7 +432,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Drei Teilnehmer exakt gleichzeitig frei → genau ein Segment mit allen drei, keine Duplikate")
+    @DisplayName("Three participants simultaneously free → exactly one Segment; no dupes")
     fun threeParticipantsSimultaneouslyFree() {
       val day = LocalDate.of(2026, 9, 21)
       val input =
@@ -451,7 +451,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Mehrere getrennte Slots desselben Teilnehmers ergeben mehrere unabhängige Segmente")
+    @DisplayName("Multiple non adjacent Slots of the same participant result in multiple segments")
     fun sameParticipantMultipleNonContiguousSlots() {
       val day = LocalDate.of(2026, 9, 21)
       val input =
@@ -511,7 +511,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Leere Segment-Liste → keine Vorschläge")
+    @DisplayName("Empty Segment-List → No Suggestions")
     fun noSegments() {
       val result =
         invoke(
@@ -526,7 +526,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Segmente mit unvollständiger Coverage werden ausgeschlossen ('volle Besetzung MUSS dominieren')")
+    @DisplayName("Segmente with partial Coverage are left out")
     fun partialCoverageIsExcluded() {
       val day = LocalDate.of(2026, 9, 21)
       val fullyCovered = SlotCoverage(TimeSlot(day.atTime(9, 0), day.atTime(9, 30)), setOf(1L, 2L, 3L))
@@ -546,7 +546,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Segment exakt duration-lang → ein Kandidat mit perfektem Score, wenn er am Fensterstart liegt")
+    @DisplayName("Segment exact duration at window start → perfect score")
     fun exactDurationSegmentAtWindowStartScoresPerfectly() {
       val day = LocalDate.of(2026, 9, 21)
       val segment = SlotCoverage(TimeSlot(day.atTime(9, 0), day.atTime(10, 0)), setOf(1L, 2L))
@@ -565,7 +565,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Segment länger als duration → früher und zentrierter Kandidat, zentriert gewinnt bei Segmentstart am Fensteranfang")
+    @DisplayName("Segment lager than duration → early, centered candidate wins")
     fun longerSegmentGeneratesTwoCandidatesCenteredWins() {
       val day = LocalDate.of(2026, 9, 21)
       val segment = SlotCoverage(TimeSlot(day.atTime(9, 0), day.atTime(11, 0)), setOf(1L))
@@ -585,7 +585,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("topN begrenzt die Ergebnisliste auf die höchstbewerteten Kandidaten")
+    @DisplayName("topN restricts result size")
     fun topNLimitsToHighestScored() {
       val day = LocalDate.of(2026, 9, 21)
       val segments =
