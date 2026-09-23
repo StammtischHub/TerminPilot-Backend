@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import org.springframework.security.core.AuthenticationException
+import org.springframework.web.ErrorResponse
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
@@ -68,7 +69,18 @@ class GlobalExceptionHandler {
 
   @ExceptionHandler(Exception::class)
   fun handleUnexpected(exception: Exception): ProblemDetail {
+
+    if (exception is ErrorResponse) {
+      logger.debug(
+        "Spring ErrorResponse: {}",
+        exception.javaClass.simpleName,
+      )
+
+      return exception.body
+    }
+
     logger.error("Unhandled exception", exception)
+
     return ProblemDetail.forStatusAndDetail(
       HttpStatus.INTERNAL_SERVER_ERROR,
       "An unexpected error occurred",
