@@ -100,7 +100,7 @@ class EventService(
           Coverage(
             totalParticipants = allParticipantIds.size,
             availableParticipantIds = slot.freeParticipantIds.toList(),
-            missingParticipantIds = (allParticipantIds - slot.freeParticipantIds).toList(),
+            missingParticipantIds = (allParticipantIds - slot.freeParticipantIds).toList(), // TODO: Ist aktuell noch tot, weil kein Partial Failure
           ),
       )
     }
@@ -138,16 +138,16 @@ class EventService(
   }
 
   private fun mergeIntervals(slots: List<TimeSlot>): List<TimeSlot> {
-    if (slots.isEmpty()) return emptyList()
+    if (slots.isEmpty()) { return emptyList() }
 
     val sorted = slots.sortedBy { it.start }
     val merged = mutableListOf(sorted.first())
 
     for (current in sorted.drop(1)) {
-      val last = merged.last()
-      if (current.start <= last.end) {
-        if (current.end > last.end) {
-          merged[merged.lastIndex] = last.copy(end = current.end)
+      val lastMerged = merged.last()
+      if (current.start <= lastMerged.end) {
+        if (current.end > lastMerged.end) {
+          merged[merged.lastIndex] = lastMerged.copy(end = current.end)
         }
       } else {
         merged.add(current)
@@ -161,31 +161,29 @@ class EventService(
     windowEnd: LocalDateTime,
     busy: List<TimeSlot>,
   ): List<TimeSlot> {
-    val relevant =
+    val relevantSlots =
       busy
         .filter { it.end > windowStart && it.start < windowEnd }
         .sortedBy { it.start }
 
-    val free = mutableListOf<TimeSlot>()
+    val freeSlots = mutableListOf<TimeSlot>()
     var cursor = windowStart
 
-    for ((start, end) in relevant) {
+    for ((start, end) in relevantSlots) {
       val busyStart = maxOf(start, windowStart)
       val busyEnd = minOf(end, windowEnd)
 
       if (busyStart > cursor) {
-        free.add(TimeSlot(cursor, busyStart))
+        freeSlots.add(TimeSlot(cursor, busyStart))
       }
       if (busyEnd > cursor) {
         cursor = busyEnd
       }
     }
-
     if (cursor < windowEnd) {
-      free.add(TimeSlot(cursor, windowEnd))
+      freeSlots.add(TimeSlot(cursor, windowEnd))
     }
-
-    return free
+    return freeSlots
   }
 
   private fun intersectFreeSlots(freeSlotsPerParticipant: Map<Long, List<TimeSlot>>): List<SlotCoverage> {
@@ -215,7 +213,11 @@ class EventService(
         result.add(SlotCoverage(TimeSlot(segmentStart, time), currentlyFree.toSet()))
       }
 
-      if (delta > 0) currentlyFree.add(participantId) else currentlyFree.remove(participantId)
+      if (delta > 0)  {
+        currentlyFree.add(participantId)
+      } else {
+        currentlyFree.remove(participantId)
+      }
       segmentStart = time
     }
 
@@ -241,7 +243,7 @@ class EventService(
 
     val fullyCoveredCandidates =
       segments
-        .filter { it.freeParticipantIds.size == totalParticipants }
+        .filter { it.freeParticipantIds.size == totalParticipants } // TODO: Partial Failure berücksichtigen
         .flatMap { segment -> generateCandidates(segment, requiredDuration) }
 
     return fullyCoveredCandidates
@@ -260,7 +262,7 @@ class EventService(
     requiredDuration: Duration,
   ): List<Candidate> {
     val segmentDuration = Duration.between(segment.slot.start, segment.slot.end)
-    val slack = segmentDuration.minus(requiredDuration)
+    val spareTime = segmentDuration.minus(requiredDuration)
 
     val earliestStart = segment.slot.start
     val earliest =
@@ -270,9 +272,9 @@ class EventService(
         segment.slot,
       )
 
-    if (slack.isZero) return listOf(earliest)
+    if (spareTime.isZero) return listOf(earliest)
 
-    val centeredStart = earliestStart + slack.dividedBy(2)
+    val centeredStart = earliestStart + spareTime.dividedBy(2)
     val centered =
       Candidate(
         TimeSlot(centeredStart, centeredStart + requiredDuration),
