@@ -5,6 +5,7 @@ import de.stammtischHub.terminPilot.model.generated.CreateUserGroupRequest
 import de.stammtischHub.terminPilot.model.generated.UpdateUserGroupRequest
 import de.stammtischHub.terminPilot.model.generated.UserGroupResponse
 import de.stammtischHub.terminPilot.service.UserGroupService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 
@@ -19,7 +20,7 @@ class UserGroupsController(
         createUserGroupRequest.creatorId,
         createUserGroupRequest.memberIds,
       )
-    return ResponseEntity.ok(userGroupResponse)
+    return ResponseEntity.status(HttpStatus.CREATED).body(userGroupResponse)
   }
 
   override fun updateUserGroup(
