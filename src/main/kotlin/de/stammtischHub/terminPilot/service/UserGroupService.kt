@@ -1,9 +1,10 @@
 package de.stammtischHub.terminPilot.service
 
 import de.stammtischHub.terminPilot.exception.UserGroupNameTakenException
-import de.stammtischHub.terminPilot.persistence.entity.User
+import de.stammtischHub.terminPilot.model.generated.UserGroupResponse
 import de.stammtischHub.terminPilot.persistence.entity.UserGroup
 import de.stammtischHub.terminPilot.persistence.repository.UserGroupRepository
+import de.stammtischHub.terminPilot.service.mapping.toUserGroupResponse
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -11,14 +12,18 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class UserGroupService(
   private val userGroupRepository: UserGroupRepository,
+  private val userService: UserService,
 ) {
   @Transactional
   fun createUserGroup(
     name: String,
-    creator: User,
-    members: MutableSet<User>,
-  ): UserGroup {
+    creatorId: Long,
+    memberIds: List<Long>,
+  ): UserGroupResponse {
     val normalizedName = name.trim()
+
+    val creator = userService.getUserByUserId(creatorId)
+    val members = memberIds.map { userService.getUserByUserId(it) }.toMutableSet()
 
     if (userGroupRepository.findByName(normalizedName).isPresent) {
       throw UserGroupNameTakenException()
@@ -32,7 +37,8 @@ class UserGroupService(
       }
 
     return try {
-      userGroupRepository.saveAndFlush(userGroup)
+      val savedUserGroup = userGroupRepository.saveAndFlush(userGroup)
+      savedUserGroup.toUserGroupResponse()
     } catch (_: DataIntegrityViolationException) {
       throw UserGroupNameTakenException()
     }
@@ -42,14 +48,18 @@ class UserGroupService(
   fun updateUserGroup(
     id: Long,
     name: String?,
-    members: MutableSet<User>?,
-  ): UserGroup {
+    memberIds: List<Long>?,
+  ): UserGroupResponse {
     val userGroup = userGroupRepository.findById(id).get()
+    val members =
+      memberIds?.map { userService.getUserByUserId(it) }?.toMutableSet()
+
     name?.let { userGroup.name = it.trim() }
     members?.let { userGroup.members = it }
-    return userGroupRepository.saveAndFlush(userGroup)
+    return userGroupRepository.saveAndFlush(userGroup).toUserGroupResponse()
   }
 
+  @Transactional
   fun deleteUserGroup(id: Long) {
     userGroupRepository.deleteById(id)
   }

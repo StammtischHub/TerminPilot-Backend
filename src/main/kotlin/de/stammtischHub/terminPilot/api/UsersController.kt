@@ -1,8 +1,6 @@
 package de.stammtischHub.terminPilot.api
 
 import de.stammtischHub.terminPilot.api.generated.UsersApi
-import de.stammtischHub.terminPilot.api.mapping.toUserGroupResponse
-import de.stammtischHub.terminPilot.api.mapping.toUserResponse
 import de.stammtischHub.terminPilot.model.generated.UserGroupResponse
 import de.stammtischHub.terminPilot.model.generated.UserResponse
 import de.stammtischHub.terminPilot.service.UserService
@@ -17,12 +15,12 @@ class UsersController(
     userId: Long,
     userGroupId: Long?,
   ): ResponseEntity<List<UserGroupResponse>> {
-    val userGroups = userService.getUserGroupsByUserId(userId, userGroupId)
-    return ResponseEntity.ok(userGroups.map { it.toUserGroupResponse() })
+    val userGroupResponses = userService.getUserGroupsByUserId(userId, userGroupId)
+    return ResponseEntity.ok(userGroupResponses)
   }
 
   override fun getUsers(): ResponseEntity<List<UserResponse>> {
     val users = userService.getAllUsers()
-    return ResponseEntity.ok(users.map { it.toUserResponse() })
+    return ResponseEntity.ok(users)
   }
 }

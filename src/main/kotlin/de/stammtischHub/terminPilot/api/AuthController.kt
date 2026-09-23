@@ -1,11 +1,11 @@
 package de.stammtischHub.terminPilot.api
 
 import de.stammtischHub.terminPilot.api.generated.AuthApi
-import de.stammtischHub.terminPilot.api.mapping.toUserResponse
 import de.stammtischHub.terminPilot.model.generated.LoginRequest
 import de.stammtischHub.terminPilot.model.generated.RegisterRequest
 import de.stammtischHub.terminPilot.model.generated.UserResponse
 import de.stammtischHub.terminPilot.service.UserService
+import de.stammtischHub.terminPilot.service.mapping.toUserResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
@@ -29,12 +29,12 @@ class AuthController(
   private val csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse()
 
   override fun register(registerRequest: RegisterRequest): ResponseEntity<UserResponse> {
-    val user =
+    val userResponse =
       userService.register(
         registerRequest.username,
         registerRequest.password,
       )
-    return ResponseEntity.status(HttpStatus.CREATED).body(user.toUserResponse())
+    return ResponseEntity.status(HttpStatus.CREATED).body(userResponse)
   }
 
   override fun login(loginRequest: LoginRequest): ResponseEntity<UserResponse> {

@@ -8,17 +8,17 @@ import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import jakarta.persistence.UniqueConstraint
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
-import jakarta.persistence.UniqueConstraint
 
 @Entity(name = "user_group")
 @Table(
   name = "user_groups",
   uniqueConstraints = [
-    UniqueConstraint(name = "unique_name_per_creator", columnNames = ["name", "creator"])
-  ]
+    UniqueConstraint(name = "unique_name_per_creator", columnNames = ["name", "creator"]),
+  ],
 )
 @AttributeOverride(name = "_id", column = Column(name = "user_group_id"))
 class UserGroup : BaseLongId() {

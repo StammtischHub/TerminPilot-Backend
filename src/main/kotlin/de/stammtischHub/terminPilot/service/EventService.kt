@@ -41,7 +41,7 @@ class EventService(
       )
 
     participants.forEach { participant ->
-      calendarProvider.writeToCalendar(participant.id!!, event)
+      calendarProvider.writeToCalendar(participant.id, event)
     }
     return event
   }
@@ -56,11 +56,11 @@ class EventService(
 
     participants.forEach { participant ->
       try {
-        calendarProvider.verifyAccess(participant.id!!)
+        calendarProvider.verifyAccess(participant.id)
       } catch (e: CalendarAccessFailedException) {
-        failures += CalendarAccessFailure(participant.id!!, e.reason)
+        failures += CalendarAccessFailure(participant.id, e.reason)
       } catch (e: CalendarAccessTimeoutException) {
-        failures += CalendarAccessFailure(participant.id!!, e.reason)
+        failures += CalendarAccessFailure(participant.id, e.reason)
       }
     }
 
