@@ -100,7 +100,8 @@ class EventService(
           Coverage(
             totalParticipants = allParticipantIds.size,
             availableParticipantIds = slot.freeParticipantIds.toList(),
-            missingParticipantIds = (allParticipantIds - slot.freeParticipantIds).toList(), // TODO: Ist aktuell noch tot, weil kein Partial Failure
+            missingParticipantIds = (allParticipantIds - slot.freeParticipantIds).toList(),
+            // TODO: Ist aktuell noch tot, weil kein Partial Failure
           ),
       )
     }
@@ -138,7 +139,7 @@ class EventService(
   }
 
   private fun mergeIntervals(slots: List<TimeSlot>): List<TimeSlot> {
-    if (slots.isEmpty()) { return emptyList() }
+    if (slots.isEmpty()) return emptyList()
 
     val sorted = slots.sortedBy { it.start }
     val merged = mutableListOf(sorted.first())
@@ -213,7 +214,7 @@ class EventService(
         result.add(SlotCoverage(TimeSlot(segmentStart, time), currentlyFree.toSet()))
       }
 
-      if (delta > 0)  {
+      if (delta > 0) {
         currentlyFree.add(participantId)
       } else {
         currentlyFree.remove(participantId)
