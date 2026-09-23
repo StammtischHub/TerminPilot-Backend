@@ -69,7 +69,6 @@ class GlobalExceptionHandler {
 
   @ExceptionHandler(Exception::class)
   fun handleUnexpected(exception: Exception): ProblemDetail {
-
     if (exception is ErrorResponse) {
       logger.debug(
         "Spring ErrorResponse: {}",
