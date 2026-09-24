@@ -1,10 +1,10 @@
-package de.stammtischHub.terminPilot.provider.apple
+package de.stammtischHub.terminPilot.provider.calDav
 
 import de.stammtischHub.terminPilot.domain.Event
 import de.stammtischHub.terminPilot.provider.CalendarProvider
 import java.time.LocalDateTime
 
-class AppleCalendarProvider : CalendarProvider {
+class CalDavCalendarService : CalendarProvider {
   override fun getCalendarForTimespan(
     userId: Long,
     start: LocalDateTime,
