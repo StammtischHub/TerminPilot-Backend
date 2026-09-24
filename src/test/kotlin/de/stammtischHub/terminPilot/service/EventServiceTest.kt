@@ -2,11 +2,11 @@ package de.stammtischHub.terminPilot.service
 
 import de.stammtischHub.terminPilot.domain.Event
 import de.stammtischHub.terminPilot.domain.ScoredSlot
+import de.stammtischHub.terminPilot.domain.SlotCoverage
 import de.stammtischHub.terminPilot.domain.TimeSlot
 import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.repository.UserRepository
 import de.stammtischHub.terminPilot.provider.CalendarProvider
-import de.stammtischHub.terminPilot.domain.SlotCoverage
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
