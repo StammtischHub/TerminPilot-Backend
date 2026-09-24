@@ -100,8 +100,8 @@ class EventService(
           Coverage(
             totalParticipants = allParticipantIds.size,
             availableParticipantIds = slot.freeParticipantIds.toList(),
-            missingParticipantIds = (allParticipantIds - slot.freeParticipantIds).toList(),
             // TODO: Ist aktuell noch tot, weil kein Partial Failure
+            missingParticipantIds = (allParticipantIds - slot.freeParticipantIds).toList(),
           ),
       )
     }
