@@ -139,9 +139,7 @@ class EventService(
   }
 
   private fun mergeIntervals(slots: List<TimeSlot>): List<TimeSlot> {
-    if (slots.isEmpty()) {
-      return emptyList()
-    }
+    if (slots.isEmpty()) return emptyList()
 
     val sorted = slots.sortedBy { it.start }
     val merged = mutableListOf(sorted.first())

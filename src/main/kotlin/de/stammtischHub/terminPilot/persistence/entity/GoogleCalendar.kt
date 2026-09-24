@@ -1,6 +1,8 @@
 package de.stammtischHub.terminPilot.persistence.entity
 
+import de.stammtischHub.terminPilot.persistence.converter.EncryptedStringConverter
 import jakarta.persistence.Column
+import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.PrimaryKeyJoinColumn
 import jakarta.persistence.Table
@@ -15,16 +17,18 @@ class GoogleCalendar : Calendar() {
   lateinit var calendarName: String
 
   @Column(columnDefinition = "TEXT")
+  @Convert(converter = EncryptedStringConverter::class)
   @NotBlank
   lateinit var accessToken: String
 
   @Column(columnDefinition = "TEXT")
+  @Convert(converter = EncryptedStringConverter::class)
   @NotBlank
   lateinit var refreshToken: String
 
   @Column(name = "token_expiry")
   @NotNull
-  private var _tokenExpiry: Long? = null
+  private var _tokenExpiry: Long? = 0L
 
   var tokenExpiry: Long
     get() = _tokenExpiry ?: error("tokenExpiry wurde noch nicht initialisiert")
