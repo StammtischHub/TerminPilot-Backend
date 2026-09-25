@@ -1,6 +1,6 @@
 package de.stammtischHub.terminPilot.persistence.repository
 
-import de.stammtischHub.terminPilot.persistence.entity.AppleCalendar
+import de.stammtischHub.terminPilot.persistence.entity.CalDavCalendar
 import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.entity.UserType
 import jakarta.validation.ConstraintViolationException
@@ -13,12 +13,12 @@ import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
 @DataJpaTest
-class AppleCalendarRepositoryTest {
+class CalDavCalendarRepositoryTest {
   @Autowired
   lateinit var entityManager: TestEntityManager
 
   @Autowired
-  lateinit var appleCalendarRepository: AppleCalendarRepository
+  lateinit var calDavCalendarRepository: CalDavCalendarRepository
 
   @Autowired
   lateinit var userRepository: UserRepository
@@ -41,23 +41,23 @@ class AppleCalendarRepositoryTest {
   fun `should automatically generate an id when saving an AppleCalendar`() {
     setupUser()
 
-    val appleCalendar =
-      appleCalendarRepository.saveAndFlush(
-        AppleCalendar().apply {
+    val calDavCalendar =
+      calDavCalendarRepository.saveAndFlush(
+        CalDavCalendar().apply {
           owner = user
-          icloudMail = "a"
+          address = "a"
           appSpecificPassword = "b"
         },
       )
 
-    val id = assertDoesNotThrow { appleCalendar.id }
+    val id = assertDoesNotThrow { calDavCalendar.id }
     assertThat(id).isPositive()
   }
 
   @Test
   fun `should throw an exception when creating an AppleCalendar with null fields`() {
     assertFailsWith<ConstraintViolationException> {
-      appleCalendarRepository.saveAndFlush(AppleCalendar())
+      calDavCalendarRepository.saveAndFlush(CalDavCalendar())
     }
   }
 
@@ -66,10 +66,10 @@ class AppleCalendarRepositoryTest {
     setupUser()
 
     assertFailsWith<ConstraintViolationException> {
-      appleCalendarRepository.saveAndFlush(
-        AppleCalendar().apply {
+      calDavCalendarRepository.saveAndFlush(
+        CalDavCalendar().apply {
           owner = user
-          icloudMail = ""
+          address = ""
           appSpecificPassword = ""
         },
       )
