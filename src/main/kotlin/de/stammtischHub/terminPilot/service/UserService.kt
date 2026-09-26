@@ -1,10 +1,15 @@
 package de.stammtischHub.terminPilot.service
 
+import de.stammtischHub.terminPilot.exception.UserNotFoundException
 import de.stammtischHub.terminPilot.exception.UsernameTakenException
+import de.stammtischHub.terminPilot.model.generated.UserGroupResponse
+import de.stammtischHub.terminPilot.model.generated.UserResponse
 import de.stammtischHub.terminPilot.persistence.entity.User
 import de.stammtischHub.terminPilot.persistence.entity.UserType
 import de.stammtischHub.terminPilot.persistence.repository.UserRepository
 import de.stammtischHub.terminPilot.security.UserPrincipal
+import de.stammtischHub.terminPilot.service.mapping.toUserGroupResponse
+import de.stammtischHub.terminPilot.service.mapping.toUserResponse
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -28,24 +33,45 @@ class UserService(
   fun register(
     username: String,
     rawPassword: String,
-  ): User {
-    val normalized = username.trim()
+  ): UserResponse {
+    val normalizedUsername = username.trim()
 
-    if (userRepository.findByUsername(normalized).isPresent) {
+    if (userRepository.findByUsername(normalizedUsername).isPresent) {
       throw UsernameTakenException()
     }
 
     val user =
       User().apply {
-        this.username = normalized
+        this.username = normalizedUsername
         password = passwordEncoder.encode(rawPassword).toString()
         userType = UserType.USER
       }
 
     return try {
-      userRepository.saveAndFlush(user)
+      val savedUser = userRepository.saveAndFlush(user)
+      savedUser.toUserResponse()
     } catch (_: DataIntegrityViolationException) {
       throw UsernameTakenException()
     }
   }
+
+  @Transactional(readOnly = true)
+  fun getUserGroupsByUserId(
+    userId: Long,
+    userGroupId: Long?,
+  ): List<UserGroupResponse> {
+    val user = userRepository.findById(userId).orElseThrow { UserNotFoundException(userId) }
+    val userGroups =
+      userGroupId?.let { userGroupId ->
+        user.userGroups.filter { it.id == userGroupId }
+      } ?: user.userGroups.toList()
+    return userGroups.map { it.toUserGroupResponse() }
+  }
+
+  @Transactional(readOnly = true)
+  fun getUserByUserId(userId: Long): User =
+    userRepository.findById(userId).orElseThrow { UserNotFoundException(userId) }
+
+  @Transactional(readOnly = true)
+  fun getAllUsers(): List<UserResponse> = userRepository.findAll().map { it.toUserResponse() }
 }

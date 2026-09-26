@@ -8,6 +8,7 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
+import org.springframework.dao.DataIntegrityViolationException
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -154,6 +155,29 @@ class UserGroupRepositoryTest {
       userGroupRepository.saveAndFlush(
         UserGroup().apply {
           name = "name"
+          members = mutableSetOf(memberUser)
+        },
+      )
+    }
+  }
+
+  @Test
+  fun `should throw an exception when creating a UserGroup with the same creator and name`() {
+    setupUsers()
+
+    userGroupRepository.saveAndFlush(
+      UserGroup().apply {
+        name = "name"
+        creator = creatorUser
+        members = mutableSetOf(memberUser)
+      },
+    )
+
+    assertFailsWith<DataIntegrityViolationException> {
+      userGroupRepository.saveAndFlush(
+        UserGroup().apply {
+          name = "name"
+          creator = creatorUser
           members = mutableSetOf(memberUser)
         },
       )

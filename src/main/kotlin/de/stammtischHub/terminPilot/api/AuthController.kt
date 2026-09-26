@@ -4,18 +4,14 @@ import de.stammtischHub.terminPilot.api.generated.AuthApi
 import de.stammtischHub.terminPilot.model.generated.LoginRequest
 import de.stammtischHub.terminPilot.model.generated.RegisterRequest
 import de.stammtischHub.terminPilot.model.generated.UserResponse
-import de.stammtischHub.terminPilot.model.generated.UserRole
-import de.stammtischHub.terminPilot.persistence.entity.User
-import de.stammtischHub.terminPilot.persistence.entity.UserType
-import de.stammtischHub.terminPilot.security.UserPrincipal
 import de.stammtischHub.terminPilot.service.UserService
+import de.stammtischHub.terminPilot.service.mapping.toUserResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler
 import org.springframework.security.web.context.SecurityContextRepository
@@ -33,12 +29,12 @@ class AuthController(
   private val csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse()
 
   override fun register(registerRequest: RegisterRequest): ResponseEntity<UserResponse> {
-    val user =
+    val userResponse =
       userService.register(
         registerRequest.username,
         registerRequest.password,
       )
-    return ResponseEntity.status(HttpStatus.CREATED).body(user.toUserResponse())
+    return ResponseEntity.status(HttpStatus.CREATED).body(userResponse)
   }
 
   override fun login(loginRequest: LoginRequest): ResponseEntity<UserResponse> {
@@ -79,36 +75,4 @@ class AuthController(
     val authentication = SecurityContextHolder.getContext().authentication
     return ResponseEntity.ok(authentication?.toUserResponse())
   }
-
-  private fun User.toUserResponse() =
-    UserResponse(
-      id = id,
-      username = username,
-      roles = listOfNotNull(userType.toUserRole()),
-    )
-
-  private fun UserType.toUserRole(): UserRole? =
-    when (this) {
-      UserType.ADMIN -> UserRole.admin
-      UserType.USER -> UserRole.user
-    }
-
-  private fun Authentication.toUserResponse(): UserResponse {
-    val principal =
-      principal as? UserPrincipal
-        ?: error("Unerwarteter Principal-Typ: ${principal!!::class}")
-
-    return UserResponse(
-      id = principal.id,
-      username = principal.username,
-      roles = authorities.mapNotNull { it.authority?.toUserRole() },
-    )
-  }
-
-  private fun String.toUserRole(): UserRole? =
-    when (this) {
-      "ADMIN" -> UserRole.admin
-      "USER" -> UserRole.user
-      else -> null
-    }
 }

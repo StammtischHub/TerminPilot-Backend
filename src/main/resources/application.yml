@@ -20,6 +20,7 @@ springdoc:
     enabled: false
     path: /swagger.html
   api-docs:
+    version: openapi_3_0
     enabled: false
 
 logging:
