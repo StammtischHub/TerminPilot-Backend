@@ -12,6 +12,32 @@ services:
       - "${DOCKER_MYSQL_PORT}:3306"
     volumes:
       - terminpilot-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  backend:
+    container_name: terminpilot-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: mysql
+      DB_PORT: 3306
+    ports:
+      - "8080:8080"
+    volumes:
+      - terminpilot-tokens:/terminpilot/tokens
 
 volumes:
   terminpilot-mysql-data:
+  terminpilot-tokens:

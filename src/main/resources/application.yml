@@ -18,10 +18,10 @@ server:
 springdoc:
   swagger-ui:
     enabled: false
+    path: /swagger.html
   api-docs:
     enabled: false
 
 logging:
   level:
     root: INFO
-    org.springframework.security: DEBUG
