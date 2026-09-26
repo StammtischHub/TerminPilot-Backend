@@ -35,9 +35,6 @@ services:
       DB_PORT: 3306
     ports:
       - "8080:8080"
-    volumes:
-      - terminpilot-tokens:/terminpilot/tokens
 
 volumes:
   terminpilot-mysql-data:
-  terminpilot-tokens:
