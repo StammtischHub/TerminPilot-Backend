@@ -3,7 +3,7 @@ export
 
 # Makefile – Shortcuts für häufige Docker-Operationen
 
-.PHONY: up down down-volume restart logs shell-user shell-root backup restore status run-local run-docker build
+.PHONY: up down down-volume restart logs shell-user shell-root backup restore status run-local run-docker-mysql run-docker
 
 ## MySQL starten (Volume bleibt erhalten)
 up:
@@ -47,16 +47,16 @@ restore:
 status:
 	docker compose ps
 
-## Spring Boot mit lokalem Docker-MySQL starten
+## Spring Boot mit lokaler MySQL-DB starten
 run-local:
 	./gradlew bootRun --args='--spring.profiles.active=local'
 
 ## Spring Boot mit lokalem Docker-MySQL starten
-run-docker:
-	docker compose up -d
+run-docker-mysql:
+	docker compose up -d mysql
 	./gradlew bootRun --args='--spring.profiles.active=docker'
 
-## Schreibt die Abhängigkeiten in die Lock-Dateien und baut das Projekt
-build:
-	./gradlew dependencies --write-locks
-	./gradlew build
+## Spring Boot als Docker Container mit Docker-MySQL starten
+run-docker:
+	./gradlew assemble -q
+	docker compose up -d
