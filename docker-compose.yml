@@ -20,6 +20,7 @@ services:
       start_period: 30s
 
   backend:
+    container_name: terminpilot-backend
     build:
       context: .
       dockerfile: Dockerfile
