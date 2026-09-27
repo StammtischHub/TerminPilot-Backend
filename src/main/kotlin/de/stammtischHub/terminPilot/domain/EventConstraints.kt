@@ -14,7 +14,7 @@ data class EventConstraints(
 ) {
   init {
     require(weekdays.isNotEmpty()) { "weekdays must not be empty" }
-    require(dateRange.endInclusive.isAfter(dateRange.start)) { "date range invalid" }
+    require(dateRange.endInclusive >= dateRange.start) { "date range invalid" }
     require(timeRange.start < timeRange.endInclusive) { "time range invalid" }
     require(duration >= 1) { "duration must be greater than 1 minute" }
     require(participantIds.isNotEmpty()) { "participants must not be empty" }
