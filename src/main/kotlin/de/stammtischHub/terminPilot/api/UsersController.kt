@@ -28,13 +28,16 @@ class UsersController(
 
   override fun updateUsername(
     userId: Long,
-    updateUsernameRequest: UpdateUsernameRequest
+    updateUsernameRequest: UpdateUsernameRequest,
   ): ResponseEntity<UserResponse> {
     val userResponse = userService.updateUsername(userId, updateUsernameRequest.username)
     return ResponseEntity.ok(userResponse)
   }
 
-  override fun updatePassword(userId: Long, updatePasswordRequest: UpdatePasswordRequest): ResponseEntity<Unit> {
+  override fun updatePassword(
+    userId: Long,
+    updatePasswordRequest: UpdatePasswordRequest,
+  ): ResponseEntity<Unit> {
     userService.updatePassword(userId, updatePasswordRequest.oldPassword, updatePasswordRequest.newPassword)
     return ResponseEntity.ok().build()
   }

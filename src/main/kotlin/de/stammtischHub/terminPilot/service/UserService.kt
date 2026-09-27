@@ -59,7 +59,7 @@ class UserService(
   @Transactional
   fun updateUsername(
     userId: Long,
-    username: String
+    username: String,
   ): UserResponse {
     val normalizedUsername = username.trim()
 
@@ -82,16 +82,17 @@ class UserService(
   fun updatePassword(
     userId: Long,
     oldPassword: String,
-    newPassword: String
+    newPassword: String,
   ) {
     val user = userRepository.findById(userId).orElseThrow { UserNotFoundException(userId) }
     if (!passwordEncoder.matches(oldPassword, user.password)) {
       throw InvalidPasswordException()
     }
 
-    user.password = requireNotNull(passwordEncoder.encode(newPassword)) {
-      "Password encoding failed"
-    }
+    user.password =
+      requireNotNull(passwordEncoder.encode(newPassword)) {
+        "Password encoding failed"
+      }
     userRepository.saveAndFlush(user)
   }
 
