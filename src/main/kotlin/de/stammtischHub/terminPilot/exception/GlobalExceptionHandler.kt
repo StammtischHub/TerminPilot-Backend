@@ -55,6 +55,12 @@ class GlobalExceptionHandler {
     return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.message ?: "User not found")
   }
 
+  @ExceptionHandler(UserGroupNotFoundException::class)
+  fun handleUserGroupNotFound(ex: UserGroupNotFoundException): ProblemDetail {
+    logger.debug("UserGroup not found: ${ex.message}")
+    return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.message ?: "UserGroup not found")
+  }
+
   @ExceptionHandler(AuthenticationException::class)
   fun handleAuthenticationFailure(): ProblemDetail {
     logger.info("Authentication failure")
@@ -65,6 +71,12 @@ class GlobalExceptionHandler {
   fun handleUsernameTaken(): ProblemDetail {
     logger.info("Username taken")
     return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Username is already taken")
+  }
+
+  @ExceptionHandler(UserGroupNameTakenException::class)
+  fun handleUserGroupNameTaken(): ProblemDetail {
+    logger.info("UserGroup name taken")
+    return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "UserGroup name is already taken")
   }
 
   @ExceptionHandler(Exception::class)

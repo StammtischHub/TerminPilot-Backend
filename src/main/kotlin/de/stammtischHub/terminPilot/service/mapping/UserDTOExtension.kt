@@ -8,3 +8,5 @@ fun User.toUserDTO(): UserDTO =
     id = id,
     name = username,
   )
+
+fun List<User>.toUserDTOList(): List<UserDTO> = this.map { it.toUserDTO() }

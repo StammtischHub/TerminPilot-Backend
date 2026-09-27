@@ -1,6 +1,7 @@
 package de.stammtischHub.terminPilot.service
 
 import de.stammtischHub.terminPilot.exception.UserGroupNameTakenException
+import de.stammtischHub.terminPilot.exception.UserGroupNotFoundException
 import de.stammtischHub.terminPilot.model.generated.UserGroupResponse
 import de.stammtischHub.terminPilot.persistence.entity.UserGroup
 import de.stammtischHub.terminPilot.persistence.repository.UserGroupRepository
@@ -50,7 +51,7 @@ class UserGroupService(
     name: String?,
     memberIds: List<Long>?,
   ): UserGroupResponse {
-    val userGroup = userGroupRepository.findById(id).get()
+    val userGroup = userGroupRepository.findById(id).orElseThrow { UserGroupNotFoundException(id) }
     val members =
       memberIds?.map { userService.getUserByUserId(it) }?.toMutableSet()
 
