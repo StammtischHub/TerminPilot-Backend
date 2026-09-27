@@ -79,6 +79,12 @@ class GlobalExceptionHandler {
     return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "UserGroup name is already taken")
   }
 
+  @ExceptionHandler(InvalidPasswordException::class)
+  fun handleInvalidPassword(): ProblemDetail {
+    logger.info("Invalid password")
+    return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Invalid password")
+  }
+
   @ExceptionHandler(Exception::class)
   fun handleUnexpected(exception: Exception): ProblemDetail {
     if (exception is ErrorResponse) {

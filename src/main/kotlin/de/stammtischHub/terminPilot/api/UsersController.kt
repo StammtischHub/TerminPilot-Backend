@@ -1,6 +1,8 @@
 package de.stammtischHub.terminPilot.api
 
 import de.stammtischHub.terminPilot.api.generated.UsersApi
+import de.stammtischHub.terminPilot.model.generated.UpdatePasswordRequest
+import de.stammtischHub.terminPilot.model.generated.UpdateUsernameRequest
 import de.stammtischHub.terminPilot.model.generated.UserGroupResponse
 import de.stammtischHub.terminPilot.model.generated.UserResponse
 import de.stammtischHub.terminPilot.service.UserService
@@ -22,5 +24,21 @@ class UsersController(
   override fun getUsers(): ResponseEntity<List<UserResponse>> {
     val users = userService.getAllUsers()
     return ResponseEntity.ok(users)
+  }
+
+  override fun updateUsername(
+    userId: Long,
+    updateUsernameRequest: UpdateUsernameRequest,
+  ): ResponseEntity<UserResponse> {
+    val userResponse = userService.updateUsername(userId, updateUsernameRequest.username)
+    return ResponseEntity.ok(userResponse)
+  }
+
+  override fun updatePassword(
+    userId: Long,
+    updatePasswordRequest: UpdatePasswordRequest,
+  ): ResponseEntity<Unit> {
+    userService.updatePassword(userId, updatePasswordRequest.oldPassword, updatePasswordRequest.newPassword)
+    return ResponseEntity.ok().build()
   }
 }

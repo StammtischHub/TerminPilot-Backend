@@ -1,5 +1,6 @@
 package de.stammtischHub.terminPilot.service
 
+import de.stammtischHub.terminPilot.exception.InvalidPasswordException
 import de.stammtischHub.terminPilot.exception.UserNotFoundException
 import de.stammtischHub.terminPilot.exception.UsernameTakenException
 import de.stammtischHub.terminPilot.model.generated.UserGroupResponse
@@ -53,6 +54,46 @@ class UserService(
     } catch (_: DataIntegrityViolationException) {
       throw UsernameTakenException()
     }
+  }
+
+  @Transactional
+  fun updateUsername(
+    userId: Long,
+    username: String,
+  ): UserResponse {
+    val normalizedUsername = username.trim()
+
+    if (userRepository.findByUsername(normalizedUsername).isPresent) {
+      throw UsernameTakenException()
+    }
+
+    val user = userRepository.findById(userId).orElseThrow { UserNotFoundException(userId) }
+    user.username = normalizedUsername
+
+    return try {
+      val savedUser = userRepository.saveAndFlush(user)
+      savedUser.toUserResponse()
+    } catch (_: DataIntegrityViolationException) {
+      throw UsernameTakenException()
+    }
+  }
+
+  @Transactional
+  fun updatePassword(
+    userId: Long,
+    oldPassword: String,
+    newPassword: String,
+  ) {
+    val user = userRepository.findById(userId).orElseThrow { UserNotFoundException(userId) }
+    if (!passwordEncoder.matches(oldPassword, user.password)) {
+      throw InvalidPasswordException()
+    }
+
+    user.password =
+      requireNotNull(passwordEncoder.encode(newPassword)) {
+        "Password encoding failed"
+      }
+    userRepository.saveAndFlush(user)
   }
 
   @Transactional(readOnly = true)
