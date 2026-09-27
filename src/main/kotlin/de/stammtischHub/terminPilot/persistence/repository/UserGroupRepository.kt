@@ -9,5 +9,8 @@ import java.util.Optional
 interface UserGroupRepository : JpaRepository<UserGroup, Long> {
   fun findByName(name: String): Optional<UserGroup>
 
-  fun existsByNameAndCreatorId(name: String, creatorId: Long): Boolean
+  fun existsByNameAndCreatorId(
+    name: String,
+    creatorId: Long,
+  ): Boolean
 }
