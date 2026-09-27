@@ -10,9 +10,9 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
 import org.springframework.dao.DataIntegrityViolationException
 import kotlin.test.Test
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 @DataJpaTest
 class UserGroupRepositoryTest {
@@ -83,31 +83,20 @@ class UserGroupRepositoryTest {
   }
 
   @Test
-  fun `should find UserGroups by creator`() {
+  fun `should check if a UserGroup with a specific name exists for a creator`() {
     setupUsers()
 
-    val userGroups =
-      mutableSetOf(
-        userGroupRepository.saveAndFlush(
-          UserGroup().apply {
-            name = "name"
-            creator = creatorUser
-            members = mutableSetOf(memberUser)
-          },
-        ),
-        userGroupRepository.saveAndFlush(
-          UserGroup().apply {
-            name = "name2"
-            creator = creatorUser
-            members = mutableSetOf(memberUser)
-          },
-        ),
-      )
-
+    userGroupRepository.saveAndFlush(
+      UserGroup().apply {
+        name = "name"
+        creator = creatorUser
+        members = mutableSetOf(memberUser)
+      },
+    )
     entityManager.clear()
 
-    val foundUserGroups = userGroupRepository.findByCreatorId(creatorUser.id).get()
-    assertContentEquals(userGroups, foundUserGroups)
+    val exists = userGroupRepository.existsByNameAndCreatorId("name", creatorUser.id)
+    assertTrue(exists)
   }
 
   @Test

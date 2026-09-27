@@ -26,7 +26,7 @@ class UserGroupService(
     val creator = userService.getUserByUserId(creatorId)
     val members = memberIds.map { userService.getUserByUserId(it) }.toMutableSet()
 
-    if (userGroupRepository.findByName(normalizedName).isPresent) {
+    if (userGroupRepository.existsByNameAndCreatorId(normalizedName, creatorId)) {
       throw UserGroupNameTakenException()
     }
 
