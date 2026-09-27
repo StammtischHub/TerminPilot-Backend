@@ -9,6 +9,8 @@ import de.stammtischHub.terminPilot.model.generated.CreateEventResponse
 import de.stammtischHub.terminPilot.model.generated.SuggestionsRequest
 import de.stammtischHub.terminPilot.model.generated.SuggestionsResponse
 import de.stammtischHub.terminPilot.service.EventService
+import de.stammtischHub.terminPilot.service.mapping.toDayOfWeekSet
+import de.stammtischHub.terminPilot.service.mapping.toUserDTOList
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalTime
@@ -40,7 +42,7 @@ class EventController(
         event.title,
         event.start.atOffset(ZoneOffset.UTC),
         event.end.atOffset(ZoneOffset.UTC),
-        event.participants.toUserDtoList(),
+        event.participants.toUserDTOList(),
         event.location,
         event.description,
       )

@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotNull
 @AttributeOverride(name = "_id", column = Column(name = "calendar_id"))
 class Calendar : BaseLongId() {
   @ManyToOne
-  @JoinColumn(name = "owner_user_id")
+  @JoinColumn(name = "owner")
   @NotNull
   lateinit var owner: User
 }
