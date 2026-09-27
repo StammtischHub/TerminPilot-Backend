@@ -54,7 +54,7 @@ jobs:
   spring_gradle_kotlin:
     name: Spring Gradle Kotlin
     permissions:
-      contents: read
+      packages: read
       checks: write
       pull-requests: write
     needs:
