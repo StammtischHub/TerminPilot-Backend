@@ -6,6 +6,9 @@ spring:
   jpa:
     open-in-view: false
 
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+
 server:
   servlet:
     session:

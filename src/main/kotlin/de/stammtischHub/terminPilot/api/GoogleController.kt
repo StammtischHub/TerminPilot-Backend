@@ -3,14 +3,17 @@ package de.stammtischHub.terminPilot.api
 import de.stammtischHub.terminPilot.api.generated.GoogleApi
 import de.stammtischHub.terminPilot.provider.google.oauth.GoogleOAuthService
 import de.stammtischHub.terminPilot.security.UserPrincipal
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 
 @RestController
 class GoogleController(
+  @Value($$"${app.frontend-url}") private val frontendUrl: String,
   private val googleOAuthService: GoogleOAuthService,
 ) : GoogleApi {
   override fun authorize(): ResponseEntity<Unit> {
@@ -31,6 +34,14 @@ class GoogleController(
     val userId = state.toLong()
     googleOAuthService.handleCallback(code, userId)
 
-    return ResponseEntity.ok().build()
+    val target =
+      UriComponentsBuilder
+        .fromUriString(frontendUrl)
+        .path("/calendar-settings")
+        .queryParam("google", "connected")
+        .build()
+        .toUri()
+
+    return ResponseEntity.status(HttpStatus.FOUND).location(target).build()
   }
 }
