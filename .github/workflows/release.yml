@@ -53,6 +53,10 @@ jobs:
 
   spring_gradle_kotlin:
     name: Spring Gradle Kotlin
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
     needs:
       - check-permissions
     uses: ./.github/workflows/spring-gradle-kotlin.yml
