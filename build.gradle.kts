@@ -101,7 +101,7 @@ dependencies {
 
   // Apple-Provider
   implementation("com.github.lookfirst:sardine:5.13")
-  implementation("org.mnode.ical4j:ical4j:4.3.0")
+  implementation("org.mnode.ical4j:ical4j:4.4.0")
 
   // Google-Provider
   implementation("com.google.api-client:google-api-client:2.9.1")
