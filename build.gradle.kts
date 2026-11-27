@@ -7,7 +7,7 @@ plugins {
   id("org.springframework.boot") version "4.2.0"
   id("io.spring.dependency-management") version "1.1.7"
   id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
-  id("org.openapi.generator") version "7.27.0"
+  id("org.openapi.generator") version "7.28.0"
   jacoco
 }
 
